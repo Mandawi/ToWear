@@ -1,4 +1,4 @@
-![freepik-logo.ico](attachment:"static\freepik-logo.ico")
+![freepik-logo.ico](static/freepik-logo.ico?raw=true "Logo")
 
 # To Wear
 
