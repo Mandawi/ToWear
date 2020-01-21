@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title> My Closet </title>
+{% endblock %}
+
+{% block Closet %} 
+class="active"
+{% endblock %}
+
+
+{% block body %} 
+<h1> Welcome to your outdoors closet! </h1>
+<p> Here, you can add your clothes to get your outfit suggestions using them. We've already added some clothes. Feel free to remove and add as you may.</p>
+{% for item in closet %}
+    <h3>{{item}}</h3>
+{% endfor %}
+<div class="container_add">
+    <form method="POST">
+        <input type="text" placeholder="Name" name="name">
+        <br>
+        <input type="text" placeholder="Warmth (4 space-seperated integers from 0 to 10 indicating warmth at head, top, bottom, and feet)" name="warmth">
+        <br>
+        <input type="text" placeholder="Stackable (1 for true, 0 for false)" name="stackable">
+        <br>
+        <p> Click the add button to add this item of clothing to your closet.</p>
+        <input type="submit" name="btn" value="add">
+    </form>
+</div>
+<br>
+<br>
+<br>
+<div class="container_del">
+    <form method="POST">
+        <input type="text" placeholder="Name" name="name2">
+        <br>
+        <p> Click the delete button to delete this item of clothing from your closet.</p>
+        <input type="submit" name="btn" value="delete">
+    </form>
+</div>
+<br>
+<br>
+<br>
+{% endblock %}

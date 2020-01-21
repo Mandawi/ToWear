@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    font-family:Arial, Helvetica, sans-serif;
+    color: springgreen;
+    background-color: black;
+  }
+p{
+color: white
+}
+
+ul.sidenav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  background-color:grey;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+ul.sidenav li a {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+ 
+ul.sidenav li a.active {
+  background-color:springgreen;
+  font-weight:bold;
+  color: black;
+}
+
+ul.sidenav li a:hover { /* hover on an active sidenav button */
+    background-color:seagreen;
+    color: black;
+  }
+
+
+ul.sidenav li a:hover:not(.active) { /* hover on a non active sidenav button */
+  background-color: #555;
+  color: white;
+}
+ 
+ul.sidenav li a:hover:active { /* click on any sidenav button */
+    background-color:seagreen;
+    font-weight:bold;
+    color: black;
+  }
+
+div.content {
+  margin-left: 25%;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+@media screen {
+  ul.sidenav {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  
+  ul.sidenav li a {
+    float: left;
+    padding: 15px;
+  }
+  
+  div.content {margin-left: 0;}
+}
+input[type=submit] {
+    background-color: ghostwhite;
+    border: none;
+    border-radius: 20px;
+    color: blacks;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: large;
+  }
+
+input[type=text] {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid springgreen;
+  border-radius: 4px;
+}
+  
+.container_add {
+    border-radius: 5px;
+    background-color: green;
+    padding: 20px;
+  }
+
+.container_del {
+    border-radius: 5px;
+    background-color: darkred;
+    padding: 20px;
+}

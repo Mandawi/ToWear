@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--to be used by each html that imports it-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' )}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='freepik-logo.ico') }}">
+    {% block head %} {% endblock %} <!--specifying that we will insert our own code here-->
+  </head>
+  <body>
+    <ul class="sidenav">
+      <li><a {% block Home %} {% endblock %} href="{{ url_for('home') }}">ToWear</a></li>
+      <li><a {% block Try %} {% endblock %} href="{{ url_for('try_page') }}">Try</a></li>
+      <li><a {% block About %} {% endblock %} href="{{ url_for('about') }}">About</a></li>
+      <li><a {% block Closet %} {% endblock %} href="{{ url_for('closet') }}">My Closet</a></li>
+    </ul>
+
+    <div class="content">
+      {% block body %} {% endblock %}<!--specifying that we will insert our own code here-->
+    </div>
+  </body>
+</html>
