@@ -1,4 +1,4 @@
-![freepik-logo.ico](attachment:freepik-logo.ico)
+![freepik-logo.ico](attachment:static/freepik-logo.ico)
 
 # To Wear
 
@@ -26,7 +26,7 @@
         If desired, you can give the app information every day about what you wore and how you felt. This will be compared to the weather outside for that given day; the next time you ask for a suggestion, you will get more personalized outfits.
 
 ### 2. For Developers <a name="ideas_developer"></a>
-        
+        Make sure to download all dependencies using "pip install -r requirements.txt" without quotes in cmd.
 ### 3. Appearance of the app <a name="appearance"></a>
 
 ### 4. Features in the works <a name="new"></a>
