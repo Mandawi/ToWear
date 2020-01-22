@@ -5,37 +5,45 @@ import pyowm
 
 app = Flask(__name__)
 
-
+# main page
 @app.route("/")
 def home():
     return render_template('index.html')
 
-
+# about page
 @app.route("/about")
 def about():
     return render_template('about.html')
 
-
+# try page
 @app.route("/try")
 def try_page():
     return render_template('try.html')
 
-
+# closet page
 @app.route("/closet")
 def closet():
     return render_template('my_closet.html', closet=my_closet.content_display())
 
 
-def get_weather(zipcode):
-    owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')
+def get_temp(zipcode):
+    """function to get weather using zipcode through pyOWM
+
+    Arguments:
+        zipcode {str} -- given by the user
+
+    Returns:
+        int -- temperature in fahrenheit returned by pyOWM for the current zipcode at the current time
+    """
+    owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')  # API code
     observation = owm.weather_at_zip_code(zipcode, "us")
     w = observation.get_weather()
     weather = w.get_temperature('fahrenheit')['temp']
     return weather
 
-
+# closet page after submission of garment addition (or deletion) request
 @app.route("/closet", methods=['POST'])
-def closet_add():
+def closet_modify():
     if "name" in request.form:
         name = request.form['name']
         warmth = list(
@@ -55,7 +63,7 @@ def closet_add():
     else:
         return render_template('my_closet.html', closet=my_closet.content_display())
 
-
+# try page after suggestion request
 @app.route('/try', methods=['POST'])
 def form_post():
     training_amount = int(request.form['training_amount'])
@@ -63,17 +71,19 @@ def form_post():
         map(float, str(request.form['secret_coefficients']).split()))  # MUST BE DECIMAL! e.g. .2 .4 .4 .2
     secret_temp_desired = float(request.form['secret_temp_desired'])
     zipcode = str(request.form['zipcode'])
-    weather = get_weather(zipcode)
-    print(f"ta: {training_amount}, sc: {secret_coefficients}, std: {secret_temp_desired}, weather: {weather}")
-    weather_input, outfit_output = generate_data(
+    temp = get_temp(zipcode)
+    # using what we know, generate training set of different
+    # temperature (temp_input) to outfit (outfit_input) combinations
+    # (e.g. 20, [1 6 5 4])
+    temp_input, outfit_output = generate_data(
         training_amount, secret_temp_desired, secret_coefficients)
-    print(f"wi: {weather_input}, oo: {outfit_output}")
+    # using the training set, predict an outfit given the temperature
     suggested_outfit = [int(element) for element in suggest_outfit(
-        weather_input, outfit_output, weather)]
+        temp_input, outfit_output, temp)]
+    # translate the outfit from an array of integers to clothes using the given closet
     suggested_outfit_translated = translate_outfit(my_closet, suggested_outfit)
 
-    return render_template('try.html', w=weather, souin=suggested_outfit, head=suggested_outfit_translated[0], upper_body=suggested_outfit_translated[1], lower_body=suggested_outfit_translated[2], feet=suggested_outfit_translated[3])
-    # return render_template('try.html', ta=training_amount, sc=secret_coefficients, st=secret_temp_desired, w=weather)
+    return render_template('try.html', w=temp, souin=suggested_outfit, head=suggested_outfit_translated[0], upper_body=suggested_outfit_translated[1], lower_body=suggested_outfit_translated[2], feet=suggested_outfit_translated[3])
 
 
 if __name__ == "__main__":
