@@ -28,7 +28,7 @@ def closet():
 
 def get_weather():
     owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')
-    observation = owm.weather_at_place('Waltham, US')
+    observation = owm.weather_at_place('Worcester, US')
     w = observation.get_weather()
     weather = w.get_temperature('fahrenheit')['temp']
     return weather
