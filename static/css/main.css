@@ -89,8 +89,14 @@ input[type=text] {
   box-sizing: border-box;
   border: 2px solid springgreen;
   border-radius: 4px;
+  background-color:darkslategray;
+  color:white;
 }
-  
+
+input[type=text]:focus {
+  background-color: black;
+}
+
 .container_add {
     border-radius: 5px;
     background-color: green;
