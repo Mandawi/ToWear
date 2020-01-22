@@ -26,9 +26,9 @@ def closet():
     return render_template('my_closet.html', closet=my_closet.content_display())
 
 
-def get_weather():
+def get_weather(zipcode):
     owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')
-    observation = owm.weather_at_zip_code(01602, "us")
+    observation = owm.weather_at_zip_code(zipcode, "us")
     w = observation.get_weather()
     weather = w.get_temperature('fahrenheit')['temp']
     return weather
@@ -62,7 +62,8 @@ def form_post():
     secret_coefficients = list(
         map(float, str(request.form['secret_coefficients']).split()))  # MUST BE DECIMAL! e.g. .2 .4 .4 .2
     secret_temp_desired = float(request.form['secret_temp_desired'])
-    weather = get_weather()
+    zipcode = int(request.form['zipcode'])
+    weather = get_weather(zipcode)
     print(f"ta: {training_amount}, sc: {secret_coefficients}, std: {secret_temp_desired}, weather: {weather}")
     weather_input, outfit_output = generate_data(
         training_amount, secret_temp_desired, secret_coefficients)
