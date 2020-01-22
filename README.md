@@ -32,13 +32,3 @@
 ### 4. Features in the works <a name="new"></a>
         
         
-
-
-```python
-
-```
-
-
-```python
-
-```
