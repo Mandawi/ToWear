@@ -35,7 +35,7 @@ def get_temp(zipcode):
     Returns:
         int -- temperature in fahrenheit returned by pyOWM for the current zipcode at the current time
     """
-    owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')  # API code
+    owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')  # API key
     observation = owm.weather_at_zip_code(zipcode, "us")
     w = observation.get_weather()
     weather = w.get_temperature('fahrenheit')['temp']
