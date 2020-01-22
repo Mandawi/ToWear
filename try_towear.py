@@ -10,7 +10,7 @@ my_closet = Wardrobe()
 my_closet.generic_clothes_generator()
 
 
-def user_happy(outfit_tried, temp_outfit, temp_global, *secrets):
+def user_happy(outfit_tried: list, temp_outfit: int, temp_global: int, *secrets: list) -> bool:
     """simulates user's feeling in this outfit with this temperature based on the user's desired temperature and coefficients
 
     Arguments:
@@ -21,7 +21,7 @@ def user_happy(outfit_tried, temp_outfit, temp_global, *secrets):
                             temp_coefficients {[type]} -- a secret list of percentages that affect the user's temperature]
 
     Returns:
-        Boolean -- whether the user felt good in this outfit or not
+        bool -- whether the user felt good in this outfit or not
     """
     if secrets[0] != None and secrets[1] != None:
         # the serets are known so, we can just take them
@@ -51,7 +51,7 @@ def user_happy(outfit_tried, temp_outfit, temp_global, *secrets):
         raise ValueError('Expected known secrets')
 
 
-def generate_data(data_amount, *secrets):
+def generate_data(data_amount: int, *secrets: list) -> tuple:
     """create train set data for machine learning; note that only the omniscient user knows the secret numbers
     although the secrets are known, we'll let the AI figure them out on its own
 
@@ -59,6 +59,9 @@ def generate_data(data_amount, *secrets):
         data_amount {int} -- how much training data?
         *secrets {list} -- [temp_desired {int} -- a secret number,
                             temp_coefficients {[type]} -- a secret list of percentages that affect the user's temperature]
+
+    Returns:
+        tuple -- pairs of weathers and corresponding appropriate outfits
     """
     # list for predicting the desired temperature of the user
     estimated_desired_temp = list()
@@ -100,7 +103,17 @@ def generate_data(data_amount, *secrets):
     return weather_input, outfit_output
 
 
-def suggest_outfit(weather_input, outfit_output, weather_given):
+def suggest_outfit(weather_input: list, outfit_output: list, weather_given: int) -> list:
+    """suggest an outfit to the user using the training sets of weather and outfit pairs
+
+    Arguments:
+        weather_input {list} -- weather inputs to use as training sets
+        outfit_output {list} -- outfits appropriate for each weather input
+        weather_given {int} -- the given weather in this case
+
+    Returns:
+        list -- [int,int,int,int] of the perfect outfit for the weather for this user
+    """
     # create linear regression objects for the four clothing slots
     predictors = [LinearRegression(n_jobs=-1) for _ in range(0, 4)]
     # fit the linear model (approximate a target function)

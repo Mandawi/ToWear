@@ -1,7 +1,7 @@
 class Garment():
     """Garment class to represent a clothing item (e.g. jeans)"""
 
-    def __init__(self, name: str, head: int, top: int, bottom: int, feet: int):
+    def __init__(self, name: str, head: int, top: int, bottom: int, feet: int) -> None:
         """initialize the garment with a name and warmth effect on the four parts of the body
         Arguments:
             name {str} - - name of garment
@@ -19,10 +19,10 @@ class Garment():
 class Wardrobe():
     """Wardrobe class to represent a user's closet"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.contents = list()
 
-    def add_item(self, garment: Garment):
+    def add_item(self, garment: Garment) -> None:
         """add an item to the closet
 
         Arguments:
@@ -30,7 +30,7 @@ class Wardrobe():
         """
         self.contents.append(garment)
 
-    def delete_by_name(self, name: str):
+    def delete_by_name(self, name: str) -> None:
         """delete an item using its name
 
         Arguments:
@@ -41,7 +41,7 @@ class Wardrobe():
                 garment_to_delete = item
                 self.contents.remove(garment_to_delete)
 
-    def generic_clothes_generator(self):
+    def generic_clothes_generator(self) -> None:
         """Generate a set of garments for the closet
         """
         self.contents.extend([Garment("tank top", 0, 1, 0, 0),
@@ -63,20 +63,20 @@ class Wardrobe():
                               Garment("winter boots and thick socks",
                                       0, 0, 0, 6)])
 
-    def content_display(self): -> list
-     """display the items of the closet
+    def content_display(self) -> list:
+        """display the items of the closet
 
-     Returns:
-         [str] -- a list of name warmth pairs
-     """
-      display_string = ["Name - Warmth"]
-       for item in self.contents:
+        Returns:
+            list -- a list of name warmth pairs
+        """
+        display_string = ["Name - Warmth"]
+        for item in self.contents:
             display_string.append(
                 f"{item.name} - {item.warmth}")
         return display_string
 
 
-def findMin(warmth_required: int, clothes_ihave: dict): -> list
+def findMin(warmth_required: int, clothes_ihave: dict) -> list:
     # Inspired by https://medium.com/@emailarunkumar/coin-exchange-problem-greedy-or-dynamic-programming-6e5ebe5a30b5
     """Use a napasack solving algorithm to find clothes needed to achieve the desired temperature
 
@@ -100,15 +100,15 @@ def findMin(warmth_required: int, clothes_ihave: dict): -> list
     return outfit
 
 
-def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list): -> list
+def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     """get an outfit in numbers and translate it to a list of outfits in words
 
     Arguments:
         wardrobe {Wardrobe} - - the closet of the user
         outfit_in_numbers {list} - - the outfit suggested in numbers
-    
+
     Returns:
-        [list] -- the outfit suggested in words
+        list -- the outfit suggested in words
     """
     outfit_in_words = [[] for _ in outfit_in_numbers]
     for position, outfit_element in enumerate(outfit_in_numbers):
