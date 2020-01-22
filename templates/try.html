@@ -13,14 +13,14 @@ class="active"
 <p> Enter training amount as an integer. Enter secret coefficients as a list of four decimals that add up to 1. Enter secret temperature desired as a number.</p>
 <p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
 <form method="POST">
-    <input type="text" placeholder="Training amount (integer; golden number is between 100 and 1000)" name="training_amount">
+    <input type="text" placeholder="Training amount (integer; golden number is between 100 and 1000)" name="training_amount" required>
     <br>
     <p> Secret coefficients: 4 space-seperated decimals from 0 to 1 and adding up to 1, indicating how much each part of the body affects the overall warmth </p>
-    <input type="text" placeholder="Secret coefficients" name="secret_coefficients">
+    <input type="text" placeholder="Secret coefficients" name="secret_coefficients" required>
     <br>
-    <input type="text" placeholder="Secret temperature desired (integer)" name="secret_temp_desired">
+    <input type="text" placeholder="Secret temperature desired (integer)" name="secret_temp_desired" required> 
     <br>
-    <input type="text" placeholder="Zip code" name="zipcode">
+    <input type="text" placeholder="Zip code" name="zipcode" required>
     <br>
     <p> Click the suggestion button to get a suggestion for what to wear outside right now.</p>
     <input type="submit" value="suggestion">
