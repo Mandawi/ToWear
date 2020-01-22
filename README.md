@@ -15,7 +15,7 @@
 ## The main ideas of the app -- for users and for developers: <a name="ideas"></a>
 
 ### 1. For Users <a name="ideas_user"></a>
-        We want our users to provide as little inputs as possible because we believe that will give them a better experience using the app.
+We want our users to provide as little inputs as possible because we believe that will give them a better experience using the app.
     
         You only have to create your closet based on the clothes you have. Each garment has a score from 1 to 10 to
     specify the warmth. Each garment warms one of four parts of the body: (1) head, (2) top, (3) bottom, (4) feet.
