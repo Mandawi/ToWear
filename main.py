@@ -52,8 +52,7 @@ def closet_modify():
         w2 = warmth[1]
         w3 = warmth[2]
         w4 = warmth[3]
-        stackable = int(request.form['stackable'])
-        new_item = Garment(name, w1, w2, w3, w4, stackable)
+        new_item = Garment(name, w1, w2, w3, w4)
         my_closet.add_item(new_item)
         return render_template('my_closet.html', closet=my_closet.content_display())
     elif "name2" in request.form:

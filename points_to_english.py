@@ -1,90 +1,114 @@
-'''
-Translate outfit data to normal english
-'''
-
-# clothing item class which has a warmth points attirbute
-
-
 class Garment():
-    def __init__(self, name, head, top, bottom, feet, stackable):
+    """Garment class to represent a clothing item (e.g. jeans)"""
+
+    def __init__(self, name: str, head: int, top: int, bottom: int, feet: int):
+        """initialize the garment with a name and warmth effect on the four parts of the body
+        Arguments:
+            name {str} - - name of garment
+            head {int} - - warmth effect on head (0 to 10)
+            top {int} - - warmth effect on top (0 to 10)
+            bottom {int} - - warmth effect on bottom (0 to 10)
+            feet {int} - - warmth effect on feet (0 to 10)
+        """
+        # FIXME: Garment must have an affect on one and only one part of the body
         self.name = name
-        self.warmth = [head, top, bottom, feet] # only one should be > 0, everything else is 0.
-        self.stackable = bool(stackable)
+        self.warmth = [head, top, bottom, feet]
     pass
 
 
 class Wardrobe():
+    """Wardrobe class to represent a user's closet"""
+
     def __init__(self):
         self.contents = list()
 
-    def add_item(self, garment):
+    def add_item(self, garment: Garment):
+        """add an item to the closet
+
+        Arguments:
+            garment {Garment} -- the garment to be added
+        """
         self.contents.append(garment)
 
-    def delete_by_name(self, name):
+    def delete_by_name(self, name: str):
+        """delete an item using its name
+
+        Arguments:
+            name {str} -- the name of the item to be deleted
+        """
         for item in self.contents:
             if item.name == name:
                 garment_to_delete = item
                 self.contents.remove(garment_to_delete)
 
     def generic_clothes_generator(self):
-        self.contents.extend([Garment("tank top", 0, 1, 0, 0, True),
-                              Garment("short sleeve shirt", 0, 1, 0, 0, True),
-                              Garment("long sleeve shirt", 0, 2, 0, 0, True),
-                              Garment("sweatshirt", 0, 2, 0, 0, False),
-                              Garment("sweater", 0, 3, 0, 0, False),
-                              Garment("winter jacket", 0, 4, 0, 0, False),
-                              Garment("winter coat", 0, 7, 0, 0, False),
-                              Garment("beanie", 2, 0, 0, 0, False),
-                              Garment("hat", 3, 0, 0, 0, False),
-                              Garment("pom pom hat", 4, 0, 0, 0, False),
-                              Garment("trapper hat", 6, 0, 0, 0, False),
-                              Garment("shorts", 0, 0, 1, 0, False),
-                              Garment("sweatpants", 0, 0, 3, 0, True),
-                              Garment("jeans", 0, 0, 5, 0, False),
+        """Generate a set of garments for the closet
+        """
+        self.contents.extend([Garment("tank top", 0, 1, 0, 0),
+                              Garment("short sleeve shirt", 0, 1, 0, 0),
+                              Garment("long sleeve shirt", 0, 2, 0, 0),
+                              Garment("sweatshirt", 0, 2, 0, 0),
+                              Garment("sweater", 0, 3, 0, 0),
+                              Garment("winter jacket", 0, 4, 0, 0),
+                              Garment("winter coat", 0, 7, 0, 0),
+                              Garment("beanie", 2, 0, 0, 0),
+                              Garment("hat", 3, 0, 0, 0),
+                              Garment("pom pom hat", 4, 0, 0, 0),
+                              Garment("trapper hat", 6, 0, 0, 0),
+                              Garment("shorts", 0, 0, 1, 0),
+                              Garment("sweatpants", 0, 0, 3, 0),
+                              Garment("jeans", 0, 0, 5, 0),
                               Garment("sneakers and light socks",
-                                      0, 0, 0, 3, False),
+                                      0, 0, 0, 3),
                               Garment("winter boots and thick socks",
-                                      0, 0, 0, 6, False)])
+                                      0, 0, 0, 6)])
 
-    def content_display(self):
-        display_string = ["Name : Warmth : Stackable"]
-        for item in self.contents:
+    def content_display(self): -> list
+     """display the items of the closet
+
+     Returns:
+         [str] -- a list of name warmth pairs
+     """
+      display_string = ["Name - Warmth"]
+       for item in self.contents:
             display_string.append(
-                f"{item.name}: {item.warmth}: {item.stackable}")
+                f"{item.name} - {item.warmth}")
         return display_string
 
 
-def findMin(warmth_required, clothes_ihave: dict):
+def findMin(warmth_required: int, clothes_ihave: dict): -> list
     # Inspired by https://medium.com/@emailarunkumar/coin-exchange-problem-greedy-or-dynamic-programming-6e5ebe5a30b5
-    """Use a napasack solving algorithm to find
+    """Use a napasack solving algorithm to find clothes needed to achieve the desired temperature
 
     Arguments:
-        warmth_required {int} -- the needed warmth
-        clothes_ihave {dict} -- the wardrobe contents as warmth[position]:garment dictionary
+        warmth_required {int} - - the needed warmth
+        clothes_ihave {dict} - - the wardrobe contents as {warmth[position]: garment} dictionary
 
     Returns:
-        list -- the outfit for this position
+        list - - the outfit for this position
     """
-    # BUG: Must reduce all positions when items that have effects on multiple positions like coat are chosen
+    # outfit is a list of lists of Garments for each part of the body
     outfit = []
     warmths_sorted = sorted(clothes_ihave.keys())
     i = len(warmths_sorted)-1
     while (i > 0):
-        unstackable_used = False
-        while (warmth_required >= warmths_sorted[i] and unstackable_used == False):
+        # FIXME: Must reduce all positions when items that have effects on multiple positions like coat are chosen
+        while (warmth_required >= warmths_sorted[i]):
             warmth_required = warmth_required - warmths_sorted[i]
             outfit.append(clothes_ihave[warmths_sorted[i]].name)
-            if clothes_ihave[warmths_sorted[i]].stackable == False:
-                unstackable_used = True
         i -= 1
     return outfit
 
 
-def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list):
+def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list): -> list
     """get an outfit in numbers and translate it to a list of outfits in words
 
     Arguments:
-        outfit_in_numbers {[type]} -- [description]
+        wardrobe {Wardrobe} - - the closet of the user
+        outfit_in_numbers {list} - - the outfit suggested in numbers
+    
+    Returns:
+        [list] -- the outfit suggested in words
     """
     outfit_in_words = [[] for _ in outfit_in_numbers]
     for position, outfit_element in enumerate(outfit_in_numbers):

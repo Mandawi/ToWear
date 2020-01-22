@@ -39,7 +39,7 @@ def user_happy(outfit_tried, temp_outfit, temp_global, *secrets):
                     # this may seem redundant but it's necessary to avoid division by zero exception
                     element_significance = 0
                 else:
-                    # the affect of any garment on the temperature of the outfit
+                    # the effect of any garment on the temperature of the outfit
                     # is equal to the temperature of the garment divided by the temperature of the outfit
                     element_significance = element/temp_outfit
                 if element_significance > 0.1 + temp_coefficients[index] or element_significance < temp_coefficients[index]-0.1:
