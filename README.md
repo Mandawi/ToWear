@@ -36,11 +36,7 @@ In [points_to_english.py](https://github.com/Mandawi/ToWear/blob/master/points_t
 
 *Note that you can use ***user_data.py*** and ***points_to_english.py*** alone to develop features using the cmd and without the flask front-end. Simply download these two files and run "python user_data.py" to see a text-based version of the app.*
 ### 3. Slideshow explaining the app <a name="slideshow"></a>
-<object data="https://github.com/Mandawi/ToWear/blob/master/ToWear.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://github.com/Mandawi/ToWear/blob/master/ToWear.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/Mandawi/ToWear/blob/master/ToWear.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+<a href="https://github.com/Mandawi/ToWear/blob/master/ToWear.pdf" target="_blank">View PDF.</a>
 
 ### 4. Features in the works <a name="new"></a>
         
