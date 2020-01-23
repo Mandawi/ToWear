@@ -19,7 +19,7 @@ class="active"
   {% for item in closet.contents %}
     <tr>
         <th>{{ item.name }}</li>
-        <th>{{ item.display(warmth) }}</li>
+        <th>{{ item.warmth }}</li>
     </tr>
   {% endfor %}  
 </table>
