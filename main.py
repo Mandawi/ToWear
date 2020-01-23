@@ -23,7 +23,7 @@ def try_page():
 # closet page
 @app.route("/closet")
 def closet():
-    return render_template('my_closet.html', closet=my_closet.content_display())
+    return render_template('my_closet.html', closet=my_closet)
 
 
 def get_temp(zipcode):
@@ -54,13 +54,13 @@ def closet_modify():
         w4 = warmth[3]
         new_item = Garment(name, w1, w2, w3, w4)
         my_closet.add_item(new_item)
-        return render_template('my_closet.html', closet=my_closet.content_display())
+        return render_template('my_closet.html', closet=my_closet)
     elif "name2" in request.form:
         name2 = request.form['name2']
         my_closet.delete_by_name(name2)
-        return render_template('my_closet.html', closet=my_closet.content_display())
+        return render_template('my_closet.html', closet=my_closet)
     else:
-        return render_template('my_closet.html', closet=my_closet.content_display())
+        return render_template('my_closet.html', closet=my_closet)
 
 # try page after suggestion request
 @app.route('/try', methods=['POST'])

@@ -11,9 +11,18 @@ class="active"
 {% block body %} 
 <h1> Welcome to your outdoors closet! </h1>
 <p> Here, you can add your clothes to get your outfit suggestions using them. We've already added some clothes. Feel free to remove and add as you may.</p>
-{% for item in closet %}
-    <h3>{{item}}</h3>
-{% endfor %}
+<table style="width:100%">
+  <tr>
+    <th>Name</th>
+    <th>Warmth</th> 
+  </tr>
+  <tr>
+    {% for item in closet %}
+        <th>{{ item.name }}</li>
+        <th>{{ item.warmth }}</li>
+    {% endfor %}  
+  </tr>
+</table>
 <div class="container_add">
     <form method="POST">
         <input type="text" placeholder="Name" name="name" required>

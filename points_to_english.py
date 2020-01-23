@@ -63,18 +63,6 @@ class Wardrobe():
                               Garment("winter boots and thick socks",
                                       0, 0, 0, 6)])
 
-    def content_display(self) -> list:
-        """display the items of the closet
-
-        Returns:
-            list -- a list of name warmth pairs
-        """
-        display_string = ["Name - Warmth"]
-        for item in self.contents:
-            display_string.append(
-                f"{item.name} - {item.warmth}")
-        return display_string
-
 
 def findMin(warmth_required: int, clothes_ihave: dict) -> list:
     # Inspired by https://medium.com/@emailarunkumar/coin-exchange-problem-greedy-or-dynamic-programming-6e5ebe5a30b5
