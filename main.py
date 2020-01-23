@@ -7,11 +7,15 @@ app = Flask(__name__)
 
 
 @app.after_request
-def set_response_headers(response):
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
-    return response
+def add_header(r):
+    """
+    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 # main page
 @app.route("/")
