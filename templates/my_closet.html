@@ -16,12 +16,12 @@ class="active"
     <th>Name</th>
     <th>Warmth</th> 
   </tr>
-  <tr>
-    {% for item in closet.contents %}
+  {% for item in closet.contents %}
+    <tr>
         <th>{{ item.name }}</li>
         <th>{{ item.display(warmth) }}</li>
-    {% endfor %}  
-  </tr>
+    </tr>
+  {% endfor %}  
 </table>
 <div class="container_add">
     <form method="POST">
