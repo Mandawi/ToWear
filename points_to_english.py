@@ -15,6 +15,9 @@ class Garment():
         self.warmth = [head, top, bottom, feet]
     pass
 
+    def display(self, warmth):
+        return ' '.join(warmth)
+
 
 class Wardrobe():
     """Wardrobe class to represent a user's closet"""
