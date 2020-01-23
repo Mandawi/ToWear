@@ -18,11 +18,13 @@ class="active"
   </tr>
   {% for item in closet.contents %}
     <tr>
-        <th>{{ item.name }}</li>
-        <th>{{ item.warmth }}</li>
+        <td>{{ item.name }}</li>
+        <td>{{ item.warmth }}</li>
     </tr>
   {% endfor %}  
 </table>
+<br>
+<br>
 <div class="container_add">
     <form method="POST">
         <input type="text" placeholder="Name" name="name" required>
@@ -33,7 +35,6 @@ class="active"
         <input type="submit" name="btn" value="add">
     </form>
 </div>
-<br>
 <br>
 <br>
 <div class="container_del">

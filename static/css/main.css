@@ -119,7 +119,7 @@ th, td {
   padding: 8px;
 }
 
-tr:nth-child(even){background-color: white}
+tr:nth-child(even){background-color: darkgreen}
 
 th {
   background-color: springgreen;
