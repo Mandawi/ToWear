@@ -62,7 +62,7 @@ class Wardrobe():
                               Garment("sweatshirt", 0, 3, 0, 0),
                               Garment("sweater", 0, 3, 0, 0),
                               Garment("winter jacket", 0, 4, 0, 0),
-                              Garment("winter coat", 0, 7, 0, 0),
+                              Garment("winter coat", 0, 4, 0, 0),
                               Garment("beanie", 2, 0, 0, 0),
                               Garment("hat", 3, 0, 0, 0),
                               Garment("pom pom hat", 4, 0, 0, 0),
@@ -78,26 +78,30 @@ class Wardrobe():
                                       0, 0, 0, 6)])
 
 
-def findMin(warmth_required: int, clothes_ihave: dict) -> list:
+def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
     # Inspired by https://medium.com/@emailarunkumar/coin-exchange-problem-greedy-or-dynamic-programming-6e5ebe5a30b5
     """Use a napasack solving algorithm to find clothes needed to achieve the desired temperature
 
     Arguments:
         warmth_required {int} - - the needed warmth
         clothes_ihave {dict} - - the wardrobe contents as {warmth[position]: garment} dictionary
+        body_part {int} - - the body part 0: head, 1:top, 2:bottom, 3:feet
 
     Returns:
         list - - the outfit for this position
     """
     # outfit is a list of lists of Garments for each part of the body
     outfit = []
-    warmths_sorted = sorted(clothes_ihave.keys())
+    warmths_sorted = sorted(clothes_ihave.keys(), reversed=True)
     i = len(warmths_sorted)-1
     while (i > 0):
         # FIXME: Must reduce all positions when items that have effects on multiple positions like coat are chosen
         while (warmth_required >= warmths_sorted[i]):
             warmth_required = warmth_required - warmths_sorted[i]
             outfit.append(clothes_ihave[warmths_sorted[i]].name)
+            # no more than one item from shoes
+            if body_part == 3:
+                return outfit
         i -= 1
     return outfit
 
@@ -121,5 +125,5 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
             wardrobe_by_element = {
                 garment.warmth[position]: garment for garment in wardrobe.contents}
             outfit_in_words[position].extend(
-                findMin(outfit_element, wardrobe_by_element))
+                findMin(outfit_element, wardrobe_by_element, position))
     return outfit_in_words
