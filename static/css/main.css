@@ -11,8 +11,8 @@ color: white
 ul.sidenav {
   list-style-type: none;
   margin: 0;
-  padding: 0;
-  width: 33%;
+  padding: 50px;
+  width: 25%;
   background-color:grey;
   position: fixed;
   height: 100%;
