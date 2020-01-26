@@ -17,6 +17,7 @@ ul.sidenav {
   position: fixed;
   height: 100%;
   overflow: auto;
+  font-size: x-large;
 }
 
 ul.sidenav li a {
