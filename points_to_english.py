@@ -92,7 +92,7 @@ def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
     """
     # outfit is a list of lists of Garments for each part of the body
     outfit = []
-    warmths_sorted = sorted(clothes_ihave.keys(), reverse=True)
+    warmths_sorted = sorted(clothes_ihave.keys(), reverse=False)
     i = len(warmths_sorted)-1
     while (i > 0):
         # FIXME: Must reduce all positions when items that have effects on multiple positions like coat are chosen
