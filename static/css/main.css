@@ -11,7 +11,7 @@ color: white
 ul.sidenav {
   list-style-type: none;
   margin: 0;
-  padding: 50px;
+  padding: 0px;
   width: 25%;
   background-color:grey;
   position: fixed;
@@ -23,7 +23,7 @@ ul.sidenav {
 ul.sidenav li a {
   display: block;
   color: white;
-  padding: 8px 16px;
+  padding: 4px 8px;
   text-decoration: none;
 }
  
