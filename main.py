@@ -71,6 +71,12 @@ def closet_modify():
         name2 = request.form['name2']
         my_closet.delete_by_name(name2)
         return render_template('my_closet.html', closet=my_closet)
+    elif "name3" in request.form:
+        name3 = request.form['name3']
+        warmth3 = list(
+            map(int, str(request.form['warmth3']).split()))
+        my_closet.change_warmth(name3, warmth3)
+        return render_template('my_closet.html', closet=my_closet)
     else:
         return render_template('my_closet.html', closet=my_closet)
 

@@ -30,6 +30,18 @@ class Wardrobe():
         """
         self.contents.append(garment)
 
+    def change_warmth(self, name: str, warmth: list) -> None:
+        """change an item's warmth
+
+        Arguments:
+            name {str} -- the name of the item whose warmth will change
+            warmth {list} -- the new warmth
+        """
+        for item in self.contents:
+            if item.name == name:
+                garment_to_change = item
+                garment_to_change.warmth = warmth
+
     def delete_by_name(self, name: str) -> None:
         """delete an item using its name
 
