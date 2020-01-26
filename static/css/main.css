@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family:Arial, Helvetica, sans-serif;
-    color: springgreen;
+    color: rgb(91, 167, 255);
     background-color: black;
   }
 p{
@@ -27,13 +27,13 @@ ul.sidenav li a {
 }
  
 ul.sidenav li a.active {
-  background-color:springgreen;
+  background-color:rgb(91, 167, 255);
   font-weight:bold;
   color: black;
 }
 
 ul.sidenav li a:hover { /* hover on an active sidenav button */
-    background-color:seagreen;
+    background-color:rgb(0, 119, 255);
     color: black;
   }
 
@@ -44,7 +44,7 @@ ul.sidenav li a:hover:not(.active) { /* hover on a non active sidenav button */
 }
  
 ul.sidenav li a:hover:active { /* click on any sidenav button */
-    background-color:seagreen;
+    background-color:rgb(0, 119, 255);
     font-weight:bold;
     color: black;
   }
@@ -87,7 +87,7 @@ input[type=text] {
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  border: 2px solid springgreen;
+  border: 2px solid rgb(0, 119, 255);
   border-radius: 4px;
   background-color:darkslategray;
   color:white;
@@ -95,6 +95,12 @@ input[type=text] {
 
 input[type=text]:focus {
   background-color: black;
+}
+
+.container_change_warmth {
+  border-radius: 5px;
+  background-color: darkslateblue;
+  padding: 20px;
 }
 
 .container_add {
@@ -119,9 +125,9 @@ th, td {
   padding: 8px;
 }
 
-tr:nth-child(even){background-color: darkgreen}
+tr:nth-child(even){background-color: darkslateblue}
 
 th {
-  background-color: springgreen;
+  background-color: rgb(0, 119, 255);
   color: black;
 }
