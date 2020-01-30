@@ -1,3 +1,6 @@
+import operator
+
+
 class Garment():
     """Garment class to represent a clothing item (e.g. jeans)"""
 
@@ -62,7 +65,7 @@ class Wardrobe():
                               Garment("sweatshirt", 0, 3, 0, 0),
                               Garment("sweater", 0, 3, 0, 0),
                               Garment("winter jacket", 0, 4, 0, 0),
-                              Garment("winter coat", 0, 4, 0, 0),
+                              Garment("winter coat", 1, 5, 2, 0),
                               Garment("beanie", 2, 0, 0, 0),
                               Garment("hat", 3, 0, 0, 0),
                               Garment("pom pom hat", 4, 0, 0, 0),
@@ -76,6 +79,26 @@ class Wardrobe():
                                       0, 0, 0, 3),
                               Garment("winter boots and thick socks",
                                       0, 0, 0, 6)])
+
+
+def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
+
+    if warmth_required == [0, 0, 0, 0]:
+        return None
+    elif len(myclothes) == 0:
+        return None
+    else:
+        if myclothes[0].warmth == warmth_required:
+            # print(myclothes[0].name, myclothes[0].warmth)
+            return [myclothes[0].name]
+        else:
+            with_v = subsetsum_lists(myclothes[1:], (list(
+                map(operator.sub, warmth_required, myclothes[0].warmth))))
+            if with_v:
+                # print(myclothes[0].name, myclothes[0].warmth)
+                return [myclothes[0].name] + with_v
+            else:
+                return subsetsum_lists(myclothes[1:], warmth_required)
 
 
 def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
@@ -116,14 +139,14 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     Returns:
         list -- the outfit suggested in words
     """
-    outfit_in_words = [[] for _ in outfit_in_numbers]
-    for position, outfit_element in enumerate(outfit_in_numbers):
-        # outfit_element_options = []
-        if outfit_element == 0:
-            outfit_in_words[position].append("nothing")
-        elif len(wardrobe.contents) > 0:
-            wardrobe_by_element = {
-                garment.warmth[position]: garment for garment in wardrobe.contents}
-            outfit_in_words[position].extend(
-                findMin(outfit_element, wardrobe_by_element, position))
+    outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
+    if outfit_in_words == None:
+        outfit_in_words = ['nothing', 'nothing', 'nothing', 'nothing']
     return outfit_in_words
+
+
+if __name__ == "__main__":
+    my_closet = Wardrobe()
+    my_closet.generic_clothes_generator()
+    outfit_in_numbers = [1, 3, 7, 3]
+    print(translate_outfit(my_closet, outfit_in_numbers))
