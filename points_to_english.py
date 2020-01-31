@@ -86,7 +86,7 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
     if warmth_required == [0, 0, 0, 0]:
         return None
     elif len(myclothes) == 0:
-        return None  # ran out of clothes
+        return None
     else:
         if myclothes[0].warmth == warmth_required:
             # print(myclothes[0].name, myclothes[0].warmth)
@@ -141,7 +141,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     """
     outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
     i = 0
-    while len(outfit_in_words) == 0:
+    while outfit_in_words != None:
         outfit_in_numbers[i] -= 1
         outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
         i += 1
