@@ -153,10 +153,10 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
         print(outfit_in_words)
     final_outfit_state = [
         garment.warmth for garment in wardrobe.contents if garment.name in outfit_in_words]
-    print(final_outfit_state)
-    final_outfit_state_numbers = [sum(garment)
-                                  for garment in final_outfit_state]
-    print(sum(final_outfit_state_numbers), sum(original_outfit_in_numbers))
+    print(f"Clothes suggested are {final_outfit_state}")
+    final_outfit_state_numbers = [sum(i) for i in zip(*final_outfit_state)]
+    print(
+        f"Used {final_outfit_state_numbers}, instead of {original_outfit_in_numbers}")
     if sum(final_outfit_state_numbers) < sum(original_outfit_in_numbers):
         print("Looks like someone needs to go shopping")
     return outfit_in_words
