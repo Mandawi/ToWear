@@ -101,8 +101,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
         outfit_in_numbers[index_to_approximate] -= 1
         difference[index_to_approximate] -= 1
         # try again
-        outfit_in_words = list(subsetsum_lists(
-            tuple(wardrobe.contents), tuple(outfit_in_numbers)))
+        outfit_in_words = subsetsum_lists(
+            tuple(wardrobe.contents), tuple(outfit_in_numbers))
     # get the warmths of the garments in the outfit created
     final_outfit_state = [
         garment.warmth for garment in wardrobe.contents if garment.name in outfit_in_words]
