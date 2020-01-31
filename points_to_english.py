@@ -142,6 +142,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
     i = 0
     print(outfit_in_numbers)
+    original_outfit_in_numbers = outfit_in_numbers.copy()
     print(outfit_in_words)
     while outfit_in_words == None:
         outfit_in_numbers[i] -= 1
@@ -155,8 +156,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     print(final_outfit_state)
     final_outfit_state_numbers = [sum(garment)
                                   for garment in final_outfit_state]
-    print(sum(final_outfit_state_numbers), sum(outfit_in_numbers))
-    if sum(final_outfit_state_numbers) < sum(outfit_in_numbers):
+    print(sum(final_outfit_state_numbers), sum(original_outfit_in_numbers))
+    if sum(final_outfit_state_numbers) < sum(original_outfit_in_numbers):
         print("Looks like someone needs to go shopping")
     return outfit_in_words
 
