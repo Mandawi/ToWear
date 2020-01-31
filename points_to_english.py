@@ -141,17 +141,20 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     """
     outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
     i = 0
+    print(outfit_in_numbers)
+    print(outfit_in_words)
     while outfit_in_words == None:
         outfit_in_numbers[i] -= 1
         outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
         i += 1
         if i >= len(outfit_in_numbers):
             i = 0
+        print(outfit_in_words)
     return outfit_in_words
 
 
 if __name__ == "__main__":
     my_closet = Wardrobe()
     my_closet.generic_clothes_generator()
-    outfit_in_numbers = [1, 3, 7, 3]
+    outfit_in_numbers = [0, 7, 6, 1]
     print(translate_outfit(my_closet, outfit_in_numbers))
