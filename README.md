@@ -11,6 +11,7 @@
 3. [Slideshow](#slideshow)
 4. [In the works](#new)
 
+### Check out [the more detailed wiki here](https://github.com/Mandawi/ToWear/wiki)
 
 ## The main ideas of the app -- for users and for developers: <a name="ideas"></a>
 
