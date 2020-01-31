@@ -150,6 +150,11 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
         if i >= len(outfit_in_numbers):
             i = 0
         print(outfit_in_words)
+        final_outfit_state = [
+            garment.warmth for garment in my_closet.contents if garment.name in outfit_in_words]
+        print(final_outfit_state)
+    if sum(final_outfit_state) < sum(outfit_in_numbers):
+        print("Looks like someone needs to go shopping")
     return outfit_in_words
 
 
