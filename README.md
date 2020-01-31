@@ -4,14 +4,14 @@
 
 ### ToWear is an application that suggests outfits to users from their closets based on the weather. We aim to use linear regression to personalize the results to each user. [Check out the current state of the app here](http://oamandawi.pythonanywhere.com/).
 
+### Check out [the more detailed wiki here](https://github.com/Mandawi/ToWear/wiki)
+
 # Table of contents
 1. [Main Ideas](#ideas)
     1. [For Users](#ideas_user)
     2. [For Developers](#ideas_developer)
 3. [Slideshow](#slideshow)
 4. [In the works](#new)
-
-### Check out [the more detailed wiki here](https://github.com/Mandawi/ToWear/wiki)
 
 ## The main ideas of the app -- for users and for developers: <a name="ideas"></a>
 
