@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request
 from try_towear import generate_data, suggest_outfit, my_closet
-from points_to_english import translate_outfit, Garment
+from points_to_english import translate_outfit
+from clothes_manager import Garment
 import pyowm
 
 app = Flask(__name__)

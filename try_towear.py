@@ -3,7 +3,8 @@ from random import randint
 # needed for predicting using training sets
 from sklearn.linear_model import LinearRegression
 # needed for translating the outfit suggestion into human-readable format
-from points_to_english import Wardrobe, translate_outfit
+from points_to_english import translate_outfit
+from clothes_manager import Wardrobe
 
 # generate a closet with some pre-defined wardrobe
 my_closet = Wardrobe()
