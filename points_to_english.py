@@ -1,6 +1,7 @@
 import operator
 
 from clothes_manager import Garment, Wardrobe
+from functools import lru_cache
 
 
 def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
@@ -32,10 +33,11 @@ def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
     return outfit
 
 
+@lru_cache(maxsize=5040)  # because 10*9*8*7 is 5040
 def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
-    # TODO: add an lru_cache to increase speed
-    """Use a recursive algorithm to find the smallest subset of myclothes 
-    such that its sum is equal to that of warmth_required, subset sum style
+    """Use a recursive algorithm to find the smallest subset of myclothes
+    such that its sum is equal to that of warmth_required, subset sum style.
+    In addition, we use an lru_cache to make this much faster
 
     Arguments:
         myclothes {Wardrobe} -- the user's closet
@@ -44,22 +46,22 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
     Returns:
         list -- the list of garment names whose warmths satisfy the warmth_required
     """
+    myclothes = list(myclothes)
+    warmth_required = list(warmth_required)
     if warmth_required == [0, 0, 0, 0]:
         return None
     elif len(myclothes) == 0:
         return None
     else:
         if myclothes[0].warmth == warmth_required:
-            # print(myclothes[0].name, myclothes[0].warmth)
             return [myclothes[0].name]
         else:
-            with_v = subsetsum_lists(myclothes[1:], (list(
+            with_v = subsetsum_lists(tuple(myclothes[1:]), tuple(list(
                 map(operator.sub, warmth_required, myclothes[0].warmth))))
             if with_v:
-                # print(myclothes[0].name, myclothes[0].warmth)
                 return [myclothes[0].name] + with_v
             else:
-                return subsetsum_lists(myclothes[1:], warmth_required)
+                return subsetsum_lists(tuple(myclothes[1:]), tuple(warmth_required))
 
 
 def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
@@ -76,7 +78,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     original_outfit_in_numbers = outfit_in_numbers.copy()
     # try subsetsum_lists on the current wardrobe contents and suggested outfit
     # * if we can't make an outfit that satisfies the warmth required, we'll try to approximate
-    outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
+    outfit_in_words = subsetsum_lists(
+        tuple(wardrobe.contents), tuple(outfit_in_numbers))
     # get the warmths of all of the user's garments
     wardrobe_contents_warmths = [
         garment.warmth for garment in wardrobe.contents]
@@ -98,7 +101,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
         outfit_in_numbers[index_to_approximate] -= 1
         difference[index_to_approximate] -= 1
         # try again
-        outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
+        outfit_in_words = list(subsetsum_lists(
+            tuple(wardrobe.contents), tuple(outfit_in_numbers)))
     # get the warmths of the garments in the outfit created
     final_outfit_state = [
         garment.warmth for garment in wardrobe.contents if garment.name in outfit_in_words]
