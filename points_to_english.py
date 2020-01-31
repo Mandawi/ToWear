@@ -155,6 +155,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     print(final_outfit_state)
     final_outfit_state_numbers = [sum(garment)
                                   for garment in final_outfit_state]
+    print(sum(final_outfit_state_numbers), sum(outfit_in_numbers))
     if sum(final_outfit_state_numbers) < sum(outfit_in_numbers):
         print("Looks like someone needs to go shopping")
     return outfit_in_words
