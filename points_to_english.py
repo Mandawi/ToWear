@@ -141,7 +141,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     """
     outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
     i = 0
-    while outfit_in_words != None:
+    while outfit_in_words == None:
         outfit_in_numbers[i] -= 1
         outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
         i += 1
