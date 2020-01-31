@@ -56,9 +56,7 @@ class Wardrobe():
     def generic_clothes_generator(self) -> None:
         """Generate a set of garments for the closet
         """
-        self.contents.extend([Garment("tank top",
-                                      0, 1, 0, 0),
-                              Garment("short sleeve shirt",
+        self.contents.extend([Garment("short sleeve shirt",
                                       0, 2, 0, 0),
                               Garment("long sleeve shirt",
                                       0, 3, 0, 0),
@@ -76,8 +74,6 @@ class Wardrobe():
                                       3, 0, 0, 0),
                               Garment("pom pom hat",
                                       4, 0, 0, 0),
-                              Garment("trapper hat",
-                                      6, 0, 0, 0),
                               Garment("shorts",
                                       0, 0, 3, 0),
                               Garment("sweatpants",
