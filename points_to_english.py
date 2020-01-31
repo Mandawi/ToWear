@@ -156,5 +156,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
 if __name__ == "__main__":
     my_closet = Wardrobe()
     my_closet.generic_clothes_generator()
-    outfit_in_numbers = [0, 7, 6, 1]
-    print(translate_outfit(my_closet, outfit_in_numbers))
+    outfit_in_numbers = [0, 7, 7, 1]
+    outfit_in_words = translate_outfit(my_closet, outfit_in_numbers)
+    dev_info = [
+        garment.warmth for garment in my_closet.contents if garment.name in outfit_in_words]
+    print(dev_info, outfit_in_words)

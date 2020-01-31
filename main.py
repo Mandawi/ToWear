@@ -100,7 +100,7 @@ def form_post():
     # translate the outfit from an array of integers to clothes using the given closet
     suggested_outfit_translated = translate_outfit(my_closet, suggested_outfit)
 
-    return render_template('try.html', w=temp, souin=suggested_outfit, head=suggested_outfit_translated[0], upper_body=suggested_outfit_translated[1], lower_body=suggested_outfit_translated[2], feet=suggested_outfit_translated[3])
+    return render_template('try.html', w=temp, souin=suggested_outfit, outfit=suggested_outfit_translated)
 
 
 if __name__ == "__main__":

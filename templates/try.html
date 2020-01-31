@@ -26,6 +26,9 @@ class="active"
     <input type="submit" value="suggestion">
 </form>
 <h2> The weather is: {{ w }} </h2>
-<h2> You should wear: {{ head }} {{ upper_body }} {{ lower_body }} {{ feet }} </h2>
+<h2> You should wear: 
+{% for item in outfit %} 
+    {{ item }} and
+{% endfor %}</h2>
 <h4> Dev info: {{ souin }} </h4> 
 {% endblock %}
