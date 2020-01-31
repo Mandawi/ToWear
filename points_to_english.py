@@ -140,21 +140,28 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
         list -- the outfit suggested in words
     """
     outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
-    i = 0
     print(outfit_in_numbers)
     original_outfit_in_numbers = outfit_in_numbers.copy()
     print(outfit_in_words)
+    wardrobe_contents_warmths = [
+        garment.warmth for garment in wardrobe.contents]
+    all_wardrobe = [sum(garment_warmth)
+                    for garment_warmth in zip(*wardrobe_contents_warmths)]
+    difference = (list(
+        map(operator.sub, original_outfit_in_numbers, all_wardrobe)))
+    print("difference", difference)
+    i = difference.index(max(difference))
     while outfit_in_words == None:
         outfit_in_numbers[i] -= 1
+        difference[i] -= 1
         outfit_in_words = subsetsum_lists(wardrobe.contents, outfit_in_numbers)
-        i += 1
-        if i >= len(outfit_in_numbers):
-            i = 0
+        i = difference.index(max(difference))
         print(outfit_in_words)
     final_outfit_state = [
         garment.warmth for garment in wardrobe.contents if garment.name in outfit_in_words]
     print(f"Clothes suggested are {final_outfit_state}")
-    final_outfit_state_numbers = [sum(i) for i in zip(*final_outfit_state)]
+    final_outfit_state_numbers = [sum(garment_warmth)
+                                  for garment_warmth in zip(*final_outfit_state)]
     print(
         f"Used {final_outfit_state_numbers}, instead of {original_outfit_in_numbers}")
     if sum(final_outfit_state_numbers) < sum(original_outfit_in_numbers):
@@ -165,8 +172,5 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
 if __name__ == "__main__":
     my_closet = Wardrobe()
     my_closet.generic_clothes_generator()
-    outfit_in_numbers = [0, 7, 7, 1]
+    outfit_in_numbers = [9, 10, 10, 11]
     outfit_in_words = translate_outfit(my_closet, outfit_in_numbers)
-    dev_info = [
-        garment.warmth for garment in my_closet.contents if garment.name in outfit_in_words]
-    print(dev_info, outfit_in_words)
