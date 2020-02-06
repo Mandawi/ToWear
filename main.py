@@ -3,6 +3,8 @@ from try_towear import generate_data, suggest_outfit, my_closet
 from points_to_english import translate_outfit
 from clothes_manager import Garment
 import pyowm
+# debugging purposes
+import sys
 
 app = Flask(__name__)
 
@@ -68,9 +70,12 @@ def closet_modify():
         new_item = Garment(name, w1, w2, w3, w4)
         my_closet.add_item(new_item)
         return render_template('my_closet.html', closet=my_closet)
-    elif "name2" in request.form:
-        name2 = request.form['name2']
-        my_closet.delete_by_name(name2)
+    elif "check" in request.form:
+        selected_items = request.form.getlist('check')
+        print(selected_items, file=sys.stderr)
+        for item in selected_items:
+            print(item, file=sys.stderr)
+            my_closet.delete_by_name(item)
         return render_template('my_closet.html', closet=my_closet)
     elif "name3" in request.form:
         name3 = request.form['name3']

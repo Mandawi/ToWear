@@ -32,7 +32,7 @@ def user_happy(outfit_tried, temp_outfit, temp_global, *secrets):
         Returns:
             int -- (-10 to 10) integer of how the user felt from freezing to melting
     """
-    if secrets[0] != None and secrets[1] != None:
+    if secrets[0] is not None and secrets[1] is not None:
         temp_desired = secrets[0]
         temp_coefficients = secrets[1]
         temp_deviation = (temp_outfit+temp_global) - temp_desired

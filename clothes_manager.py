@@ -80,11 +80,7 @@ class Wardrobe():
                                       0, 0, 4, 0),
                               Garment("jeans",
                                       0, 0, 6, 0),
-                              Garment("light socks",
-                                      0, 0, 0, 1),
                               Garment("sneakers",
                                       0, 0, 0, 3),
-                              Garment("thick socks",
-                                      0, 0, 0, 2),
                               Garment("casual shoes",
                                       0, 0, 0, 4)])

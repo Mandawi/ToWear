@@ -22,7 +22,7 @@ def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
     warmths_sorted = sorted(clothes_ihave.keys(), reverse=False)
     i = len(warmths_sorted)-1
     while (i > 0):
-        # ! BUG: Does not work when items that have effects on multiple body parts, such as coats, are chosen
+        # ! BUG: Does not work when items affect multiple body parts, such as coats or dresses
         while (warmth_required >= warmths_sorted[i]):
             warmth_required = warmth_required - warmths_sorted[i]
             outfit.append(clothes_ihave[warmths_sorted[i]].name)
@@ -50,7 +50,7 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
     warmth_required = list(warmth_required)
     if warmth_required == [0, 0, 0, 0]:
         return None
-    elif len(myclothes) == 0:
+    elif not myclothes:
         return None
     else:
         if myclothes[0].warmth == warmth_required:
@@ -90,7 +90,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     # get the difference between the suggested outfit and the maximum outfit
     difference = (list(
         map(operator.sub, original_outfit_in_numbers, maximum_outfit)))
-    while outfit_in_words == None:
+    while outfit_in_words is None:
         # start at index where the difference between the suggested outfit and the maximum outfit is greatest
         index_to_approximate = difference.index(max(difference))
         # > code for server logs
