@@ -83,6 +83,10 @@ def closet_modify():
             map(int, str(request.form['warmth3']).split()))
         my_closet.change_warmth(name3, warmth3)
         return render_template('my_closet.html', closet=my_closet)
+    elif "repopulate" in request.form:
+        my_closet.contents = []
+        my_closet.generic_clothes_generator()
+        return render_template('my_closet.html', closet=my_closet)
     else:
         return render_template('my_closet.html', closet=my_closet)
 
