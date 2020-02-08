@@ -45,3 +45,5 @@ In [points_to_english.py](https://github.com/Mandawi/ToWear/blob/master/points_t
 <a href="https://github.com/Mandawi/ToWear/blob/master/ToWear.pdf" target="_blank">View PDF.</a>
 
 ### 3. Features in the works <a name="new"></a>
+* [Main to do list](https://github.com/Mandawi/ToWear/projects/1)
+* [Feature to do list](https://github.com/Mandawi/ToWear/projects/2)
