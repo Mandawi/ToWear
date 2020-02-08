@@ -1,43 +1,48 @@
-from flask import Flask, render_template, url_for, request
+"""Web APPlication creation and web page direction (basically, glues the whole program together)."""
+
+from flask import Flask, render_template, request
+import pyowm  # for temperature
 from try_towear import generate_data, suggest_outfit, my_closet
 from points_to_english import translate_outfit
 from clothes_manager import Garment
-import pyowm
-# debugging purposes
-import sys
-
-app = Flask(__name__)
 
 
-@app.after_request
-def add_header(r):
+APP = Flask(__name__)
+
+
+@APP.after_request
+def add_header(made_request):
     """
     source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
     """
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
+    made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    made_request.headers["Pragma"] = "no-cache"
+    made_request.headers["Expires"] = "0"
+    made_request.headers['Cache-Control'] = 'public, max-age=0'
+    return made_request
 
 # main page
-@app.route("/")
+@APP.route("/")
 def home():
+    """Home page."""
     return render_template('index.html')
 
 # about page
-@app.route("/about")
+@APP.route("/about")
 def about():
+    """About page."""
     return render_template('about.html')
 
 # try page
-@app.route("/try")
+@APP.route("/try")
 def try_page():
+    """Developer demo page."""
     return render_template('try.html')
 
 # closet page
-@app.route("/closet")
+@APP.route("/closet")
 def closet():
+    """User closet page."""
     return render_template('my_closet.html', closet=my_closet)
 
 
@@ -48,54 +53,54 @@ def get_temp(zipcode):
         zipcode {str} -- given by the user
 
     Returns:
-        int -- temperature in fahrenheit returned by pyOWM for the current zipcode at the current time
+        int -- temperature in fahrenheit returned by pyOWM
+                for the current zipcode at the current time
     """
     owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')  # API key
     observation = owm.weather_at_zip_code(zipcode, "us")
-    w = observation.get_weather()
-    weather = w.get_temperature('fahrenheit')['temp']
-    return weather
+    current_weather = observation.get_weather()
+    temperature = current_weather.get_temperature('fahrenheit')['temp']
+    return temperature
 
 # closet page after submission of garment addition (or deletion) request
-@app.route("/closet", methods=['POST'])
+@APP.route("/closet", methods=['POST'])
 def closet_modify():
+    """Page direction after modification of closet."""
     if "name" in request.form:
         name = request.form['name']
         warmth = list(
             map(int, str(request.form['warmth']).split()))
-        w1 = warmth[0]
-        w2 = warmth[1]
-        w3 = warmth[2]
-        w4 = warmth[3]
-        new_item = Garment(name, w1, w2, w3, w4)
+        w_1 = warmth[0]
+        w_2 = warmth[1]
+        w_3 = warmth[2]
+        w_4 = warmth[3]
+        new_item = Garment(name, w_1, w_2, w_3, w_4)
         my_closet.add_item(new_item)
         return render_template('my_closet.html', closet=my_closet)
-    elif "check" in request.form:
+    if "check" in request.form:
         selected_items = request.form.getlist('check')
-        print(selected_items, file=sys.stderr)
         for item in selected_items:
-            print(item, file=sys.stderr)
             my_closet.delete_by_name(item)
         return render_template('my_closet.html', closet=my_closet)
-    elif "name3" in request.form:
+    if "name3" in request.form:
         name3 = request.form['name3']
         warmth3 = list(
             map(int, str(request.form['warmth3']).split()))
         my_closet.change_warmth(name3, warmth3)
         return render_template('my_closet.html', closet=my_closet)
-    elif "repopulate" in request.form:
+    if "repopulate" in request.form:
         my_closet.contents = []
         my_closet.generic_clothes_generator()
         return render_template('my_closet.html', closet=my_closet)
-    else:
-        return render_template('my_closet.html', closet=my_closet)
+    return render_template('my_closet.html', closet=my_closet)
 
 # try page after suggestion request
-@app.route('/try', methods=['POST'])
+@APP.route('/try', methods=['POST'])
 def form_post():
+    """Page direction after submitting request for outfit suggestion."""
     training_amount = int(request.form['training_amount'])
     secret_coefficients = list(
-        map(float, str(request.form['secret_coefficients']).split()))  # MUST BE DECIMAL! e.g. .2 .4 .4 .2
+        map(float, str(request.form['secret_coefficients']).split()))
     secret_temp_desired = float(request.form['secret_temp_desired'])
     zipcode = str(request.form['zipcode'])
     temp = get_temp(zipcode)
@@ -110,8 +115,9 @@ def form_post():
     # translate the outfit from an array of integers to clothes using the given closet
     suggested_outfit_translated = translate_outfit(my_closet, suggested_outfit)
 
-    return render_template('try.html', w=temp, souin=suggested_outfit, outfit=suggested_outfit_translated)
+    return render_template(
+        'try.html', w=temp, souin=suggested_outfit, outfit=suggested_outfit_translated)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    APP.run(debug=True)
