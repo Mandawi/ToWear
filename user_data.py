@@ -1,4 +1,5 @@
 '''
+! ONLY LOOK AT THIS IF YOU WANT TO DEVELOP ON THE COMMAND LINE, THIS IS NOT USED ANYWHERE ON THE APP! 
 Get or generate user data which includes outfit_tried, temp_global, and feeling
 representing the clothes worn list, the weather outside, how the user felt with their outfit in that weather.
 This is used for training the ML model.

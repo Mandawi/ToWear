@@ -6,8 +6,6 @@ from dataclasses import dataclass
 @dataclass
 class Garment():
     """Garment class to represent a clothing item (e.g. jeans)"""
-    name: str
-    warmth: list
 
     def __init__(self, name: str, warmth: list) -> None:
         """initialize the garment with a name and warmth effect on the four parts of the body
