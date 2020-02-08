@@ -117,7 +117,7 @@ pyasn1-modules==0.2.5
 pycodestyle==2.5.0
 pycparser==2.19
 Pygments==2.4.2
-pyinstaller==3.5
+pyinstaller==3.6
 pylint==2.3.1
 pyOpenSSL==17.0.0
 pyowm==2.10.0
