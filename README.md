@@ -1,4 +1,4 @@
-# ToWear https://mandawi.github.io/ToWear/
+# [ToWear](https://mandawi.github.io/ToWear/) 
 
 ![freepik-logo.ico](static/freepik-logo.ico?raw=true "Logo")
 
