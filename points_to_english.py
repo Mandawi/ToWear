@@ -1,36 +1,8 @@
+"""Functions that help us create suggested outfits given the user's closet."""
+
 import operator
-
-from clothes_manager import Garment, Wardrobe
 from functools import lru_cache
-
-
-def findMin(warmth_required: int, clothes_ihave: dict, body_part: int) -> list:
-    # ! NOTE: This function is expired and is no longer in use; for reason, see BUG below
-    """Inspired by https://medium.com/@emailarunkumar/coin-exchange-problem-greedy-or-dynamic-programming-6e5ebe5a30b5
-    Use a simple brute force algorithm to find clothes needed to achieve the desired temperature
-
-    Arguments:
-        warmth_required {int} - - the needed warmth
-        clothes_ihave {dict} - - the wardrobe contents as {warmth[position]: garment} dictionary
-        body_part {int} - - the body part 0: head, 1:top, 2:bottom, 3:feet
-
-    Returns:
-        list - - the outfit for this position
-    """
-    # outfit is a list of lists of Garments for each part of the body
-    outfit = []
-    warmths_sorted = sorted(clothes_ihave.keys(), reverse=False)
-    i = len(warmths_sorted)-1
-    while (i > 0):
-        # ! BUG: Does not work when items affect multiple body parts, such as coats or dresses
-        while (warmth_required >= warmths_sorted[i]):
-            warmth_required = warmth_required - warmths_sorted[i]
-            outfit.append(clothes_ihave[warmths_sorted[i]].name)
-            # no more than one item from shoes
-            if body_part == 3:
-                return outfit
-        i -= 1
-    return outfit
+from clothes_manager import Wardrobe
 
 
 @lru_cache(maxsize=5040)  # because 10*9*8*7 is 5040
@@ -41,7 +13,8 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
 
     Arguments:
         myclothes {Wardrobe} -- the user's closet
-        warmth_required {list} -- the list of suggested warmths (outfit_in_numbers) given by suggest_outfit in try_towear
+        warmth_required {list} -- the list of suggested warmths (outfit_in_numbers)
+        given by suggest_outfit in try_towear
 
     Returns:
         list -- the list of garment names whose warmths satisfy the warmth_required
@@ -50,18 +23,15 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
     warmth_required = list(warmth_required)
     if warmth_required == [0, 0, 0, 0]:
         return None
-    elif not myclothes:
+    if not myclothes:
         return None
-    else:
-        if myclothes[0].warmth == warmth_required:
-            return [myclothes[0].name]
-        else:
-            with_v = subsetsum_lists(tuple(myclothes[1:]), tuple(list(
-                map(operator.sub, warmth_required, myclothes[0].warmth))))
-            if with_v:
-                return [myclothes[0].name] + with_v
-            else:
-                return subsetsum_lists(tuple(myclothes[1:]), tuple(warmth_required))
+    if myclothes[0].warmth == warmth_required:
+        return [myclothes[0].name]
+    with_v = subsetsum_lists(tuple(myclothes[1:]), tuple(list(
+        map(operator.sub, warmth_required, myclothes[0].warmth))))
+    if with_v:
+        return [myclothes[0].name] + with_v
+    return subsetsum_lists(tuple(myclothes[1:]), tuple(warmth_required))
 
 
 def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
@@ -84,14 +54,16 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     wardrobe_contents_warmths = [
         garment.warmth for garment in wardrobe.contents]
     # create an outfit combining everything in the user's closet
-    # * we will later use this to know in which places the user lacks enough garments so we can better approximate
+    # * we will later use this to know in which places the user lacks enough garments
+    # * so we can better approximate
     maximum_outfit = [sum(garment_warmth)
                       for garment_warmth in zip(*wardrobe_contents_warmths)]
     # get the difference between the suggested outfit and the maximum outfit
     difference = (list(
         map(operator.sub, original_outfit_in_numbers, maximum_outfit)))
     while outfit_in_words is None:
-        # start at index where the difference between the suggested outfit and the maximum outfit is greatest
+        # start at index where the difference between the suggested outfit
+        # and the maximum outfit is greatest
         index_to_approximate = difference.index(max(difference))
         # > code for server logs
         print(
@@ -117,9 +89,9 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     return outfit_in_words
 
 
-# * for testing only
+# ! for testing only
 if __name__ == "__main__":
-    my_closet = Wardrobe()
-    my_closet.generic_clothes_generator()
-    outfit_in_numbers = [9, 10, 10, 11]
-    outfit_in_words = translate_outfit(my_closet, outfit_in_numbers)
+    MY_CLOSET = Wardrobe()
+    MY_CLOSET.generic_clothes_generator()
+    NUMERICAL_OUTFIT = [9, 10, 10, 11]
+    WORDED_OUTFIT = translate_outfit(MY_CLOSET, NUMERICAL_OUTFIT)
