@@ -1,13 +1,15 @@
-"""Web APPlication creation and web page direction (basically, glues the whole program together)."""
+"""Web application creation and web page direction (basically, glues the whole program together)."""
 
 from flask import Flask, render_template, request
 import pyowm  # for temperature
-from try_towear import generate_data, suggest_outfit, my_closet
+from try_towear import generate_data, suggest_outfit
 from points_to_english import translate_outfit
-from clothes_manager import Garment
+from clothes_manager import Garment, Wardrobe
 
 
 APP = Flask(__name__)
+MY_CLOSET = Wardrobe()
+MY_CLOSET.generic_clothes_generator()
 
 
 @APP.after_request
@@ -43,7 +45,7 @@ def try_page():
 @APP.route("/closet")
 def closet():
     """User closet page."""
-    return render_template('my_closet.html', closet=my_closet)
+    return render_template('my_closet.html', closet=MY_CLOSET)
 
 
 def get_temp(zipcode):
@@ -75,24 +77,24 @@ def closet_modify():
         w_3 = warmth[2]
         w_4 = warmth[3]
         new_item = Garment(name, w_1, w_2, w_3, w_4)
-        my_closet.add_item(new_item)
-        return render_template('my_closet.html', closet=my_closet)
+        MY_CLOSET.add_item(new_item)
+        return render_template('my_closet.html', closet=MY_CLOSET)
     if "check" in request.form:
         selected_items = request.form.getlist('check')
         for item in selected_items:
-            my_closet.delete_by_name(item)
-        return render_template('my_closet.html', closet=my_closet)
+            MY_CLOSET.delete_by_name(item)
+        return render_template('my_closet.html', closet=MY_CLOSET)
     if "name3" in request.form:
         name3 = request.form['name3']
         warmth3 = list(
             map(int, str(request.form['warmth3']).split()))
-        my_closet.change_warmth(name3, warmth3)
-        return render_template('my_closet.html', closet=my_closet)
+        MY_CLOSET.change_warmth(name3, warmth3)
+        return render_template('my_closet.html', closet=MY_CLOSET)
     if "repopulate" in request.form:
-        my_closet.contents = []
-        my_closet.generic_clothes_generator()
-        return render_template('my_closet.html', closet=my_closet)
-    return render_template('my_closet.html', closet=my_closet)
+        MY_CLOSET.contents = []
+        MY_CLOSET.generic_clothes_generator()
+        return render_template('my_closet.html', closet=MY_CLOSET)
+    return render_template('my_closet.html', closet=MY_CLOSET)
 
 # try page after suggestion request
 @APP.route('/try', methods=['POST'])
@@ -113,7 +115,7 @@ def form_post():
     suggested_outfit = [int(element) for element in suggest_outfit(
         temp_input, outfit_output, temp)]
     # translate the outfit from an array of integers to clothes using the given closet
-    suggested_outfit_translated = translate_outfit(my_closet, suggested_outfit)
+    suggested_outfit_translated = translate_outfit(MY_CLOSET, suggested_outfit)
 
     return render_template(
         'try.html', w=temp, souin=suggested_outfit, outfit=suggested_outfit_translated)

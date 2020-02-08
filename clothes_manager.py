@@ -1,21 +1,30 @@
+"""Classes for creating user's garments and closets."""
+
+from dataclasses import dataclass
+
+
+@dataclass
 class Garment():
     """Garment class to represent a clothing item (e.g. jeans)"""
+    name: str
+    warmth: list
 
-    def __init__(self, name: str, head: int, top: int, bottom: int, feet: int) -> None:
+    def __init__(self, name: str, warmth: list) -> None:
         """initialize the garment with a name and warmth effect on the four parts of the body
         Arguments:
-            name {str} - - name of garment
-            head {int} - - warmth effect on head (0 to 10)
-            top {int} - - warmth effect on top (0 to 10)
-            bottom {int} - - warmth effect on bottom (0 to 10)
-            feet {int} - - warmth effect on feet (0 to 10)
+                name {str} - - name of garment
+                warmth{list} --[
+                                head {int} - - warmth effect on head (0 to 10),
+                                top {int} - - warmth effect on top (0 to 10),
+                                bottom {int} - - warmth effect on bottom (0 to 10),
+                                feet {int} - - warmth effect on feet (0 to 10)
+                                ]
         """
-        # FIXME: Garment must have an affect on one and only one part of the body
         self.name = name
-        self.warmth = [head, top, bottom, feet]
-    pass
+        self.warmth = warmth
 
 
+@dataclass
 class Wardrobe():
     """Wardrobe class to represent a user's closet"""
 
@@ -57,30 +66,30 @@ class Wardrobe():
         """Generate a set of garments for the closet
         """
         self.contents.extend([Garment("short sleeve shirt",
-                                      0, 2, 0, 0),
+                                      [0, 2, 0, 0]),
                               Garment("long sleeve shirt",
-                                      0, 3, 0, 0),
+                                      [0, 3, 0, 0]),
                               Garment("sweatshirt",
-                                      0, 3, 0, 0),
+                                      [0, 3, 0, 0]),
                               Garment("sweater",
-                                      0, 3, 0, 0),
+                                      [0, 3, 0, 0]),
                               Garment("winter jacket",
-                                      0, 4, 0, 0),
+                                      [0, 4, 0, 0]),
                               Garment("winter coat",
-                                      1, 5, 2, 0),
+                                      [1, 5, 2, 0]),
                               Garment("beanie",
-                                      2, 0, 0, 0),
+                                      [2, 0, 0, 0]),
                               Garment("hat",
-                                      3, 0, 0, 0),
+                                      [3, 0, 0, 0]),
                               Garment("pom pom hat",
-                                      4, 0, 0, 0),
+                                      [4, 0, 0, 0]),
                               Garment("shorts",
-                                      0, 0, 3, 0),
+                                      [0, 0, 3, 0]),
                               Garment("sweatpants",
-                                      0, 0, 4, 0),
+                                      [0, 0, 4, 0]),
                               Garment("jeans",
-                                      0, 0, 6, 0),
+                                      [0, 0, 6, 0]),
                               Garment("sneakers",
-                                      0, 0, 0, 3),
+                                      [0, 0, 0, 3]),
                               Garment("casual shoes",
-                                      0, 0, 0, 4)])
+                                      [0, 0, 0, 4])])

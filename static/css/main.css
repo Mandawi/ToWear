@@ -1,15 +1,19 @@
 body {
-    margin: 0;
-    font-family:Arial, Helvetica, sans-serif;
-    color: rgb(91, 167, 255);
-    background-color: black;
-    font-size:large;
-  }
+  /* default body text format */
+  margin: 0;
+  font-family:Arial, Helvetica, sans-serif;
+  color: rgb(91, 167, 255);
+  background-color: black;
+  font-size:large;
+}
+
 p{
-color: white
+  /* default paragraph text format */
+  color: white
 }
 
 ul.sidenav {
+  /* main menu */
   list-style-type: none;
   margin: 0;
   padding: 0px;
@@ -22,6 +26,7 @@ ul.sidenav {
 }
 
 ul.sidenav li a {
+  /* main menu item*/
   display: block;
   color: white;
   padding: 4px 8px;
@@ -29,26 +34,30 @@ ul.sidenav li a {
 }
  
 ul.sidenav li a.active {
+  /* main menu selected page*/
   background-color:rgb(91, 167, 255);
   font-weight:bold;
   color: black;
 }
 
-ul.sidenav li a:hover { /* hover on an active sidenav button */
+ul.sidenav li a:hover {
+  /* hover on an active sidenav button */
     background-color:rgb(0, 119, 255);
     color: black;
   }
 
 
-ul.sidenav li a:hover:not(.active) { /* hover on a non active sidenav button */
+ul.sidenav li a:hover:not(.active) { 
+  /* hover on a non active sidenav button */
   background-color: #555;
   color: white;
 }
  
-ul.sidenav li a:hover:active { /* click on any sidenav button */
-    background-color:rgb(0, 119, 255);
-    font-weight:bold;
-    color: black;
+ul.sidenav li a:hover:active { 
+  /* click on any sidenav button */
+  background-color:rgb(0, 119, 255);
+  font-weight:bold;
+  color: black;
   }
 
 div.content {
@@ -72,19 +81,21 @@ div.content {
   div.content {margin-left: 0;}
 }
 input[type=submit] {
-    background-color: ghostwhite;
-    border: none;
-    border-radius: 20px;
-    color: blacks;
-    padding: 16px 32px;
-    text-decoration: none;
-    margin: 4px 2px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: large;
-  }
+  /* submit button */
+  background-color: ghostwhite;
+  border: none;
+  border-radius: 20px;
+  color: blacks;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: large;
+}
 
 input[type=text] {
+  /* textbox */
   width: 50%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -96,58 +107,68 @@ input[type=text] {
 }
 
 input[type=text]:focus {
+  /* textbox selected */
   background-color: black;
 }
 
 .container_change_warmth {
+  /* container for button relating to changing the warmth of a garment */
   border-radius: 5px;
   background-color: darkslateblue;
   padding: 20px;
 }
 
 .container_repopulate {
+  /* container for button relating to repopulating the closet with garments */
   border-radius: 5px;
   background-color: rgb(0, 119, 255);
   padding: 20px;
 }
 
 .container_add {
-    border-radius: 5px;
-    background-color: green;
-    padding: 20px;
-  }
+  /* container for button relating to adding a garment */
+  border-radius: 5px;
+  background-color: green;
+  padding: 20px;
+}
 
 .container_del {
-    border-radius: 5px;
-    background-color: darkred;
-    padding: 20px;
+  /* container for button relating to deleting a garment */
+  border-radius: 5px;
+  background-color: darkred;
+  padding: 20px;
 }
 
 table {
+  /* clothes table */
   border-collapse: collapse;
   width: 100%;
 }
 
 th, td {
+  /* clothes table headers */
   text-align: left;
   padding: 8px;
-  border-radius: 5px;
 }
 
 tr:nth-child(even){
+  /* clothes table alternating rows */
   background-color: darkslateblue;
   color:white;
 }
 
 tr:nth-child(odd){
+  /* clothes table alternating rows */
   color:white;
 }
 
 th {
+  /* clothes table cell */
   background-color: rgb(0, 119, 255);
   color: black;
 }
 .container {
+  /* default checkbox style modification */
   display: block;
   position: relative;
   padding-left: 35px;
@@ -160,8 +181,8 @@ th {
   user-select: none;
 }
 
-/* Hide the browser's default checkbox */
 .container input {
+  /* Hide the browser's default checkbox */
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -169,8 +190,8 @@ th {
   width: 0;
 }
 
-/* Create a custom checkbox */
 .checkmark {
+  /* Create a custom checkbox */
   position: absolute;
   top: 0;
   left: 0;
@@ -179,30 +200,30 @@ th {
   background-color: #eee;
 }
 
-/* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
-  background-color: #ccc;
+  /* On mouse-over, add a light blue background color */
+  background-color: skyblue;
 }
 
-/* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
+  /* When the checkbox is checked, add a blue background */
   background-color: rgb(0, 119, 255);
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
+  /* Create the checkmark/indicator (hidden when not checked) */
   content: "";
   position: absolute;
   display: none;
 }
 
-/* Show the checkmark when checked */
 .container input:checked ~ .checkmark:after {
+  /* Show the checkmark when checked */
   display: block;
 }
 
-/* Style the checkmark/indicator */
 .container .checkmark:after {
+  /* Style the checkmark/indicator */
   left: 9px;
   top: 5px;
   width: 5px;
