@@ -101,8 +101,8 @@ def closet_modify():
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
     secret_coefficients = list(
-        map(float, str(request.form['secret_coefficients']).split()))
-    secret_temp_desired = float(request.form['secret_temp_desired'])
+        map(float, str(request.form['weather_conditions']).split()))
+    secret_temp_desired = float(request.form['temperature_tolerance'])
     zipcode = str(request.form['zipcode'])
     temp = get_temp(zipcode)
     # using what we know, generate training set of different

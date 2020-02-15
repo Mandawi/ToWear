@@ -10,13 +10,40 @@ class="active"
 
 {% block body %} 
 <h1> Try the app! </h1>
-<p> Enter training amount as an integer. Enter secret coefficients as a list of four decimals that add up to 1. Enter secret temperature desired as a number.</p>
+<p> Enter secret temperature desired as a number.</p>
 <p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
 <form method="POST">
-    <p> Secret coefficients: 4 space-seperated decimals from 0 to 1 and adding up to 1, indicating how much each part of the body affects the overall warmth </p>
-    <input type="text" placeholder="Secret coefficients" name="secret_coefficients" required>
+    <p> Weather Conditions </p>
+    <label class="container">Average: nothing extraordinary
+    <input type="radio" checked="checked" name="weather_conditions" value="0.15 0.35 0.35 0.15">
+    <span class="checkmark_radio"></span>
+    </label>
+    <label class="container">Extra Sunny: less warm tops and nothing on head
+    <input type="radio" name="weather_conditions" value="0 0.3 0.35 0.35">
+    <span class="checkmark_radio"></span>
+    </label>
+    <label class="container">Rainy Day: hats and boots 
+    <input type="radio" name="weather_conditions" value="0.2 0.3 0.3 0.2">
+    <span class="checkmark_radio"></span>
+    </label>
+    <label class="container">Snowy Day: boots and coat
+    <input type="radio" name="weather_conditions" value="0.05 0.4 0.3 0.25">
+    <span class="checkmark_radio"></span>
+    </label>
     <br>
-    <input type="text" placeholder="Secret temperature desired (integer)" name="secret_temp_desired" required> 
+    <p> Temperature Tolerance</p>
+    <label class="container">Normal
+    <input type="radio" checked="checked" name="temperature_tolerance" value="100">
+    <span class="checkmark_radio"></span>
+    </label>
+    <label class="container">Always Cold
+    <input type="radio" name="temperature_tolerance" value="120">
+    <span class="checkmark_radio"></span>
+    </label>
+    <label class="container">Always Warm
+    <input type="radio" name="temperature_tolerance" value="90">
+    <span class="checkmark_radio"></span>
+    </label>
     <br>
     <input type="text" placeholder="Zip code" name="zipcode" required>
     <br>
