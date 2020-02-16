@@ -7,12 +7,12 @@ from points_to_english import translate_outfit
 from clothes_manager import Garment, Wardrobe
 
 
-APP = Flask(__name__)
+app = Flask(__name__)
 MY_CLOSET = Wardrobe()
 MY_CLOSET.generic_clothes_generator()
 
 # disable css caching
-@APP.after_request
+@app.after_request
 def add_header(made_request):
     """
     source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask 
@@ -24,25 +24,25 @@ def add_header(made_request):
     return made_request
 
 # main page
-@APP.route("/")
+@app.route("/")
 def home():
     """Home page."""
     return render_template('index.html')
 
 # about page
-@APP.route("/about")
+@app.route("/about")
 def about():
     """About page."""
     return render_template('about.html')
 
 # try page
-@APP.route("/try")
+@app.route("/try")
 def try_page():
     """Developer demo page."""
     return render_template('try.html')
 
 # closet page
-@APP.route("/closet")
+@app.route("/closet")
 def closet():
     """User closet page."""
     return render_template('my_closet.html', closet=MY_CLOSET)
@@ -65,7 +65,7 @@ def get_temp(zipcode):
     return temperature
 
 # closet page after submission of garment addition (or deletion) request
-@APP.route("/closet", methods=['POST'])
+@app.route("/closet", methods=['POST'])
 def closet_modify():
     """Page direction after modification of closet."""
     if "name" in request.form:
@@ -93,7 +93,7 @@ def closet_modify():
     return render_template('my_closet.html', closet=MY_CLOSET)
 
 # try page after suggestion request
-@APP.route('/try', methods=['POST'])
+@app.route('/try', methods=['POST'])
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
     secret_coefficients = list(
@@ -118,4 +118,4 @@ def form_post():
 
 
 if __name__ == "__main__":
-    APP.run(debug=True)
+    app.run(debug=True)
