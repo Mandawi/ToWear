@@ -11,11 +11,11 @@ APP = Flask(__name__)
 MY_CLOSET = Wardrobe()
 MY_CLOSET.generic_clothes_generator()
 
-
+# disable css caching
 @APP.after_request
 def add_header(made_request):
     """
-    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask 
     """
     made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     made_request.headers["Pragma"] = "no-cache"
@@ -72,11 +72,7 @@ def closet_modify():
         name = request.form['name']
         warmth = list(
             map(int, str(request.form['warmth']).split()))
-        w_1 = warmth[0]
-        w_2 = warmth[1]
-        w_3 = warmth[2]
-        w_4 = warmth[3]
-        new_item = Garment(name, w_1, w_2, w_3, w_4)
+        new_item = Garment(name, warmth)
         MY_CLOSET.add_item(new_item)
         return render_template('my_closet.html', closet=MY_CLOSET)
     if "check" in request.form:
@@ -100,17 +96,16 @@ def closet_modify():
 @APP.route('/try', methods=['POST'])
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
-    training_amount = int(request.form['training_amount'])
     secret_coefficients = list(
-        map(float, str(request.form['secret_coefficients']).split()))
-    secret_temp_desired = float(request.form['secret_temp_desired'])
+        map(float, str(request.form['weather_conditions']).split()))
+    secret_temp_desired = float(request.form['temperature_tolerance'])
     zipcode = str(request.form['zipcode'])
     temp = get_temp(zipcode)
     # using what we know, generate training set of different
     # temperature (temp_input) to outfit (outfit_input) combinations
     # (e.g. 20, [1 6 5 4])
     temp_input, outfit_output = generate_data(
-        training_amount, secret_temp_desired, secret_coefficients)
+        secret_temp_desired, secret_coefficients)
     # using the training set, predict an outfit given the temperature
     suggested_outfit = [int(element) for element in suggest_outfit(
         temp_input, outfit_output, temp)]
@@ -118,7 +113,8 @@ def form_post():
     suggested_outfit_translated = translate_outfit(MY_CLOSET, suggested_outfit)
 
     return render_template(
-        'try.html', w=temp, souin=suggested_outfit, outfit=suggested_outfit_translated)
+        'try.html', temperature=temp, suggested_outfit_warmths=suggested_outfit,
+        suggested_outfit_garments=suggested_outfit_translated)
 
 
 if __name__ == "__main__":

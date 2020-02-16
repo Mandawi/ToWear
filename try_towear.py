@@ -51,7 +51,7 @@ def user_happy(outfit_tried: list, temp_outfit: int, temp_global: int, *secrets:
     raise ValueError('Expected known secrets')
 
 
-def generate_data(data_amount: int, *secrets: list) -> tuple:
+def generate_data(*secrets: list) -> tuple:
     """create train set data for machine learning;
     note that only the omniscient user knows the secret numbers
     although the secrets are known, we'll let the AI figure them out on its own
@@ -67,12 +67,16 @@ def generate_data(data_amount: int, *secrets: list) -> tuple:
     """
     # list for predicting the desired temperature of the user
     estimated_desired_temp = list()
+
     # list for predicting the warmth coefficients of the user
     estimated_coefficients = []
+
     # list of weather data
     weather_input = list()
+
     # list of outfits corresponding to the weather data
     outfit_output = [[] for _ in range(0, 4)]
+
     if secrets:
         # the serets are known so, we can just take them
         temp_desired = secrets[0]
@@ -82,17 +86,25 @@ def generate_data(data_amount: int, *secrets: list) -> tuple:
     else:
         # if we don't know the desired temperatures, we should estimate them later
         temp_desired_scaled = temp_coefficients = None
+
+    # training amount (integer; 10 is usually enough. >100 is too high
+    training_amount = 10
+
     # generate data_amount of items for the training sets of weather_input and outfit_output
-    while len(weather_input) != data_amount:
+    while len(weather_input) != training_amount:
         # random weather value between 0 and 40
         temp_global_original = randint(0, 134)
+
         # global temperature in the same terms as the temperature of the outfit
         temp_global_scaled = (40/134) * temp_global_original
+
         # generate a random tried outfit with garment warmths between 0 and 10 for all 4 parts
         outfit_tried = [randint(0, 10) for _ in range(0, 4)]
+
         # the temperature of the outfit generated
         # between 0 and 40 for the temperature which is between 0 and 40
         temp_outfit = sum(outfit_tried)
+
         if user_happy(outfit_tried, temp_outfit, temp_global_scaled,
                       temp_desired_scaled, temp_coefficients):
             # if the user, knowing their desired temperature
@@ -121,13 +133,17 @@ def suggest_outfit(weather_input: list, outfit_output: list, weather_given: int)
     """
     # create linear regression objects for the four clothing slots
     predictors = [LinearRegression(n_jobs=-1) for _ in range(0, 4)]
-    # fit the linear model (approximate a target function)
+
+   # fit the linear model (approximate a target function)
     for index, predictor in enumerate(predictors):
         predictor.fit(X=weather_input, y=outfit_output[index])
+
     # use the current weather as input
     x_test = [[int(weather_given)]]
+
     # Predict the ouput of the input X_Test using the linear model
     outfit = [predictor.predict(X=x_test) for predictor in predictors]
+
     # get rid of any below 0 inaccuracies
     for i, suggested_garment_warmth in enumerate(outfit):
         if suggested_garment_warmth < 0:

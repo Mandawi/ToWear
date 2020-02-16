@@ -67,6 +67,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
         index_to_approximate = difference.index(max(difference))
         # > code for server logs
         print(
+            f"The suggested outfit is {outfit_in_numbers}")
+        print(
             f"The differnce between suggested outfit and maximum outfit is {difference}")
         # > end of code for server logs
         # reduce the warmth of the suggested outfit based on where the user lacks enough clothes

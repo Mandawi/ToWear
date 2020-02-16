@@ -21,6 +21,9 @@ class Garment():
         self.name = name
         self.warmth = warmth
 
+    def __hash__(self):
+        return hash(tuple(self.warmth))
+
 
 @dataclass
 class Wardrobe():
@@ -55,18 +58,17 @@ class Wardrobe():
         Arguments:
             name {str} -- the name of the item to be deleted
         """
-        for item in self.contents:
+        for index, item in enumerate(self.contents):
             if item.name == name:
-                garment_to_delete = item
-                self.contents.remove(garment_to_delete)
+                del self.contents[index]
 
     def generic_clothes_generator(self) -> None:
         """Generate a set of garments for the closet
         """
         self.contents.extend([Garment("short sleeve shirt",
-                                      [0, 2, 0, 0]),
+                                      [0, 1, 0, 0]),
                               Garment("long sleeve shirt",
-                                      [0, 3, 0, 0]),
+                                      [0, 2, 0, 0]),
                               Garment("sweatshirt",
                                       [0, 3, 0, 0]),
                               Garment("sweater",
@@ -82,9 +84,9 @@ class Wardrobe():
                               Garment("pom pom hat",
                                       [4, 0, 0, 0]),
                               Garment("shorts",
-                                      [0, 0, 3, 0]),
+                                      [0, 0, 1, 0]),
                               Garment("sweatpants",
-                                      [0, 0, 4, 0]),
+                                      [0, 0, 3, 0]),
                               Garment("jeans",
                                       [0, 0, 6, 0]),
                               Garment("sneakers",
