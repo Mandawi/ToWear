@@ -21,6 +21,9 @@ class Garment():
         self.name = name
         self.warmth = warmth
 
+    def __hash__(self):
+        return hash(tuple(self.warmth))
+
 
 @dataclass
 class Wardrobe():

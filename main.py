@@ -15,7 +15,7 @@ MY_CLOSET.generic_clothes_generator()
 @APP.after_request
 def add_header(made_request):
     """
-    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask 
     """
     made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     made_request.headers["Pragma"] = "no-cache"
