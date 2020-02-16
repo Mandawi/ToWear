@@ -72,11 +72,7 @@ def closet_modify():
         name = request.form['name']
         warmth = list(
             map(int, str(request.form['warmth']).split()))
-        w_1 = warmth[0]
-        w_2 = warmth[1]
-        w_3 = warmth[2]
-        w_4 = warmth[3]
-        new_item = Garment(name, [w_1, w_2, w_3, w_4])
+        new_item = Garment(name, warmth)
         MY_CLOSET.add_item(new_item)
         return render_template('my_closet.html', closet=MY_CLOSET)
     if "check" in request.form:
