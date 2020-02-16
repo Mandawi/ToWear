@@ -5,7 +5,7 @@ from functools import lru_cache
 from clothes_manager import Wardrobe
 
 
-@lru_cache(maxsize=5040)  # because 10*9*8*7 is 5040
+@lru_cache()  # because 10*9*8*7 is 5040
 def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
     """Use a recursive algorithm to find the smallest subset of myclothes
     such that its sum is equal to that of warmth_required, subset sum style.
