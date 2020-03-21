@@ -10,9 +10,11 @@
   <body>
     <ul class="sidenav">
       <li><a {% block Home %} {% endblock %} href="{{ url_for('home') }}">ToWear</a></li>
+      <li><a {% block Login %} {% endblock %} href="{{ url_for('login') }}">Login</a></li>
+      <li><a {% block Register %} {% endblock %} href="{{ url_for('register') }}">Register</a></li>
       <li><a {% block Try %} {% endblock %} href="{{ url_for('try_page') }}">Try</a></li>
-      <li><a {% block About %} {% endblock %} href="{{ url_for('about') }}">About</a></li>
       <li><a {% block Closet %} {% endblock %} href="{{ url_for('closet') }}">My Closet</a></li>
+      <li><a {% block About %} {% endblock %} href="{{ url_for('about') }}">About</a></li>
     </ul>
 
     <div class="content">

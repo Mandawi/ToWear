@@ -1,21 +1,50 @@
 """Web application creation and web page direction (basically, glues the whole program together)."""
 
+
 from flask import Flask, render_template, request
-import pyowm  # for temperature
+
+import pyowm
 from try_towear import generate_data, suggest_outfit
 from points_to_english import translate_outfit
 from clothes_manager import Garment, Wardrobe
 
+from flask_bootstrap import Bootstrap
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField
+from wtforms.validators import InputRequired, Email, Length
+
+from flask_nav.elements import Navbar, View
+from flask_nav import Nav
+
+<<<<<<< Updated upstream
 APP = Flask(__name__)
+=======
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'donttellanyonethis'
+
+nav = Nav()
+
+>>>>>>> Stashed changes
 MY_CLOSET = Wardrobe()
 MY_CLOSET.generic_clothes_generator()
+
+
+@nav.navigation()
+def mynavbar():
+    return Navbar(
+        'ToWear',
+        View('Home', 'home'),
+        View('Login', 'login'),
+        View('Register', 'register'),
+    )
+
 
 # disable css caching
 @APP.after_request
 def add_header(made_request):
     """
-    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask 
+    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
     """
     made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     made_request.headers["Pragma"] = "no-cache"
@@ -23,26 +52,79 @@ def add_header(made_request):
     made_request.headers['Cache-Control'] = 'public, max-age=0'
     return made_request
 
+<<<<<<< Updated upstream
 # main page
 @APP.route("/")
+=======
+
+class LoginForm(FlaskForm):
+    username = StringField("username", validators=[
+                           InputRequired(), Length(min=5, max=20)])
+    password = PasswordField("password", validators=[
+                             InputRequired(), Length(8, 80)])
+    remember = BooleanField("remember me")
+
+
+class RegisterForm(FlaskForm):
+    username = StringField("username", validators=[
+                           InputRequired(), Length(min=5, max=20)])
+    email = StringField("email", validators=[
+        InputRequired(), Email(message="This is an invalid email!"), Length(max=50)])
+    password = PasswordField("password", validators=[
+                             InputRequired(), Length(8, 80)])
+
+
+@app.route("/")
+>>>>>>> Stashed changes
 def home():
     """Home page."""
     return render_template('index.html')
 
+<<<<<<< Updated upstream
 # about page
 @APP.route("/about")
+=======
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    """Login page."""
+    form = LoginForm()
+    if form.validate_on_submit():
+        return '<h1>' + form.username.data + ' ' + form.password.data + '</h1>'
+    return render_template('login.html', form=form)
+
+
+@app.route("/register")
+def register():
+    """Registration page."""
+    form = RegisterForm()
+    return render_template('register.html', form=form)
+
+
+@app.route("/about")
+>>>>>>> Stashed changes
 def about():
     """About page."""
     return render_template('about.html')
 
+<<<<<<< Updated upstream
 # try page
 @APP.route("/try")
+=======
+
+@app.route("/try")
+>>>>>>> Stashed changes
 def try_page():
     """Developer demo page."""
     return render_template('try.html')
 
+<<<<<<< Updated upstream
 # closet page
 @APP.route("/closet")
+=======
+
+@app.route("/closet")
+>>>>>>> Stashed changes
 def closet():
     """User closet page."""
     return render_template('my_closet.html', closet=MY_CLOSET)
@@ -64,8 +146,13 @@ def get_temp(zipcode):
     temperature = current_weather.get_temperature('fahrenheit')['temp']
     return temperature
 
+<<<<<<< Updated upstream
 # closet page after submission of garment addition (or deletion) request
 @APP.route("/closet", methods=['POST'])
+=======
+
+@app.route("/closet", methods=['POST'])
+>>>>>>> Stashed changes
 def closet_modify():
     """Page direction after modification of closet."""
     if "name" in request.form:
@@ -92,8 +179,13 @@ def closet_modify():
         return render_template('my_closet.html', closet=MY_CLOSET)
     return render_template('my_closet.html', closet=MY_CLOSET)
 
+<<<<<<< Updated upstream
 # try page after suggestion request
 @APP.route('/try', methods=['POST'])
+=======
+
+@app.route('/try', methods=['POST'])
+>>>>>>> Stashed changes
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
     secret_coefficients = list(
@@ -118,4 +210,10 @@ def form_post():
 
 
 if __name__ == "__main__":
+<<<<<<< Updated upstream
     APP.run(debug=True)
+=======
+    nav.init_app(app)
+    bootstrap = Bootstrap(app)
+    app.run(debug=True)
+>>>>>>> Stashed changes

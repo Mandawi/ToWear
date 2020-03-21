@@ -100,13 +100,29 @@ input[type=text] {
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  border: 2px solid rgb(0, 119, 255);
+  border: 2px solid rgb(255, 255, 255);
   border-radius: 4px;
   background-color:darkslategray;
   color:white;
 }
 
 input[type=text]:focus {
+  /* textbox selected */
+  background-color: black;
+}
+
+input[type=password] {
+  /* textbox */
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid rgb(0, 119, 255);
+  border-radius: 4px;
+  background-color:darkslategray;
+  color:white;
+}
+input[type=password]:focus {
   /* textbox selected */
   background-color: black;
 }
