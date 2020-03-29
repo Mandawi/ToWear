@@ -1,12 +1,9 @@
-"""Web application creation and web page direction (basically, glues the whole program together)."""
+"""Web APPlication creation and web page direction (basically, glues the whole program together)."""
 
 
 from flask import Flask, render_template, request
 
 import pyowm
-from try_towear import generate_data, suggest_outfit
-from points_to_english import translate_outfit
-from clothes_manager import Garment, Wardrobe
 
 from flask_bootstrap import Bootstrap
 
@@ -14,29 +11,19 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
-from flask_nav.elements import Navbar, View
-from flask_nav import Nav
+from try_towear import generate_data, suggest_outfit
+from points_to_english import translate_outfit
+from clothes_manager import Garment, Wardrobe
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'donttellanyonethis'
-
-nav = Nav()
+APP = Flask(__name__)
+APP.config['SECRET_KEY'] = 'donttellanyonethis'
+APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
 MY_CLOSET = Wardrobe()
 MY_CLOSET.generic_clothes_generator()
 
 
-@nav.navigation()
-def mynavbar():
-    return Navbar(
-        'ToWear',
-        View('Home', 'home'),
-        View('Login', 'login'),
-        View('Register', 'register'),
-    )
-
-
-@app.after_request
+@APP.after_request
 def add_header(made_request):
     """
     source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
@@ -49,29 +36,30 @@ def add_header(made_request):
 
 
 class LoginForm(FlaskForm):
-    username = StringField("username", validators=[
+    username = StringField("Username", validators=[
                            InputRequired(), Length(min=5, max=20)])
-    password = PasswordField("password", validators=[
+    password = PasswordField("Password", validators=[
                              InputRequired(), Length(8, 80)])
-    remember = BooleanField("remember me")
+    remember = BooleanField("Remember me")
 
 
 class RegisterForm(FlaskForm):
-    username = StringField("username", validators=[
+    username = StringField("Username", validators=[
                            InputRequired(), Length(min=5, max=20)])
-    email = StringField("email", validators=[
+    email = StringField("Email", validators=[
         InputRequired(), Email(message="This is an invalid email!"), Length(max=50)])
-    password = PasswordField("password", validators=[
+    password = PasswordField("Password", validators=[
                              InputRequired(), Length(8, 80)])
 
 
-@app.route("/")
+@APP.route("/home")
+@APP.route("/")
 def home():
     """Home page."""
     return render_template('index.html')
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@APP.route("/login", methods=['GET', 'POST'])
 def login():
     """Login page."""
     form = LoginForm()
@@ -80,26 +68,26 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route("/register")
+@APP.route("/register")
 def register():
     """Registration page."""
     form = RegisterForm()
     return render_template('register.html', form=form)
 
 
-@app.route("/about")
+@APP.route("/about")
 def about():
     """About page."""
     return render_template('about.html')
 
 
-@app.route("/try")
+@APP.route("/try")
 def try_page():
     """Developer demo page."""
     return render_template('try.html')
 
 
-@app.route("/closet")
+@APP.route("/closet")
 def closet():
     """User closet page."""
     return render_template('my_closet.html', closet=MY_CLOSET)
@@ -122,7 +110,7 @@ def get_temp(zipcode):
     return temperature
 
 
-@app.route("/closet", methods=['POST'])
+@APP.route("/closet", methods=['POST'])
 def closet_modify():
     """Page direction after modification of closet."""
     if "name" in request.form:
@@ -150,7 +138,7 @@ def closet_modify():
     return render_template('my_closet.html', closet=MY_CLOSET)
 
 
-@app.route('/try', methods=['POST'])
+@APP.route('/try', methods=['POST'])
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
     secret_coefficients = list(
@@ -175,6 +163,5 @@ def form_post():
 
 
 if __name__ == "__main__":
-    nav.init_app(app)
-    bootstrap = Bootstrap(app)
-    app.run(debug=True)
+    BSTRAP = Bootstrap(APP)
+    APP.run(debug=True)

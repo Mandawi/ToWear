@@ -1,32 +1,38 @@
-{% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
 
-{% block title %}
+{% block title %} 
 Register
 {% endblock %}
 
+{% set active_page = "register" %}
 
-{% block navbar %}
-    {{nav.mynavbar.render()}}
-{% endblock %}
-
-
-{% block styles %}
-{{super()}}
-<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
-{% endblock %}
-
-{% block content %}
+{% block page_content %}
 <div class="container">
-
-  <form class="form-signin" method="POST" action="/signup">
-    <h2 class="form-signin-heading">Sign Up</h2>
-    {{ form.hidden_tag() }}
-    {{ wtf.form_field(form.username) }}
-    {{ wtf.form_field(form.email) }}
-    {{ wtf.form_field(form.password) }}
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+  <form class="form-signin" method="POST" action="/register">
+    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only") }}
+    <div class="form-group  required">
+        <label class="control-label" for="username">Username</label>
+        {{ form.username(class="form-control",id="username",required="required",type="text",value="",placeholder="Enter username") }}
+    </div>
+    <div class="form-group  required">
+        <label class="control-label" for="email">Email</label>
+        {% if form.email.errors %}
+          <div class="form-group  required has-error">
+              {{ form.email(class="form-control",id="email",required='required',type="text",value="",placeholder="Enter email") }}
+              {% for error in form.email.errors %}
+              <p class="help-block">{{ error }}</p>
+              {% endfor %}
+        {% else %}
+            <div class="form-group  required">
+            {{ form.email(class="form-control",id="email",required='required',type="text",value="",placeholder="Enter email") }}
+        {% endif %}
+            </div>
+    </div>
+    <div class="form-group  required">
+        <label class="control-label" for="password">Password</label>
+        {{ form.password(class="form-control",id="password",required="required",type="password",value="",placeholder="Enter Password") }}
+    </div>
+    <button class="btn btn-info col-md-6" type="submit">Sign up</button>
   </form>
-
 </div> <!-- /container -->
 {% endblock %}

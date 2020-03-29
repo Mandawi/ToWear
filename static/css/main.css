@@ -1,15 +1,15 @@
 body {
   /* default body text format */
   margin: 0;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   color: rgb(91, 167, 255);
   background-color: black;
-  font-size:large;
+  font-size: large;
 }
 
-p{
+p {
   /* default paragraph text format */
-  color: white
+  color: white;
 }
 
 ul.sidenav {
@@ -18,7 +18,7 @@ ul.sidenav {
   margin: 0;
   padding: 0px;
   width: 25%;
-  background-color:grey;
+  background-color: grey;
   position: fixed;
   height: 100%;
   overflow: auto;
@@ -32,33 +32,32 @@ ul.sidenav li a {
   padding: 4px 8px;
   text-decoration: none;
 }
- 
+
 ul.sidenav li a.active {
   /* main menu selected page*/
-  background-color:rgb(91, 167, 255);
-  font-weight:bold;
+  background-color: rgb(91, 167, 255);
+  font-weight: bold;
   color: black;
 }
 
 ul.sidenav li a:hover {
   /* hover on an active sidenav button */
-    background-color:rgb(0, 119, 255);
-    color: black;
-  }
+  background-color: rgb(0, 119, 255);
+  color: black;
+}
 
-
-ul.sidenav li a:hover:not(.active) { 
+ul.sidenav li a:hover:not(.active) {
   /* hover on a non active sidenav button */
   background-color: #555;
   color: white;
 }
- 
-ul.sidenav li a:hover:active { 
+
+ul.sidenav li a:hover:active {
   /* click on any sidenav button */
-  background-color:rgb(0, 119, 255);
-  font-weight:bold;
+  background-color: rgb(0, 119, 255);
+  font-weight: bold;
   color: black;
-  }
+}
 
 div.content {
   margin-left: 25%;
@@ -72,15 +71,17 @@ div.content {
     height: auto;
     position: relative;
   }
-  
+
   ul.sidenav li a {
     float: left;
     padding: 15px;
   }
-  
-  div.content {margin-left: 0;}
+
+  div.content {
+    margin-left: 0;
+  }
 }
-input[type=submit] {
+input[type="submit"] {
   /* submit button */
   background-color: ghostwhite;
   border: none;
@@ -94,7 +95,7 @@ input[type=submit] {
   font-size: large;
 }
 
-input[type=text] {
+input[type="text"] {
   /* textbox */
   width: 50%;
   padding: 12px 20px;
@@ -102,16 +103,16 @@ input[type=text] {
   box-sizing: border-box;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 4px;
-  background-color:darkslategray;
-  color:white;
+  background-color: darkslategray;
+  color: white;
 }
 
-input[type=text]:focus {
+input[type="text"]:focus {
   /* textbox selected */
   background-color: black;
 }
 
-input[type=password] {
+input[type="password"] {
   /* textbox */
   width: 50%;
   padding: 12px 20px;
@@ -119,10 +120,10 @@ input[type=password] {
   box-sizing: border-box;
   border: 2px solid rgb(0, 119, 255);
   border-radius: 4px;
-  background-color:darkslategray;
-  color:white;
+  background-color: darkslategray;
+  color: white;
 }
-input[type=password]:focus {
+input[type="password"]:focus {
   /* textbox selected */
   background-color: black;
 }
@@ -161,142 +162,26 @@ table {
   width: 100%;
 }
 
-th, td {
+th,
+td {
   /* clothes table headers */
   text-align: left;
   padding: 8px;
 }
 
-tr:nth-child(even){
+tr:nth-child(even) {
   /* clothes table alternating rows */
   background-color: darkslateblue;
-  color:white;
+  color: white;
 }
 
-tr:nth-child(odd){
+tr:nth-child(odd) {
   /* clothes table alternating rows */
-  color:white;
+  color: white;
 }
 
 th {
   /* clothes table cell */
   background-color: rgb(0, 119, 255);
   color: black;
-}
-.container {
-  /* default checkbox style modification */
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.container input {
-  /* Hide the browser's default checkbox */
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-
-.checkmark {
-  /* Create a custom checkbox */
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-}
-
-.container:hover input ~ .checkmark {
-  /* On mouse-over, add a light blue background color */
-  background-color: skyblue;
-}
-
-.container input:checked ~ .checkmark {
-  /* When the checkbox is checked, add a blue background */
-  background-color: rgb(0, 119, 255);
-}
-
-.checkmark:after {
-  /* Create the checkmark/indicator (hidden when not checked) */
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-.container input:checked ~ .checkmark:after {
-  /* Show the checkmark when checked */
-  display: block;
-}
-
-.container .checkmark:after {
-  /* Style the checkmark/indicator */
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-/* Hide the browser's default radio button */
-.container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* Create a custom radio button */
-.checkmark_radio {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 50%;
-}
-
-/* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark_radio {
-  background-color: #ccc;
-}
-
-/* When the radio button is checked, add a blue background */
-.container input:checked ~ .checkmark_radio {
-  background-color: #2196F3;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark_radio:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.container input:checked ~ .checkmark_radio:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.container .checkmark_radio:after {
- 	top: 9px;
-	left: 9px;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background: white;
 }
