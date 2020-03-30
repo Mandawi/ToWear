@@ -1,7 +1,7 @@
 """Web APPlication creation and web page direction (basically, glues the whole program together)."""
 
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 import pyowm
 
@@ -11,16 +11,26 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
+import pymysql.cursors  # database
+
 from try_towear import generate_data, suggest_outfit
 from points_to_english import translate_outfit
 from clothes_manager import Garment, Wardrobe
 
+
 APP = Flask(__name__)
 APP.config['SECRET_KEY'] = 'donttellanyonethis'
-APP.config["TEMPLATES_AUTO_RELOAD"] = True
+APP.config['TEMPLATES_AUTO_RELOAD'] = True
 
 MY_CLOSET = Wardrobe()
 MY_CLOSET.generic_clothes_generator()
+
+conn = pymysql.connect(host="sql9.freemysqlhosting.net", user="sql9330153",
+                       password="Q8RVqW38bq", db="sql9330153")
+cursor = conn.cursor()
+cursor.execute(
+    f"CREATE TABLE IF NOT EXISTS login_info (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,name VARCHAR(20),password VARCHAR(80),email VARCHAR(50));")
+conn.commit()
 
 
 @APP.after_request
@@ -36,20 +46,30 @@ def add_header(made_request):
 
 
 class LoginForm(FlaskForm):
+    """Login form setup
+
+    Arguments:
+        FlaskForm -- Flask-specific subclass of WTForms ~wtforms.form.Form.
+    """
     username = StringField("Username", validators=[
-                           InputRequired(), Length(min=5, max=20)])
+        InputRequired(), Length(min=5, max=20)])
     password = PasswordField("Password", validators=[
-                             InputRequired(), Length(8, 80)])
+        InputRequired(), Length(8, 80)])
     remember = BooleanField("Remember me")
 
 
 class RegisterForm(FlaskForm):
+    """Registeration form setup
+
+    Arguments:
+        FlaskForm - - Flask-specific subclass of WTForms ~wtforms.form.Form.
+    """
     username = StringField("Username", validators=[
-                           InputRequired(), Length(min=5, max=20)])
+        InputRequired(), Length(min=5, max=20)])
     email = StringField("Email", validators=[
         InputRequired(), Email(message="This is an invalid email!"), Length(max=50)])
     password = PasswordField("Password", validators=[
-                             InputRequired(), Length(8, 80)])
+        InputRequired(), Length(8, 80)])
 
 
 @APP.route("/home")
@@ -59,20 +79,34 @@ def home():
     return render_template('index.html')
 
 
+@APP.route("/register", methods=['GET', 'POST'])
+def register():
+    """Registration page."""
+    form = RegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        cursor.execute(
+            "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s)", (username, password, email))
+        conn.commit()
+        return redirect(url_for('register'))
+    return render_template('register.html', form=form)
+
+
 @APP.route("/login", methods=['GET', 'POST'])
 def login():
     """Login page."""
     form = LoginForm()
     if form.validate_on_submit():
-        return '<h1>' + form.username.data + ' ' + form.password.data + '</h1>'
+        username = form.username.data
+        cursor.execute(
+            "SELECT name FROM login_info WHERE name ='"+username+"'")
+        user = cursor.fetchone()
+        if len(user) is 1:
+            return redirect(url_for('closet'))
+        return "failed"
     return render_template('login.html', form=form)
-
-
-@APP.route("/register")
-def register():
-    """Registration page."""
-    form = RegisterForm()
-    return render_template('register.html', form=form)
 
 
 @APP.route("/about")
@@ -97,10 +131,10 @@ def get_temp(zipcode):
     """function to get weather using zipcode through pyOWM
 
     Arguments:
-        zipcode {str} -- given by the user
+        zipcode {str} - - given by the user
 
     Returns:
-        int -- temperature in fahrenheit returned by pyOWM
+        int - - temperature in fahrenheit returned by pyOWM
                 for the current zipcode at the current time
     """
     owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')  # API key

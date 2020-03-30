@@ -11,14 +11,12 @@ Login
 
 <div class="container">
   <form class="form-signin" method="POST" action="/login">
-    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only") }}
+    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
     <div class="form-group  required">
-        <label class="control-label" for="username">Username</label>
-        {{ form.username(class="form-control",id="username",required="required",type="text",value="",placeholder="Enter username") }}
+        {{ wtf.form_field(form.username,class="form-control",id="username",type="text",value="",placeholder="Enter username")}}
     </div>
     <div class="form-group  required">
-        <label class="control-label" for="password">Password</label>
-        {{ form.password(class="form-control",id="password",required="required",type="password",value="",placeholder="Enter password") }}
+        {{ wtf.form_field(form.password,class="form-control",id="password",type="password",value="",placeholder="Enter password") }}
     </div>
     <p>
         <label>
@@ -28,5 +26,5 @@ Login
     </p>
     <button class="btn btn-info col-md-6" type="submit">Sign in</button>
   </form>
-</div> <!-- /container -->
+</div>
 {% endblock %}
