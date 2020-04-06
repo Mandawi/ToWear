@@ -43,11 +43,16 @@ CURSOR.execute(
 DB.commit()
 
 CURSOR.execute("SELECT id,name,password FROM login_info")
-towear_users_dirty = CURSOR.fetchall()
-print(towear_users_dirty)
+USERS = CURSOR.fetchall()
+print(USERS)
 
 
 class User:
+    """a user class to keep track of the users without having to keep making sql queries
+    Notes:
+          this is an optimization
+    """
+
     def __init__(self, my_id, username, password):
         self.my_id = my_id
         self.username = username
@@ -58,8 +63,7 @@ class User:
 
 
 towear_users = [
-    User(my_id=user[0], username=user[1], password=user[2])
-    for user in towear_users_dirty
+    User(my_id=user[0], username=user[1], password=user[2]) for user in USERS
 ]
 
 
@@ -181,6 +185,7 @@ def login():
 
 @APP.route("/logout")  # LOGIN REQUIRED!
 def logout():
+    """Log user out."""
     session.clear()
     return redirect(url_for("login"))
 
