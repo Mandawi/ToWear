@@ -2,11 +2,14 @@
 
 # needed for generating test data
 from random import randint
+
 # needed for predicting using training sets
 from sklearn.linear_model import LinearRegression
 
 
-def user_happy(outfit_tried: list, temp_outfit: int, temp_global: int, *secrets: list) -> bool:
+def user_happy(
+    outfit_tried: list, temp_outfit: int, temp_global: int, *secrets: list
+) -> bool:
     """simulates user's feeling in this outfit with this temperature
     based on the user's desired temperature and coefficients
 
@@ -26,7 +29,7 @@ def user_happy(outfit_tried: list, temp_outfit: int, temp_global: int, *secrets:
         temp_desired = secrets[0]
         temp_coefficients = secrets[1]
         # deviation of what is an accepted outfit and what is not
-        temp_deviation = (temp_outfit+temp_global) - temp_desired
+        temp_deviation = (temp_outfit + temp_global) - temp_desired
         if temp_deviation > 1 or temp_deviation < -1:
             # too much deviation from the desired temperature
             # (remember, all temperatures are scaled from 0 to 40)
@@ -40,15 +43,17 @@ def user_happy(outfit_tried: list, temp_outfit: int, temp_global: int, *secrets:
                 # the effect of any garment on the temperature of the outfit
                 # is equal to the temperature of the garment
                 # divided by the temperature of the outfit
-                element_significance = element/temp_outfit
-            if element_significance > 0.1 + temp_coefficients[index] \
-                    or element_significance < temp_coefficients[index]-0.1:
+                element_significance = element / temp_outfit
+            if (
+                element_significance > 0.1 + temp_coefficients[index]
+                or element_significance < temp_coefficients[index] - 0.1
+            ):
                 # user should be unhappy
                 # the coefficient does not match the desired temperature
                 return False
         return True
     # TODO: Allow users to modify desired temperature and coefficients with real inputs
-    raise ValueError('Expected known secrets')
+    raise ValueError("Expected known secrets")
 
 
 def generate_data(*secrets: list) -> tuple:
@@ -59,7 +64,7 @@ def generate_data(*secrets: list) -> tuple:
     Arguments:
         data_amount {int} -- how much training data?
         *secrets {list} -- [temp_desired {int} -- a secret number,
-                            temp_coefficients {[type]} -- a secret list of percentages
+                            temp_coefficients {list} -- a secret list of percentages
                                                             that affect the user's temperature]
 
     Returns:
@@ -82,7 +87,7 @@ def generate_data(*secrets: list) -> tuple:
         temp_desired = secrets[0]
         temp_coefficients = secrets[1]
         # scale the desired temperature to a number between 0 and 40
-        temp_desired_scaled = (40/134) * temp_desired
+        temp_desired_scaled = (40 / 134) * temp_desired
     else:
         # if we don't know the desired temperatures, we should estimate them later
         temp_desired_scaled = temp_coefficients = None
@@ -96,7 +101,7 @@ def generate_data(*secrets: list) -> tuple:
         temp_global_original = randint(0, 134)
 
         # global temperature in the same terms as the temperature of the outfit
-        temp_global_scaled = (40/134) * temp_global_original
+        temp_global_scaled = (40 / 134) * temp_global_original
 
         # generate a random tried outfit with garment warmths between 0 and 10 for all 4 parts
         outfit_tried = [randint(0, 10) for _ in range(0, 4)]
@@ -105,22 +110,30 @@ def generate_data(*secrets: list) -> tuple:
         # between 0 and 40 for the temperature which is between 0 and 40
         temp_outfit = sum(outfit_tried)
 
-        if user_happy(outfit_tried, temp_outfit, temp_global_scaled,
-                      temp_desired_scaled, temp_coefficients):
+        if user_happy(
+            outfit_tried,
+            temp_outfit,
+            temp_global_scaled,
+            temp_desired_scaled,
+            temp_coefficients,
+        ):
             # if the user, knowing their desired temperature
             # and coefficients are happy with the result,
             # we should include the weather_input and outfit_output pair
             # in the training set
-            estimated_desired_temp.append(temp_outfit+temp_global_scaled)
+            estimated_desired_temp.append(temp_outfit + temp_global_scaled)
             estimated_coefficients.append(
-                [element/temp_outfit for element in outfit_tried])
+                [element / temp_outfit for element in outfit_tried]
+            )
             weather_input.append([int(temp_global_original)])
             for index, output in enumerate(outfit_output):
                 output.append(int(outfit_tried[index]))
     return weather_input, outfit_output
 
 
-def suggest_outfit(weather_input: list, outfit_output: list, weather_given: int) -> list:
+def suggest_outfit(
+    weather_input: list, outfit_output: list, weather_given: int
+) -> list:
     """suggest an outfit to the user using the training sets of weather and outfit pairs
 
     Arguments:
@@ -134,7 +147,7 @@ def suggest_outfit(weather_input: list, outfit_output: list, weather_given: int)
     # create linear regression objects for the four clothing slots
     predictors = [LinearRegression(n_jobs=-1) for _ in range(0, 4)]
 
-   # fit the linear model (approximate a target function)
+    # fit the linear model (approximate a target function)
     for index, predictor in enumerate(predictors):
         predictor.fit(X=weather_input, y=outfit_output[index])
 

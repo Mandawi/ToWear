@@ -1,9 +1,10 @@
 """Web APPlication creation and web page direction (basically, glues the whole program together)."""
 
 
-from flask import Flask, render_template, request, redirect, url_for
+import json
+import requests
 
-import pyowm
+from flask import Flask, render_template, request, redirect, url_for, g, session
 
 from flask_bootstrap import Bootstrap
 
@@ -13,24 +14,53 @@ from wtforms.validators import InputRequired, Email, Length
 
 import pymysql.cursors  # database
 
+from passlib.hash import sha256_crypt  # password encryption
+
 from try_towear import generate_data, suggest_outfit
 from points_to_english import translate_outfit
 from clothes_manager import Garment, Wardrobe
 
 
 APP = Flask(__name__)
-APP.config['SECRET_KEY'] = 'donttellanyonethis'
-APP.config['TEMPLATES_AUTO_RELOAD'] = True
+APP.config["SECRET_KEY"] = "donttellanyonethis"
+APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
 MY_CLOSET = Wardrobe()
 MY_CLOSET.generic_clothes_generator()
 
-conn = pymysql.connect(host="sql9.freemysqlhosting.net", user="sql9330153",
-                       password="Q8RVqW38bq", db="sql9330153")
-cursor = conn.cursor()
-cursor.execute(
-    f"CREATE TABLE IF NOT EXISTS login_info (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,name VARCHAR(20),password VARCHAR(80),email VARCHAR(50));")
-conn.commit()
+DB = pymysql.connect(
+    host="sql9.freemysqlhosting.net",
+    user="sql9330153",
+    password="Q8RVqW38bq",
+    db="sql9330153",
+)
+CURSOR = DB.cursor()
+CURSOR.execute(
+    "CREATE TABLE IF NOT EXISTS login_info"
+    "(id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+    "name VARCHAR(20),password VARCHAR(80),email VARCHAR(50));"
+)
+DB.commit()
+
+CURSOR.execute("SELECT id,name,password FROM login_info")
+towear_users_dirty = CURSOR.fetchall()
+print(towear_users_dirty)
+
+
+class User:
+    def __init__(self, my_id, username, password):
+        self.my_id = my_id
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return f"<User: {self.username}>"
+
+
+towear_users = [
+    User(my_id=user[0], username=user[1], password=user[2])
+    for user in towear_users_dirty
+]
 
 
 @APP.after_request
@@ -41,7 +71,7 @@ def add_header(made_request):
     made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     made_request.headers["Pragma"] = "no-cache"
     made_request.headers["Expires"] = "0"
-    made_request.headers['Cache-Control'] = 'public, max-age=0'
+    made_request.headers["Cache-Control"] = "public, max-age=0"
     return made_request
 
 
@@ -51,10 +81,11 @@ class LoginForm(FlaskForm):
     Arguments:
         FlaskForm -- Flask-specific subclass of WTForms ~wtforms.form.Form.
     """
-    username = StringField("Username", validators=[
-        InputRequired(), Length(min=5, max=20)])
-    password = PasswordField("Password", validators=[
-        InputRequired(), Length(8, 80)])
+
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=5, max=20)]
+    )
+    password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
     remember = BooleanField("Remember me")
 
 
@@ -64,22 +95,39 @@ class RegisterForm(FlaskForm):
     Arguments:
         FlaskForm - - Flask-specific subclass of WTForms ~wtforms.form.Form.
     """
-    username = StringField("Username", validators=[
-        InputRequired(), Length(min=5, max=20)])
-    email = StringField("Email", validators=[
-        InputRequired(), Email(message="This is an invalid email!"), Length(max=50)])
-    password = PasswordField("Password", validators=[
-        InputRequired(), Length(8, 80)])
+
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=5, max=20)]
+    )
+    email = StringField(
+        "Email",
+        validators=[
+            InputRequired(),
+            Email(message="This is an invalid email!"),
+            Length(max=50),
+        ],
+    )
+    password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
 
 
 @APP.route("/home")
 @APP.route("/")
 def home():
     """Home page."""
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@APP.route("/register", methods=['GET', 'POST'])
+@APP.before_request
+def before_request():
+    """set the session user
+    """
+    g.user = None
+    if "user_id" in session:
+        user = [x for x in towear_users if x.my_id == session["user_id"]][0]
+        g.user = user
+
+
+@APP.route("/register", methods=["GET", "POST"])
 def register():
     """Registration page."""
     form = RegisterForm()
@@ -87,44 +135,78 @@ def register():
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        cursor.execute(
-            "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s)", (username, password, email))
-        conn.commit()
-        return redirect(url_for('register'))
-    return render_template('register.html', form=form)
+        secure_password = sha256_crypt.encrypt(str(password))  # encrypted password
+        CURSOR.execute(
+            "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s)",
+            (username, secure_password, email),
+        )
+        DB.commit()
+        CURSOR.execute(
+            "SELECT id,name,password FROM login_info WHERE name = %s", (username),
+        )
+        new_user = CURSOR.fetchone()
+        towear_users.append(
+            User(my_id=new_user[0], username=new_user[1], password=new_user[2])
+        )
+        return redirect(url_for("login"))
+    return render_template("register.html", form=form)
 
 
-@APP.route("/login", methods=['GET', 'POST'])
+@APP.route("/login", methods=["GET", "POST"])
 def login():
     """Login page."""
     form = LoginForm()
     if form.validate_on_submit():
+        session.pop("user_id", None)
         username = form.username.data
-        cursor.execute(
-            "SELECT name FROM login_info WHERE name ='"+username+"'")
-        user = cursor.fetchone()
-        if len(user) is 1:
-            return redirect(url_for('closet'))
-        return "failed"
-    return render_template('login.html', form=form)
+        password = form.password.data
+        CURSOR.execute(
+            "SELECT name FROM login_info WHERE name = %s", (username),
+        )
+        namedata = CURSOR.fetchone()
+        CURSOR.execute(
+            "SELECT password FROM login_info WHERE name = %s", (username),
+        )
+        passdata = CURSOR.fetchone()
+        if namedata is None:
+            return render_template("login.html", form=form)
+        curr_user = [user for user in towear_users if user.username == username][0]
+        for passdata_block in passdata:
+            if sha256_crypt.verify(password, passdata_block):
+                session["user_id"] = curr_user.my_id
+                session["log"] = True
+                return redirect(url_for("closet"))
+    return render_template("login.html", form=form)
+
+
+@APP.route("/logout")  # LOGIN REQUIRED!
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 
 
 @APP.route("/about")
 def about():
     """About page."""
-    return render_template('about.html')
+    return render_template("about.html")
 
 
 @APP.route("/try")
 def try_page():
     """Developer demo page."""
-    return render_template('try.html')
+    if "log" not in session:
+        return redirect(url_for("login"))
+    print(session["user_id"])
+    return render_template("try.html")
 
 
 @APP.route("/closet")
-def closet():
+def closet():  # LOGIN REQUIRED!
     """User closet page."""
-    return render_template('my_closet.html', closet=MY_CLOSET)
+    if "log" not in session:
+        return redirect(url_for("login"))
+    print(session["user_id"])
+    return render_template("my_closet.html", closet=MY_CLOSET)
 
 
 def get_temp(zipcode):
@@ -137,65 +219,70 @@ def get_temp(zipcode):
         int - - temperature in fahrenheit returned by pyOWM
                 for the current zipcode at the current time
     """
-    owm = pyowm.OWM('07a7c137a54f5238063fbcd575974072')  # API key
-    observation = owm.weather_at_zip_code(zipcode, "us")
-    current_weather = observation.get_weather()
-    temperature = current_weather.get_temperature('fahrenheit')['temp']
-    return temperature
+    response = requests.get(
+        f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},us&units=imperial&appid=a1f5a7e05ed9d8a645dc1651d089e671"
+    )
+    response_dict = json.loads(response.text)
+    temp = response_dict["main"]["temp"]
+    print(f"{'*'*20}\nTHE TEMPERATURE is {temp}\n{'*'*20}")
+    return temp
 
 
-@APP.route("/closet", methods=['POST'])
+@APP.route("/closet", methods=["POST"])  # LOGIN REQUIRED!
 def closet_modify():
     """Page direction after modification of closet."""
     if "name" in request.form:
-        name = request.form['name']
-        warmth = list(
-            map(int, str(request.form['warmth']).split()))
+        name = request.form["name"]
+        warmth = list(map(int, str(request.form["warmth"]).split()))
         new_item = Garment(name, warmth)
         MY_CLOSET.add_item(new_item)
-        return render_template('my_closet.html', closet=MY_CLOSET)
+        return render_template("my_closet.html", closet=MY_CLOSET)
     if "check" in request.form:
-        selected_items = request.form.getlist('check')
+        selected_items = request.form.getlist("check")
         for item in selected_items:
             MY_CLOSET.delete_by_name(item)
-        return render_template('my_closet.html', closet=MY_CLOSET)
+        return render_template("my_closet.html", closet=MY_CLOSET)
     if "name3" in request.form:
-        name3 = request.form['name3']
-        warmth3 = list(
-            map(int, str(request.form['warmth3']).split()))
+        name3 = request.form["name3"]
+        warmth3 = list(map(int, str(request.form["warmth3"]).split()))
         MY_CLOSET.change_warmth(name3, warmth3)
-        return render_template('my_closet.html', closet=MY_CLOSET)
+        return render_template("my_closet.html", closet=MY_CLOSET)
     if "repopulate" in request.form:
         MY_CLOSET.contents = []
         MY_CLOSET.generic_clothes_generator()
-        return render_template('my_closet.html', closet=MY_CLOSET)
-    return render_template('my_closet.html', closet=MY_CLOSET)
+        return render_template("my_closet.html", closet=MY_CLOSET)
+    return render_template("my_closet.html", closet=MY_CLOSET)
 
 
-@APP.route('/try', methods=['POST'])
+@APP.route("/try", methods=["POST"])  # LOGIN REQUIRED!
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
     secret_coefficients = list(
-        map(float, str(request.form['weather_conditions']).split()))
-    secret_temp_desired = float(request.form['temperature_tolerance'])
-    zipcode = str(request.form['zipcode'])
+        map(float, str(request.form["weather_conditions"]).split())
+    )
+    secret_temp_desired = float(request.form["temperature_tolerance"])
+    zipcode = str(request.form["zipcode"])
     temp = get_temp(zipcode)
     # using what we know, generate training set of different
     # temperature (temp_input) to outfit (outfit_input) combinations
     # (e.g. 20, [1 6 5 4])
-    temp_input, outfit_output = generate_data(
-        secret_temp_desired, secret_coefficients)
+    temp_input, outfit_output = generate_data(secret_temp_desired, secret_coefficients)
     # using the training set, predict an outfit given the temperature
-    suggested_outfit = [int(element) for element in suggest_outfit(
-        temp_input, outfit_output, temp)]
+    suggested_outfit = [
+        int(element) for element in suggest_outfit(temp_input, outfit_output, temp)
+    ]
     # translate the outfit from an array of integers to clothes using the given closet
     suggested_outfit_translated = translate_outfit(MY_CLOSET, suggested_outfit)
 
     return render_template(
-        'try.html', temperature=temp, suggested_outfit_warmths=suggested_outfit,
-        suggested_outfit_garments=suggested_outfit_translated)
+        "try.html",
+        temperature=temp,
+        suggested_outfit_warmths=suggested_outfit,
+        suggested_outfit_garments=suggested_outfit_translated,
+    )
 
 
 if __name__ == "__main__":
     BSTRAP = Bootstrap(APP)
-    APP.run(debug=True)
+    APP.run()
+    session.clear()

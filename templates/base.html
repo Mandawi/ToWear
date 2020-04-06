@@ -19,7 +19,11 @@
 {% endblock %}
 
 {% block content %} 
+    {% if session.log %}
+    {% set navigation_bar = [('/closet', 'closet', 'My Closet'),('/try', 'try', 'Try'),('/logout', 'logout', 'Logout')] -%}
+    {% else %}
     {% set navigation_bar = [('/login', 'login', 'Login'),('/register', 'register', 'Register')] -%}
+    {% endif %}
     {% set active_page = active_page|default('home') -%}
     <nav>
       <div class="teal nav-wrapper">
