@@ -81,7 +81,6 @@ def add_header(made_request):
     made_request.headers["Cache-Control"] = "public, max-age=0"
     return made_request
 
-
 class LoginForm(FlaskForm):
     """Login form setup
 
@@ -206,6 +205,7 @@ def try_page():
     return render_template("try.html")
 
 
+
 @APP.route("/closet")
 def closet():  # LOGIN REQUIRED!
     """User closet page."""
@@ -238,8 +238,7 @@ def get_temp(zipcode):
     print(f"{'*'*20}\nTHE TEMPERATURE is {temp}\n{'*'*20}")
     return temp
 
-
-@APP.route("/closet", methods=["POST"])  # LOGIN REQUIRED!
+          
 def closet_modify():
     """Page direction after modification of closet."""
     if "log" not in session:
