@@ -2,6 +2,7 @@
 
 
 import json
+import pickle
 import requests
 
 from flask import Flask, render_template, request, redirect, url_for, g, session
@@ -25,9 +26,6 @@ APP = Flask(__name__)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
-MY_CLOSET = Wardrobe()
-MY_CLOSET.generic_clothes_generator()
-
 DB = pymysql.connect(
     host="sql9.freemysqlhosting.net",
     user="sql9330153",
@@ -39,6 +37,12 @@ CURSOR.execute(
     "CREATE TABLE IF NOT EXISTS login_info"
     "(id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
     "name VARCHAR(20),password VARCHAR(80),email VARCHAR(50));"
+)
+DB.commit()
+CURSOR.execute(
+    "CREATE TABLE IF NOT EXISTS users_closets"
+    "(id INT(11) NOT NULL PRIMARY KEY,"
+    "closet VARCHAR(4096));"
 )
 DB.commit()
 
@@ -121,16 +125,6 @@ def home():
     return render_template("index.html")
 
 
-@APP.before_request
-def before_request():
-    """set the session user
-    """
-    g.user = None
-    if "user_id" in session:
-        user = [x for x in towear_users if x.my_id == session["user_id"]][0]
-        g.user = user
-
-
 @APP.route("/register", methods=["GET", "POST"])
 def register():
     """Registration page."""
@@ -152,6 +146,14 @@ def register():
         towear_users.append(
             User(my_id=new_user[0], username=new_user[1], password=new_user[2])
         )
+        my_closet = Wardrobe()
+        my_closet.generic_clothes_generator()
+        curr_user = [user for user in towear_users if user.username == username][0]
+        CURSOR.execute(
+            "INSERT INTO users_closets (id,closet)VALUES(%s,%s)",
+            (curr_user.my_id, pickle.dumps(my_closet, 0)),
+        )
+        DB.commit()
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
@@ -210,8 +212,13 @@ def closet():  # LOGIN REQUIRED!
     """User closet page."""
     if "log" not in session:
         return redirect(url_for("login"))
+    CURSOR.execute(
+        "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
+    )
+    closet_pickled = CURSOR.fetchone()
+    user_closet = pickle.loads(str.encode(closet_pickled[0]))
     print(session["user_id"])
-    return render_template("my_closet.html", closet=MY_CLOSET)
+    return render_template("my_closet.html", closet=user_closet)
 
 
 def get_temp(zipcode):
@@ -236,32 +243,57 @@ def get_temp(zipcode):
 @APP.route("/closet", methods=["POST"])  # LOGIN REQUIRED!
 def closet_modify():
     """Page direction after modification of closet."""
+    if "log" not in session:
+        return redirect(url_for("login"))
+    CURSOR.execute(
+        "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
+    )
+    closet_pickled = CURSOR.fetchone()
+    user_closet = pickle.loads(str.encode(closet_pickled[0]))
     if "name" in request.form:
         name = request.form["name"]
         warmth = list(map(int, str(request.form["warmth"]).split()))
         new_item = Garment(name, warmth)
-        MY_CLOSET.add_item(new_item)
-        return render_template("my_closet.html", closet=MY_CLOSET)
+        user_closet.add_item(new_item)
+        CURSOR.execute(
+            "UPDATE users_closets SET closet = %s WHERE id = %s",
+            (pickle.dumps(user_closet, 0), session["user_id"]),
+        )
+        return render_template("my_closet.html", closet=user_closet)
     if "check" in request.form:
         selected_items = request.form.getlist("check")
         for item in selected_items:
-            MY_CLOSET.delete_by_name(item)
-        return render_template("my_closet.html", closet=MY_CLOSET)
+            user_closet.delete_by_name(item)
+        CURSOR.execute(
+            "UPDATE users_closets SET closet = %s WHERE id = %s",
+            (pickle.dumps(user_closet, 0), session["user_id"]),
+        )
+        return render_template("my_closet.html", closet=user_closet)
     if "name3" in request.form:
         name3 = request.form["name3"]
         warmth3 = list(map(int, str(request.form["warmth3"]).split()))
-        MY_CLOSET.change_warmth(name3, warmth3)
-        return render_template("my_closet.html", closet=MY_CLOSET)
+        user_closet.change_warmth(name3, warmth3)
+        CURSOR.execute(
+            "UPDATE users_closets SET closet = %s WHERE id = %s",
+            (pickle.dumps(user_closet, 0), session["user_id"]),
+        )
+        return render_template("my_closet.html", closet=user_closet)
     if "repopulate" in request.form:
-        MY_CLOSET.contents = []
-        MY_CLOSET.generic_clothes_generator()
-        return render_template("my_closet.html", closet=MY_CLOSET)
-    return render_template("my_closet.html", closet=MY_CLOSET)
+        user_closet.contents = []
+        user_closet.generic_clothes_generator()
+        CURSOR.execute(
+            "UPDATE users_closets SET closet = %s WHERE id = %s",
+            (pickle.dumps(user_closet, 0), session["user_id"]),
+        )
+        return render_template("my_closet.html", closet=user_closet)
+    return render_template("my_closet.html", closet=user_closet)
 
 
 @APP.route("/try", methods=["POST"])  # LOGIN REQUIRED!
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
+    if "log" not in session:
+        return redirect(url_for("login"))
     secret_coefficients = list(
         map(float, str(request.form["weather_conditions"]).split())
     )
@@ -277,7 +309,12 @@ def form_post():
         int(element) for element in suggest_outfit(temp_input, outfit_output, temp)
     ]
     # translate the outfit from an array of integers to clothes using the given closet
-    suggested_outfit_translated = translate_outfit(MY_CLOSET, suggested_outfit)
+    CURSOR.execute(
+        "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
+    )
+    closet_pickled = CURSOR.fetchone()
+    user_closet = pickle.loads(str.encode(closet_pickled[0]))
+    suggested_outfit_translated = translate_outfit(user_closet, suggested_outfit)
 
     return render_template(
         "try.html",
@@ -290,4 +327,3 @@ def form_post():
 if __name__ == "__main__":
     BSTRAP = Bootstrap(APP)
     APP.run()
-    session.clear()

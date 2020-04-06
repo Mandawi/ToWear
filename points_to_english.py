@@ -46,6 +46,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     Returns:
         list -- the outfit suggested in words
     """
+    # TODO: IF SUGGESTED OUTFIT HAS NEGATIVE NUMBERS (i.e. it does not make sense) JUST GIVE BACK MAXIMUM CLOTHING
     # save a copy of the outfit_in_numbers so that we can later modify it
     original_outfit_in_numbers = outfit_in_numbers.copy()
     # try subsetsum_lists on the current wardrobe contents and suggested outfit
