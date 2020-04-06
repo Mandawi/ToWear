@@ -8,7 +8,6 @@ import requests
 from flask import Flask, render_template, request, redirect, url_for, g, session
 
 from flask_bootstrap import Bootstrap
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
