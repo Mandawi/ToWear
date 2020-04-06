@@ -1,13 +1,12 @@
-{% extends 'base.html' %}
-{% block head %} 
-<title> ToWear </title>
+
+{% extends "base.html" %}
+
+{% block title %} 
+Home
 {% endblock %}
 
-{% block Home %} 
-class="active"
-{% endblock %}
+{% set active_page = "home" %}
 
-{% block body %} 
-<h1> In Development! </h1>
-<p> ToWear is under development </p>
+{% block page_content %} 
+<p class="flow-text">ToWear is in development </p>
 {% endblock %}

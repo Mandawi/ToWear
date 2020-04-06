@@ -27,8 +27,10 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
         return None
     if myclothes[0].warmth == warmth_required:
         return [myclothes[0].name]
-    with_v = subsetsum_lists(tuple(myclothes[1:]), tuple(list(
-        map(operator.sub, warmth_required, myclothes[0].warmth))))
+    with_v = subsetsum_lists(
+        tuple(myclothes[1:]),
+        tuple(list(map(operator.sub, warmth_required, myclothes[0].warmth))),
+    )
     if with_v:
         return [myclothes[0].name] + with_v
     return subsetsum_lists(tuple(myclothes[1:]), tuple(warmth_required))
@@ -44,47 +46,54 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
     Returns:
         list -- the outfit suggested in words
     """
+    # TODO: IF SUGGESTED OUTFIT HAS NEGATIVE NUMBERS (i.e. it does not make sense) JUST GIVE BACK MAXIMUM CLOTHING
     # save a copy of the outfit_in_numbers so that we can later modify it
     original_outfit_in_numbers = outfit_in_numbers.copy()
     # try subsetsum_lists on the current wardrobe contents and suggested outfit
     # * if we can't make an outfit that satisfies the warmth required, we'll try to approximate
     outfit_in_words = subsetsum_lists(
-        tuple(wardrobe.contents), tuple(outfit_in_numbers))
+        tuple(wardrobe.contents), tuple(outfit_in_numbers)
+    )
     # get the warmths of all of the user's garments
-    wardrobe_contents_warmths = [
-        garment.warmth for garment in wardrobe.contents]
+    wardrobe_contents_warmths = [garment.warmth for garment in wardrobe.contents]
     # create an outfit combining everything in the user's closet
     # * we will later use this to know in which places the user lacks enough garments
     # * so we can better approximate
-    maximum_outfit = [sum(garment_warmth)
-                      for garment_warmth in zip(*wardrobe_contents_warmths)]
+    maximum_outfit = [
+        sum(garment_warmth) for garment_warmth in zip(*wardrobe_contents_warmths)
+    ]
     # get the difference between the suggested outfit and the maximum outfit
-    difference = (list(
-        map(operator.sub, original_outfit_in_numbers, maximum_outfit)))
+    difference = list(map(operator.sub, original_outfit_in_numbers, maximum_outfit))
     while outfit_in_words is None:
         # start at index where the difference between the suggested outfit
         # and the maximum outfit is greatest
         index_to_approximate = difference.index(max(difference))
         # > code for server logs
+        print(f"The suggested outfit is {outfit_in_numbers}")
         print(
-            f"The suggested outfit is {outfit_in_numbers}")
-        print(
-            f"The differnce between suggested outfit and maximum outfit is {difference}")
+            f"The differnce between suggested outfit and maximum outfit is {difference}"
+        )
         # > end of code for server logs
         # reduce the warmth of the suggested outfit based on where the user lacks enough clothes
         outfit_in_numbers[index_to_approximate] -= 1
         difference[index_to_approximate] -= 1
         # try again
         outfit_in_words = subsetsum_lists(
-            tuple(wardrobe.contents), tuple(outfit_in_numbers))
+            tuple(wardrobe.contents), tuple(outfit_in_numbers)
+        )
     # get the warmths of the garments in the outfit created
     final_outfit_state = [
-        garment.warmth for garment in wardrobe.contents if garment.name in outfit_in_words]
+        garment.warmth
+        for garment in wardrobe.contents
+        if garment.name in outfit_in_words
+    ]
     # > code for server logs
-    final_outfit_state_numbers = [sum(garment_warmth)
-                                  for garment_warmth in zip(*final_outfit_state)]
+    final_outfit_state_numbers = [
+        sum(garment_warmth) for garment_warmth in zip(*final_outfit_state)
+    ]
     print(
-        f"Used: {final_outfit_state_numbers} versus Recommended: {original_outfit_in_numbers}")
+        f"Used: {final_outfit_state_numbers} versus Recommended: {original_outfit_in_numbers}"
+    )
     if sum(final_outfit_state_numbers) < sum(original_outfit_in_numbers):
         print("Looks like someone needs to go shopping")
     # > end of code for server logs

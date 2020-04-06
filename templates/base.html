@@ -1,22 +1,44 @@
 <!DOCTYPE html>
 <!--to be used by each html that imports it-->
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' )}}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='freepik-logo.ico') }}">
-    {% block head %} {% endblock %} <!--specifying that we will insert our own code here-->
-  </head>
-  <body>
-    <ul class="sidenav">
-      <li><a {% block Home %} {% endblock %} href="{{ url_for('home') }}">ToWear</a></li>
-      <li><a {% block Try %} {% endblock %} href="{{ url_for('try_page') }}">Try</a></li>
-      <li><a {% block About %} {% endblock %} href="{{ url_for('about') }}">About</a></li>
-      <li><a {% block Closet %} {% endblock %} href="{{ url_for('closet') }}">My Closet</a></li>
-    </ul>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-    <div class="content">
-      {% block body %} {% endblock %}<!--specifying that we will insert our own code here-->
+{% block head %}
+    {{ super() }}
+    <title>{% block title %}{% endblock %} - ToWear</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='freepik-logo.ico') }}">
+{% endblock %}
+
+{% block content %} 
+    {% if session.log %}
+    {% set navigation_bar = [('/closet', 'closet', 'My Closet'),('/try', 'try', 'Try'),('/logout', 'logout', 'Logout')] -%}
+    {% else %}
+    {% set navigation_bar = [('/login', 'login', 'Login'),('/register', 'register', 'Register')] -%}
+    {% endif %}
+    {% set active_page = active_page|default('home') -%}
+    <nav>
+      <div class="teal nav-wrapper">
+        <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
+        <ul class="left hide-on-med-and-down" id="navigation">
+          {% for href, id, caption in navigation_bar %}
+          <li {% if id == active_page %} class="active" {% endif%}>
+            <a style="text-decoration:none;color: inherit" href="{{ href|e }}">{{ caption|e }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+    <br>
+    <div class="container">
+        {% block page_content %}{% endblock %}
     </div>
-  </body>
-</html>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} 
+Login
+{% endblock %}
+
+{% set active_page = "login" %}
+
+
+{% block page_content %}
+
+<div class="container">
+  <form class="form-signin" method="POST" action="/login">
+    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
+    <div class="form-group  required">
+        {{ wtf.form_field(form.username,class="form-control",id="username",type="text",value="",placeholder="Enter username")}}
+    </div>
+    <div class="form-group  required">
+        {{ wtf.form_field(form.password,class="form-control",id="password",type="password",value="",placeholder="Enter password") }}
+    </div>
+    <p>
+        <label>
+            <input id="remember_me" name="remember_me" type="checkbox" value="y" class="filled-in"/>
+            <span>Remember me</span>
+        </label>
+    </p>
+    <button class="btn btn-info col-md-6" type="submit">Sign in</button>
+  </form>
+</div>
+{% endblock %}

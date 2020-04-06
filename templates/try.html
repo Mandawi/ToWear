@@ -1,59 +1,60 @@
-{% extends 'base.html' %}
-{% block head %} 
-<title> Try </title>
+{% extends "base.html" %}
+
+{% block title %} 
+Try
 {% endblock %}
 
-{% block Try %} 
-class="active"
-{% endblock %}
+{% set active_page = "try" %}
 
 
-{% block body %} 
-<h1> Try the app! </h1>
-<p> Enter secret temperature desired as a number.</p>
-<p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
-<form method="POST">
-    <p> Weather Conditions </p>
-    <label class="container">Average: nothing extraordinary
-    <input type="radio" checked="checked" name="weather_conditions" value="0.15 0.35 0.35 0.15">
-    <span class="checkmark_radio"></span>
-    </label>
-    <label class="container">Extra Sunny: less warm tops and nothing on head
-    <input type="radio" name="weather_conditions" value="0 0.3 0.35 0.35">
-    <span class="checkmark_radio"></span>
-    </label>
-    <label class="container">Rainy Day: hats and boots 
-    <input type="radio" name="weather_conditions" value="0.2 0.3 0.3 0.2">
-    <span class="checkmark_radio"></span>
-    </label>
-    <label class="container">Snowy Day: boots and coat
-    <input type="radio" name="weather_conditions" value="0.05 0.4 0.3 0.25">
-    <span class="checkmark_radio"></span>
-    </label>
-    <br>
-    <p> Temperature Tolerance</p>
-    <label class="container">Normal
-    <input type="radio" checked="checked" name="temperature_tolerance" value="100">
-    <span class="checkmark_radio"></span>
-    </label>
-    <label class="container">Always Cold
-    <input type="radio" name="temperature_tolerance" value="120">
-    <span class="checkmark_radio"></span>
-    </label>
-    <label class="container">Always Warm
-    <input type="radio" name="temperature_tolerance" value="90">
-    <span class="checkmark_radio"></span>
-    </label>
-    <br>
-    <input type="text" placeholder="Zip code" name="zipcode" required>
-    <br>
-    <p> Click the suggestion button to get a suggestion for what to wear outside right now.</p>
-    <input type="submit" value="suggestion">
-</form>
-<h2> The temperature is: {{ temperature }} </h2>
-<h2> You should wear: <br>
-{% for garment in suggested_outfit_garments %} 
-    {{ garment }}<br>  
-{% endfor %}</h2>
-<h4> Dev info: {{ suggested_outfit_warmths }} </h4> 
+{% block page_content %} 
+<div class="container">
+    <h1> Try the app! </h1>
+    <p> Enter secret temperature desired as a number.</p>
+    <p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
+    <form method="POST">
+        <p> Weather Conditions </p>
+        <label class="container">Average: nothing extraordinary
+        <input type="radio" checked="checked" name="weather_conditions" value="0.15 0.35 0.35 0.15">
+        <span class="checkmark_radio"></span>
+        </label>
+        <label class="container">Extra Sunny: less warm tops and nothing on head
+        <input type="radio" name="weather_conditions" value="0 0.3 0.35 0.35">
+        <span class="checkmark_radio"></span>
+        </label>
+        <label class="container">Rainy Day: hats and boots 
+        <input type="radio" name="weather_conditions" value="0.2 0.3 0.3 0.2">
+        <span class="checkmark_radio"></span>
+        </label>
+        <label class="container">Snowy Day: boots and coat
+        <input type="radio" name="weather_conditions" value="0.05 0.4 0.3 0.25">
+        <span class="checkmark_radio"></span>
+        </label>
+        <br>
+        <p> Temperature Tolerance</p>
+        <label class="container">Normal
+        <input type="radio" checked="checked" name="temperature_tolerance" value="100">
+        <span class="checkmark_radio"></span>
+        </label>
+        <label class="container">Always Cold
+        <input type="radio" name="temperature_tolerance" value="120">
+        <span class="checkmark_radio"></span>
+        </label>
+        <label class="container">Always Warm
+        <input type="radio" name="temperature_tolerance" value="90">
+        <span class="checkmark_radio"></span>
+        </label>
+        <br>
+        <input type="text" placeholder="Zip code" name="zipcode" required>
+        <br>
+        <p> Click the suggestion button to get a suggestion for what to wear outside right now.</p>
+        <input type="submit" value="suggestion">
+    </form>
+    <h2> The temperature is: {{ temperature }} </h2>
+    <h2> You should wear: <br>
+    {% for garment in suggested_outfit_garments %} 
+        {{ garment }}<br>  
+    {% endfor %}</h2>
+    <h4> Dev info: {{ suggested_outfit_warmths }} </h4> 
+</div>
 {% endblock %}
