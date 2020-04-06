@@ -5,7 +5,7 @@ import json
 import pickle
 import requests
 
-from flask import Flask, render_template, request, redirect, url_for, g, session
+from flask import Flask, render_template, request, redirect, url_for, session
 
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -26,10 +26,10 @@ APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
 DB = pymysql.connect(
-    host="sql9.freemysqlhosting.net",
-    user="sql9330153",
-    password="Q8RVqW38bq",
-    db="sql9330153",
+    host="oamandawi.mysql.pythonanywhere-services.com",
+    user="oamandawi",
+    password="FrFZpH^gq5",
+    db="oamandawi$towear",
 )
 CURSOR = DB.cursor()
 CURSOR.execute(
@@ -80,6 +80,7 @@ def add_header(made_request):
     made_request.headers["Expires"] = "0"
     made_request.headers["Cache-Control"] = "public, max-age=0"
     return made_request
+
 
 class LoginForm(FlaskForm):
     """Login form setup
@@ -205,7 +206,6 @@ def try_page():
     return render_template("try.html")
 
 
-
 @APP.route("/closet")
 def closet():  # LOGIN REQUIRED!
     """User closet page."""
@@ -238,7 +238,7 @@ def get_temp(zipcode):
     print(f"{'*'*20}\nTHE TEMPERATURE is {temp}\n{'*'*20}")
     return temp
 
-          
+
 def closet_modify():
     """Page direction after modification of closet."""
     if "log" not in session:
