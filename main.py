@@ -43,7 +43,7 @@ TUNNEL.start()
 DB = pymysql.connect(
     user="oamandawi",
     password="FrFZpH^gq5",
-    host="127.0.0.1",
+    host="oamandawi.pythonanywhere.com",
     port=TUNNEL.local_bind_port,
     db="oamandawi$towear",
 )
