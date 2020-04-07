@@ -336,4 +336,4 @@ def form_post():
 
 if __name__ == "__main__":
     Bootstrap(APP)
-    APP.run()
+    APP.run(debug=True)
