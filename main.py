@@ -12,7 +12,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
-import mysql.connector  # database
+import pymysql.cursors  # database
 import sshtunnel
 
 from passlib.hash import sha256_crypt  # password encryption
@@ -26,22 +26,26 @@ APP = Flask(__name__)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
-sshtunnel.SSH_TIMEOUT = 200.0
-sshtunnel.TUNNEL_TIMEOUT = 200.0
+sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
 
-with sshtunnel.SSHTunnelForwarder(
+tunnel = sshtunnel.open_tunnel(
     ("ssh.pythonanywhere.com"),
     ssh_username="oamandawi",
     ssh_password="ToWearwego?",
     remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
-) as tunnel:
-    DB = mysql.connector.connect(
-        user="oamandawi",
-        password="FrFZpH^gq5",
-        host="127.0.0.1",
-        port=tunnel.local_bind_port,
-        database="oamandawi$towear",
-    )
+    # local_bind_address=("127.0.0.1", 5000),
+    debug_level="TRACE",
+)
+
+tunnel.start()
+
+DB = pymysql.connect(
+    user="oamandawi",
+    password="FrFZpH^gq5",
+    host="127.0.0.1",
+    port=tunnel.local_bind_port,
+    db="oamandawi$towear",
+)
 
 CURSOR = DB.cursor()
 CURSOR.execute(
