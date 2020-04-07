@@ -64,7 +64,6 @@ DB.commit()
 
 CURSOR.execute("SELECT id,name,password FROM login_info")
 USERS = CURSOR.fetchall()
-print(USERS)
 
 
 class User:
@@ -85,6 +84,15 @@ class User:
 towear_users = [
     User(my_id=user[0], username=user[1], password=user[2]) for user in USERS
 ]
+
+
+@APP.before_request
+def before_request():
+    g.user = None
+
+    if "user_id" in session:
+        user = [x for x in USERS if x.my_id == session["user_id"]][0]
+        g.user = user
 
 
 @APP.after_request
