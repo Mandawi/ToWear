@@ -25,7 +25,7 @@ from clothes_manager import Garment, Wardrobe
 APP = Flask(__name__)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
-bootstrap = Bootstrap(APP)
+BOOTSTRAP = Bootstrap(APP)
 
 sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
 
