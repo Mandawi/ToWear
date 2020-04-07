@@ -28,7 +28,7 @@ APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
 sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
 
-tunnel = sshtunnel.open_tunnel(
+TUNNEL = sshtunnel.open_tunnel(
     ("ssh.pythonanywhere.com"),
     ssh_username="oamandawi",
     ssh_password="ToWearwego?",
@@ -37,13 +37,13 @@ tunnel = sshtunnel.open_tunnel(
     debug_level="TRACE",
 )
 
-tunnel.start()
+TUNNEL.start()
 
 DB = pymysql.connect(
     user="oamandawi",
     password="FrFZpH^gq5",
     host="127.0.0.1",
-    port=tunnel.local_bind_port,
+    port=TUNNEL.local_bind_port,
     db="oamandawi$towear",
 )
 
