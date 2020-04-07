@@ -27,7 +27,7 @@
     <nav>
       <div class="teal nav-wrapper">
         <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
-        <ul class="left hide-on-med-and-down" id="navigation">
+        <ul class="center hide-on-med-and-down" id="navigation">
           {% for href, id, caption in navigation_bar %}
           <li {% if id == active_page %} class="active" {% endif%}>
             <a style="text-decoration:none;color: inherit" href="{{ href|e }}">{{ caption|e }}</a>
