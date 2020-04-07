@@ -23,6 +23,7 @@ from clothes_manager import Garment, Wardrobe
 
 
 APP = Flask(__name__)
+bootstrap = Bootstrap(APP)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -339,5 +340,4 @@ def form_post():
 
 
 if __name__ == "__main__":
-    Bootstrap(APP)
     APP.run(debug=True)
