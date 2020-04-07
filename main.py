@@ -5,7 +5,7 @@ import json
 import pickle
 import requests
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, g
 
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -27,40 +27,20 @@ APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
 BOOTSTRAP = Bootstrap(APP)
 
-sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
 
-TUNNEL = sshtunnel.open_tunnel(
-    ("ssh.pythonanywhere.com"),
-    ssh_username="oamandawi",
-    ssh_password="ToWearwego?",
-    remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
-    # local_bind_address=("127.0.0.1", 5000),
-    debug_level="TRACE",
-)
-
-TUNNEL.start()
-
-DB = pymysql.connect(
-    user="oamandawi",
-    password="FrFZpH^gq5",
-    host="",
-    port=TUNNEL.local_bind_port,
-    db="oamandawi$towear",
-)
-
-CURSOR = DB.cursor()
+CURSOR = g.db.cursor()
 CURSOR.execute(
     "CREATE TABLE IF NOT EXISTS login_info"
     "(id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
     "name VARCHAR(20),password VARCHAR(80),email VARCHAR(50));"
 )
-DB.commit()
+g.db.commit()
 CURSOR.execute(
     "CREATE TABLE IF NOT EXISTS users_closets"
     "(id INT(11) NOT NULL PRIMARY KEY,"
     "closet VARCHAR(4096));"
 )
-DB.commit()
+g.db.commit()
 
 CURSOR.execute("SELECT id,name,password FROM login_info")
 USERS = CURSOR.fetchall()
@@ -84,6 +64,39 @@ class User:
 towear_users = [
     User(my_id=user[0], username=user[1], password=user[2]) for user in USERS
 ]
+
+
+@APP.before_request
+def before_request():
+    sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
+
+    TUNNEL = sshtunnel.open_tunnel(
+        ("ssh.pythonanywhere.com"),
+        ssh_username="oamandawi",
+        ssh_password="ToWearwego?",
+        remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
+        local_bind_address=(""),
+        debug_level="TRACE",
+    )
+
+    TUNNEL.start()
+
+    DB = pymysql.connect(
+        user="oamandawi",
+        password="FrFZpH^gq5",
+        host="127.0.0.1",
+        port=TUNNEL.local_bind_port,
+        db="oamandawi$towear",
+        charset="utf8mb4",
+    )
+    g.db = DB
+
+
+@APP.after_request
+def after_request(response):
+    if g.db is not None:
+        g.db.close()
+    return response
 
 
 @APP.after_request
@@ -153,7 +166,7 @@ def register():
             "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s)",
             (username, secure_password, email),
         )
-        DB.commit()
+        g.db.commit()
         CURSOR.execute(
             "SELECT id,name,password FROM login_info WHERE name = %s", (username),
         )
@@ -168,7 +181,7 @@ def register():
             "INSERT INTO users_closets (id,closet)VALUES(%s,%s)",
             (curr_user.my_id, pickle.dumps(my_closet, 0)),
         )
-        DB.commit()
+        g.db.commit()
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
