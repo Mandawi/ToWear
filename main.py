@@ -5,7 +5,7 @@ import json
 import pickle
 import requests
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, g
 
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
