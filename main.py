@@ -12,7 +12,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
-import pymysql.cursors  # database
+import mysql.connector  # database
+import sshtunnel
 
 from passlib.hash import sha256_crypt  # password encryption
 
@@ -22,16 +23,26 @@ from clothes_manager import Garment, Wardrobe
 
 
 APP = Flask(__name__)
-Bootstrap(APP)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
 
-DB = pymysql.connect(
-    host="oamandawi.mysql.pythonanywhere-services.com",
-    user="oamandawi",
-    password="FrFZpH^gq5",
-    db="oamandawi$towear",
-)
+sshtunnel.SSH_TIMEOUT = 200.0
+sshtunnel.TUNNEL_TIMEOUT = 200.0
+
+with sshtunnel.SSHTunnelForwarder(
+    ("ssh.pythonanywhere.com"),
+    ssh_username="oamandawi",
+    ssh_password="ToWearwego?",
+    remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
+) as tunnel:
+    DB = mysql.connector.connect(
+        user="oamandawi",
+        password="FrFZpH^gq5",
+        host="127.0.0.1",
+        port=tunnel.local_bind_port,
+        database="oamandawi$towear",
+    )
+
 CURSOR = DB.cursor()
 CURSOR.execute(
     "CREATE TABLE IF NOT EXISTS login_info"
@@ -324,4 +335,5 @@ def form_post():
 
 
 if __name__ == "__main__":
+    Bootstrap(APP)
     APP.run()
