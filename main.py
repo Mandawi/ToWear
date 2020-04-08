@@ -50,7 +50,7 @@ APP.config[
 ] = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
     username="oamandawi",
     password="FrFZpH^gq5",
-    hostname=socket.gethostbyname(socket.gethostname()),
+    hostname="0.0.0.0",
     # tunnel=TUNNEL.local_bind_port,
     databasename="oamandawi$towear",
 )
