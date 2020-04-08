@@ -5,6 +5,7 @@ import json
 import pickle
 import requests
 import socket
+import logging
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
@@ -28,6 +29,7 @@ from clothes_manager import Garment, Wardrobe
 APP = Flask(__name__)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
 APP.config["TEMPLATES_AUTO_RELOAD"] = True
+APP.config["DEBUG"] = True
 BOOTSTRAP = Bootstrap(APP)
 
 sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
@@ -70,6 +72,8 @@ DB.engine.execute(
 )
 
 USERS = DB.engine.execute("SELECT id,name,password FROM login_info").fetchall()
+
+APP.logger.info("Successfully created DB and connected")
 
 
 class User:
@@ -172,6 +176,7 @@ def register():
             "INSERT INTO users_closets (id,closet)VALUES(%s,%s)",
             (curr_user.my_id, pickle.dumps(my_closet, 0)),
         )
+        APP.logger.info("Successfully registered")
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
@@ -197,6 +202,7 @@ def login():
             if sha256_crypt.verify(password, passdata_block):
                 session["user_id"] = curr_user.my_id
                 session["log"] = True
+                APP.logger.info("Successfully logged in")
                 return redirect(url_for("closet"))
     return render_template("login.html", form=form)
 
@@ -205,6 +211,7 @@ def login():
 def logout():
     """Log user out."""
     session.clear()
+    APP.logger.info("Successfully logged out")
     return redirect(url_for("login"))
 
 
@@ -219,7 +226,6 @@ def try_page():
     """Developer demo page."""
     if "log" not in session:
         return redirect(url_for("login"))
-    print(session["user_id"])
     return render_template("try.html")
 
 
@@ -232,7 +238,6 @@ def closet():  # LOGIN REQUIRED!
         "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
     ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
-    print(session["user_id"])
     return render_template("my_closet.html", closet=user_closet)
 
 
@@ -283,6 +288,7 @@ def closet_modify():
         "UPDATE users_closets SET closet = %s WHERE id = %s",
         (pickle.dumps(user_closet, 0), session["user_id"]),
     )
+    APP.logger.info("Successfully modified closet for user %s", (session["user_id"]))
     return render_template("my_closet.html", closet=user_closet)
 
 
@@ -311,7 +317,7 @@ def form_post():
     ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     suggested_outfit_translated = translate_outfit(user_closet, suggested_outfit)
-
+    APP.logger.info("%s sucessfully tried clothes", (session["user_id"]))
     return render_template(
         "try.html",
         temperature=temp,
