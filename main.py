@@ -4,6 +4,7 @@
 import json
 import pickle
 import requests
+import socket
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
@@ -46,7 +47,7 @@ APP.config[
 ] = "mysql+pymysql://{username}:{password}@{hostname}:{tunnel}/{databasename}".format(
     username="oamandawi",
     password="FrFZpH^gq5",
-    hostname="oamandawi.mysql.pythonanywhere-services.com",
+    hostname=f"{socket.gethostbyname(socket.gethostname())}",
     tunnel=TUNNEL.local_bind_port,
     databasename="oamandawi$towear",
 )
