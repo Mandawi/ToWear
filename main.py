@@ -7,13 +7,15 @@ import requests
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
+from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
-import pymysql.cursors  # database
+
 import sshtunnel
+import pymysql
 
 from passlib.hash import sha256_crypt  # password encryption
 
@@ -21,6 +23,7 @@ from try_towear import generate_data, suggest_outfit
 from points_to_english import translate_outfit
 from clothes_manager import Garment, Wardrobe
 
+# USE SQLALCHEMY TO TAKE CARE OF BOILERPLATE!!!
 
 APP = Flask(__name__)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
@@ -34,37 +37,40 @@ TUNNEL = sshtunnel.open_tunnel(
     ssh_username="oamandawi",
     ssh_password="ToWearwego?",
     remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
-    local_bind_address=(""),
     debug_level="TRACE",
 )
 
 TUNNEL.start()
 
-DB = pymysql.connect(
-    user="oamandawi",
+APP.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "mysql+pymysql://{username}:{password}@{hostname}:{tunnel}/{databasename}".format(
+    username="oamandawi",
     password="FrFZpH^gq5",
-    host="127.0.0.1",
-    port=TUNNEL.local_bind_port,
-    db="oamandawi$towear",
-    charset="utf8mb4",
+    hostname="127.0.0.1",
+    tunnel=TUNNEL.local_bind_port,
+    databasename="oamandawi$towear",
 )
 
-CURSOR = DB.cursor()
-CURSOR.execute(
+# APP.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+# APP.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+# APP.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+DB = SQLAlchemy(APP)
+
+DB.engine.execute(
     "CREATE TABLE IF NOT EXISTS login_info"
-    "(id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+    "(id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
     "name VARCHAR(20),password VARCHAR(80),email VARCHAR(50));"
 )
-DB.commit()
-CURSOR.execute(
+
+DB.engine.execute(
     "CREATE TABLE IF NOT EXISTS users_closets"
     "(id INT(11) NOT NULL PRIMARY KEY,"
     "closet VARCHAR(4096));"
 )
-DB.commit()
 
-CURSOR.execute("SELECT id,name,password FROM login_info")
-USERS = CURSOR.fetchall()
+USERS = DB.engine.execute("SELECT id,name,password FROM login_info").fetchall()
 
 
 class User:
@@ -150,26 +156,23 @@ def register():
         email = form.email.data
         password = form.password.data
         secure_password = sha256_crypt.encrypt(str(password))  # encrypted password
-        CURSOR.execute(
+        DB.engine.execute(
             "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s)",
             (username, secure_password, email),
         )
-        DB.commit()
-        CURSOR.execute(
+        new_user = DB.engine.execute(
             "SELECT id,name,password FROM login_info WHERE name = %s", (username),
-        )
-        new_user = CURSOR.fetchone()
+        ).fetchone()
         towear_users.append(
             User(my_id=new_user[0], username=new_user[1], password=new_user[2])
         )
         my_closet = Wardrobe()
         my_closet.generic_clothes_generator()
         curr_user = [user for user in towear_users if user.username == username][0]
-        CURSOR.execute(
+        DB.engine.execute.execute(
             "INSERT INTO users_closets (id,closet)VALUES(%s,%s)",
             (curr_user.my_id, pickle.dumps(my_closet, 0)),
         )
-        DB.commit()
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
@@ -182,14 +185,12 @@ def login():
         session.pop("user_id", None)
         username = form.username.data
         password = form.password.data
-        CURSOR.execute(
-            "SELECT name FROM login_info WHERE name = %s", (username),
-        )
-        namedata = CURSOR.fetchone()
-        CURSOR.execute(
-            "SELECT password FROM login_info WHERE name = %s", (username),
-        )
-        passdata = CURSOR.fetchone()
+        namedata = DB.engine.execute(
+            "SELECT name FROM login_info WHERE name = %s",(username)
+        ).fetchone()
+        passdata = DB.engine.execute(
+            "SELECT password FROM login_info WHERE name = %s",(password)
+        ).fetchone()
         if namedata is None:
             return render_template("login.html", form=form)
         curr_user = [user for user in towear_users if user.username == username][0]
@@ -228,10 +229,9 @@ def closet():  # LOGIN REQUIRED!
     """User closet page."""
     if "log" not in session:
         return redirect(url_for("login"))
-    CURSOR.execute(
+    closet_pickled = DB.engine.execute(
         "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
-    )
-    closet_pickled = CURSOR.fetchone()
+    ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     print(session["user_id"])
     return render_template("my_closet.html", closet=user_closet)
@@ -260,47 +260,30 @@ def closet_modify():
     """Page direction after modification of closet."""
     if "log" not in session:
         return redirect(url_for("login"))
-    CURSOR.execute(
+    closet_pickled = DB.engine.execute(
         "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
-    )
-    closet_pickled = CURSOR.fetchone()
+    ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     if "name" in request.form:
         name = request.form["name"]
         warmth = list(map(int, str(request.form["warmth"]).split()))
         new_item = Garment(name, warmth)
         user_closet.add_item(new_item)
-        CURSOR.execute(
-            "UPDATE users_closets SET closet = %s WHERE id = %s",
-            (pickle.dumps(user_closet, 0), session["user_id"]),
-        )
-        return render_template("my_closet.html", closet=user_closet)
     if "check" in request.form:
         selected_items = request.form.getlist("check")
         for item in selected_items:
             user_closet.delete_by_name(item)
-        CURSOR.execute(
-            "UPDATE users_closets SET closet = %s WHERE id = %s",
-            (pickle.dumps(user_closet, 0), session["user_id"]),
-        )
-        return render_template("my_closet.html", closet=user_closet)
     if "name3" in request.form:
         name3 = request.form["name3"]
         warmth3 = list(map(int, str(request.form["warmth3"]).split()))
         user_closet.change_warmth(name3, warmth3)
-        CURSOR.execute(
-            "UPDATE users_closets SET closet = %s WHERE id = %s",
-            (pickle.dumps(user_closet, 0), session["user_id"]),
-        )
-        return render_template("my_closet.html", closet=user_closet)
     if "repopulate" in request.form:
         user_closet.contents = []
         user_closet.generic_clothes_generator()
-        CURSOR.execute(
-            "UPDATE users_closets SET closet = %s WHERE id = %s",
-            (pickle.dumps(user_closet, 0), session["user_id"]),
-        )
-        return render_template("my_closet.html", closet=user_closet)
+    DB.engine.execute(
+        "UPDATE users_closets SET closet = %s WHERE id = %s",
+        (pickle.dumps(user_closet, 0), session["user_id"]),
+    )
     return render_template("my_closet.html", closet=user_closet)
 
 
@@ -324,10 +307,9 @@ def form_post():
         int(element) for element in suggest_outfit(temp_input, outfit_output, temp)
     ]
     # translate the outfit from an array of integers to clothes using the given closet
-    CURSOR.execute(
+    closet_pickled = DB.engine.execute(
         "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
-    )
-    closet_pickled = CURSOR.fetchone()
+    ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     suggested_outfit_translated = translate_outfit(user_closet, suggested_outfit)
 
