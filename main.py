@@ -72,7 +72,7 @@ DB.engine.execute(
     "closet VARCHAR(4096));"
 )
 
-USERS = DB.engine.execute("SELECT id,name,password FROM login_info").fetchall()
+USERS = DB.engine.execute("SELECT id,name,password FROM login_info;").fetchall()
 
 APP.logger.info("Successfully created DB and connected")
 
@@ -161,11 +161,11 @@ def register():
         password = form.password.data
         secure_password = sha256_crypt.encrypt(str(password))  # encrypted password
         DB.engine.execute(
-            "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s)",
+            "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s);",
             (username, secure_password, email),
         )
         new_user = DB.engine.execute(
-            "SELECT id,name,password FROM login_info WHERE name = %s", (username),
+            "SELECT id,name,password FROM login_info WHERE name = %s;", (username),
         ).fetchone()
         towear_users.append(
             User(my_id=new_user[0], username=new_user[1], password=new_user[2])
@@ -174,7 +174,7 @@ def register():
         my_closet.generic_clothes_generator()
         curr_user = [user for user in towear_users if user.username == username][0]
         DB.engine.execute.execute(
-            "INSERT INTO users_closets (id,closet)VALUES(%s,%s)",
+            "INSERT INTO users_closets (id,closet)VALUES(%s,%s);",
             (curr_user.my_id, pickle.dumps(my_closet, 0)),
         )
         APP.logger.info("Successfully registered")
@@ -195,11 +195,11 @@ def login():
         password = form.password.data
         APP.logger.info("Form data has been successfully fetched")
         namedata = DB.engine.execute(
-            "SELECT name FROM login_info WHERE name = %s", (username)
+            "SELECT name FROM login_info WHERE name = %s;", (username)
         ).fetchone()
         APP.logger.info("Name data is %s", (namedata))
         passdata = DB.engine.execute(
-            "SELECT password FROM login_info WHERE name = %s", (password)
+            "SELECT password FROM login_info WHERE name = %s;", (password)
         ).fetchone()
         if namedata is None:
             return render_template("login.html", form=form)
@@ -247,7 +247,7 @@ def closet():  # LOGIN REQUIRED!
     if "log" not in session:
         return redirect(url_for("login"))
     closet_pickled = DB.engine.execute(
-        "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
+        "SELECT closet FROM users_closets WHERE id = %s;", (session["user_id"]),
     ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     return render_template("my_closet.html", closet=user_closet)
@@ -277,7 +277,7 @@ def closet_modify():
     if "log" not in session:
         return redirect(url_for("login"))
     closet_pickled = DB.engine.execute(
-        "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
+        "SELECT closet FROM users_closets WHERE id = %s;", (session["user_id"]),
     ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     if "name" in request.form:
@@ -297,7 +297,7 @@ def closet_modify():
         user_closet.contents = []
         user_closet.generic_clothes_generator()
     DB.engine.execute(
-        "UPDATE users_closets SET closet = %s WHERE id = %s",
+        "UPDATE users_closets SET closet = %s WHERE id = %s;",
         (pickle.dumps(user_closet, 0), session["user_id"]),
     )
     APP.logger.info("Successfully modified closet for user %s", (session["user_id"]))
@@ -325,7 +325,7 @@ def form_post():
     ]
     # translate the outfit from an array of integers to clothes using the given closet
     closet_pickled = DB.engine.execute(
-        "SELECT closet FROM users_closets WHERE id = %s", (session["user_id"]),
+        "SELECT closet FROM users_closets WHERE id = %s;", (session["user_id"]),
     ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     suggested_outfit_translated = translate_outfit(user_closet, suggested_outfit)
