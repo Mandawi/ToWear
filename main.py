@@ -15,7 +15,6 @@ from wtforms.validators import InputRequired, Email, Length
 
 
 import sshtunnel
-import pymysql
 
 from passlib.hash import sha256_crypt  # password encryption
 
