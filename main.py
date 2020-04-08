@@ -185,11 +185,15 @@ def register():
 @APP.route("/login", methods=["GET", "POST"])
 def login():
     """Login page."""
+    APP.logger.info("Arrived at login page")
     form = LoginForm()
+    APP.logger.info("Form validated")
     if form.validate_on_submit():
+        APP.logger.info("Fetching form data")
         session.pop("user_id", None)
         username = form.username.data
         password = form.password.data
+        APP.logger.info("Form data has been successfully fetched")
         namedata = DB.engine.execute(
             "SELECT name FROM login_info WHERE name = %s", (username)
         ).fetchone()
