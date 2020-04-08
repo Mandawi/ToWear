@@ -3,9 +3,10 @@
 
 import json
 import pickle
-import requests
-import socket
 import logging
+import socket
+import requests
+
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
