@@ -52,9 +52,8 @@ APP.config[
     databasename="oamandawi$towear",
 )
 
-# APP.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-# APP.config["SQLALCHEMY_POOL_RECYCLE"] = 299
-# APP.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+APP.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+APP.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 DB = SQLAlchemy(APP)
 
@@ -186,10 +185,10 @@ def login():
         username = form.username.data
         password = form.password.data
         namedata = DB.engine.execute(
-            "SELECT name FROM login_info WHERE name = %s",(username)
+            "SELECT name FROM login_info WHERE name = %s", (username)
         ).fetchone()
         passdata = DB.engine.execute(
-            "SELECT password FROM login_info WHERE name = %s",(password)
+            "SELECT password FROM login_info WHERE name = %s", (password)
         ).fetchone()
         if namedata is None:
             return render_template("login.html", form=form)
