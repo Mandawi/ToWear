@@ -47,7 +47,7 @@ BOOTSTRAP = Bootstrap(APP)
 
 APP.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "mysql+pymysql://{username}:{password}@{hostname}:{tunnel}/{databasename}".format(
+] = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
     username="oamandawi",
     password="FrFZpH^gq5",
     hostname=("%s", socket.gethostbyname(socket.gethostname())),
