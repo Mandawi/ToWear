@@ -173,7 +173,7 @@ def register():
         my_closet = Wardrobe()
         my_closet.generic_clothes_generator()
         curr_user = [user for user in towear_users if user.username == username][0]
-        DB.engine.execute.execute(
+        DB.engine.execute(
             "INSERT INTO users_closets (id,closet)VALUES(%s,%s);",
             (curr_user.my_id, pickle.dumps(my_closet, 0)),
         )
