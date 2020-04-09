@@ -200,9 +200,8 @@ def login():
         APP.logger.info("Name data is %s", (namedata))
         passdata = DB.engine.execute(
             "SELECT password FROM login_info WHERE name = %s;", (username)
-        ).fetchall()
-        APP.logger.info("Passdata is %s", (passdata))
-        if namedata or passdata is None:
+        ).fetchone()
+        if namedata is None or passdata is None:
             return render_template("login.html", form=form)
         APP.logger.info("Searching for current user")
         curr_user = [user for user in towear_users if user.username == username][0]
