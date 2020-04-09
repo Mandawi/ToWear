@@ -152,12 +152,6 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
 
 
-@APP.route("/slack_bot", methods=["GET", "POST"])
-def slack_bot():
-    challenge = request.get_json()["challenge"]
-    return json.dumps({"challenge": challenge}), 200, {"ContentType": "text/plain"}
-
-
 @APP.route("/home")
 @APP.route("/")
 def home():
