@@ -33,25 +33,25 @@ APP.config["TEMPLATES_AUTO_RELOAD"] = True
 APP.config["DEBUG"] = True
 BOOTSTRAP = Bootstrap(APP)
 
-sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
+# sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
 
-TUNNEL = sshtunnel.open_tunnel(
-    ("ssh.pythonanywhere.com"),
-    ssh_username="oamandawi",
-    ssh_password="ToWearwego?",
-    remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
-    debug_level="TRACE",
-)
+# TUNNEL = sshtunnel.open_tunnel(
+#     ("ssh.pythonanywhere.com"),
+#     ssh_username="oamandawi",
+#     ssh_password="ToWearwego?",
+#     remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
+#     debug_level="TRACE",
+# )
 
-TUNNEL.start()
+# TUNNEL.start()
 
 APP.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "mysql+pymysql://{username}:{password}@{hostname}:{tunnel}/{databasename}".format(
+] = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
     username="oamandawi",
     password="FrFZpH^gq5",
     hostname="0.0.0.0",
-    tunnel=TUNNEL.local_bind_port,
+    # tunnel=TUNNEL.local_bind_port,
     databasename="oamandawi$towear",
 )
 
