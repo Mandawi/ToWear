@@ -199,7 +199,7 @@ def login():
         ).fetchone()
         APP.logger.info("Name data is %s", (namedata))
         passdata = DB.engine.execute(
-            "SELECT password FROM login_info WHERE name = %s;", (password)
+            "SELECT password FROM login_info WHERE name = %s;", (username)
         ).fetchone()
         if namedata or passdata is None:
             return render_template("login.html", form=form)
