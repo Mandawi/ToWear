@@ -154,7 +154,7 @@ class RegisterForm(FlaskForm):
 
 @APP.route("/slack_bot", methods=["POST"])
 def slack_bot():
-    challenge = str(request.form.get("challenge"))
+    challenge = request.form.get("challenge")
     response = make_response(challenge, 200)
     response.mimetype = "text/plain"
     return response
