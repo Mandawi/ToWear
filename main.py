@@ -50,7 +50,7 @@ APP.config[
 ] = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
     username="oamandawi",
     password="FrFZpH^gq5",
-    hostname="0.0.0.0",
+    hostname="oamandawi.mysql.pythonanywhere-services.com",
     # tunnel=TUNNEL.local_bind_port,
     databasename="oamandawi$towear",
 )
