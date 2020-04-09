@@ -201,19 +201,18 @@ def login():
         passdata = DB.engine.execute(
             "SELECT password FROM login_info WHERE name = %s;", (password)
         ).fetchone()
-        if namedata is None:
+        if namedata or passdata is None:
             return render_template("login.html", form=form)
         APP.logger.info("Searching for current user")
         curr_user = [user for user in towear_users if user.username == username][0]
         APP.logger.info("Current user is %s", (curr_user.my_id))
-        if passdata:
-            for passdata_block in passdata:
-                APP.logger.info("Decrypting password")
-                if sha256_crypt.verify(password, passdata_block):
-                    session["user_id"] = curr_user.my_id
-                    session["log"] = True
-                    APP.logger.info("Successfully logged in")
-                    return redirect(url_for("closet"))
+        for passdata_block in passdata:
+            APP.logger.info("Decrypting password")
+            if sha256_crypt.verify(password, passdata_block):
+                session["user_id"] = curr_user.my_id
+                session["log"] = True
+                APP.logger.info("Successfully logged in")
+                return redirect(url_for("closet"))
         APP.logger.info(
             "Login authentication complete.\nNo such user.\nRedirecting to login page..."
         )
