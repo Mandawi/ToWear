@@ -154,8 +154,8 @@ class RegisterForm(FlaskForm):
 
 @APP.route("/slack_bot", methods=["GET", "POST"])
 def slack_bot():
-    challenge = request.form["challenge"]
-    return f"<html><body>{challenge}</body></html>"
+    challenge = request.get_json()["challenge"]
+    return json.dumps({"challenge": challenge}), 200, {"ContentType": "text/plain"}
 
 
 @APP.route("/home")
