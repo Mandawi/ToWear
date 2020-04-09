@@ -200,7 +200,7 @@ def login():
         APP.logger.info("Name data is %s", (namedata))
         passdata = DB.engine.execute(
             "SELECT password FROM login_info WHERE name = %s;", (username)
-        ).fetchone()
+        ).fetchall()
         if namedata or passdata is None:
             return render_template("login.html", form=form)
         APP.logger.info("Searching for current user")
