@@ -152,7 +152,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
 
 
-@APP.route("/slack_bot", methods=["POST"])
+@APP.route("/slack_bot", methods=["GET","POST"])
 def slack_bot():
     challenge = request.form.get("challenge")
     response = make_response(challenge, 200)
