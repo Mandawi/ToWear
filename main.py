@@ -8,7 +8,15 @@ import socket
 import requests
 
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    make_response,
+)
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -142,6 +150,14 @@ class RegisterForm(FlaskForm):
         ],
     )
     password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
+
+
+@APP.route("/slack_bot", methods=["POST"])
+def slack_bot():
+    challenge = str(request.form.get("challenge"))
+    response = make_response(challenge, 200)
+    response.mimetype = "text/plain"
+    return response
 
 
 @APP.route("/home")
