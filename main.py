@@ -3,10 +3,8 @@
 
 import json
 import pickle
-import logging
-import socket
-import requests
 
+# import socket
 
 from flask import (
     Flask,
@@ -15,7 +13,6 @@ from flask import (
     redirect,
     url_for,
     session,
-    make_response,
 )
 
 from flask_sqlalchemy import SQLAlchemy
@@ -24,8 +21,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
-
-import sshtunnel
+# import sshtunnel
 
 from passlib.hash import sha256_crypt  # password encryption
 
@@ -100,7 +96,7 @@ class User:
         return ("<User: %s>", self.username)
 
 
-towear_users = [
+TOWEAR_USERS = [
     User(my_id=user[0], username=user[1], password=user[2]) for user in USERS
 ]
 
@@ -175,12 +171,12 @@ def register():
         new_user = DB.engine.execute(
             "SELECT id,name,password FROM login_info WHERE name = %s;", (username),
         ).fetchone()
-        towear_users.append(
+        TOWEAR_USERS.append(
             User(my_id=new_user[0], username=new_user[1], password=new_user[2])
         )
         my_closet = Wardrobe()
         my_closet.generic_clothes_generator()
-        curr_user = [user for user in towear_users if user.username == username][0]
+        curr_user = [user for user in TOWEAR_USERS if user.username == username][0]
         DB.engine.execute(
             "INSERT INTO users_closets (id,closet)VALUES(%s,%s);",
             (curr_user.my_id, pickle.dumps(my_closet, 0)),
@@ -212,7 +208,7 @@ def login():
         if namedata is None or passdata is None:
             return render_template("login.html", form=form)
         APP.logger.info("Searching for current user")
-        curr_user = [user for user in towear_users if user.username == username][0]
+        curr_user = [user for user in TOWEAR_USERS if user.username == username][0]
         APP.logger.info("Current user is %s", (curr_user.my_id))
         for passdata_block in passdata:
             APP.logger.info("Decrypting password")
@@ -271,8 +267,9 @@ def get_temp(zipcode):
         int - - temperature in fahrenheit returned by pyOWM
                 for the current zipcode at the current time
     """
-    response = requests.get(
-        f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},us&units=imperial&appid=a1f5a7e05ed9d8a645dc1651d089e671"
+    response = request.get(
+        f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},"
+        "zus&units=imperial&appid=a1f5a7e05ed9d8a645dc1651d089e671"
     )
     response_dict = json.loads(response.text)
     temp = response_dict["main"]["temp"]
