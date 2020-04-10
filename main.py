@@ -241,7 +241,7 @@ def about():
     return render_template("about.html")
 
 
-@APP.route("/try", methods=["GET", "POST"])
+@APP.route("/try")
 def try_page():
     """Developer demo page."""
     if "log" not in session:
@@ -249,7 +249,7 @@ def try_page():
     return render_template("try.html")
 
 
-@APP.route("/closet", methods=["GET", "POST"])
+@APP.route("/closet")
 def closet():  # LOGIN REQUIRED!
     """User closet page."""
     if "log" not in session:
@@ -261,7 +261,6 @@ def closet():  # LOGIN REQUIRED!
     return render_template("my_closet.html", closet=user_closet)
 
 
-@APP.route("/try", methods=["GET", "POST"])
 def get_temp(zipcode):
     """function to get weather using zipcode through pyOWM
 
