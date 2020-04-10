@@ -76,18 +76,6 @@ DB.engine.execute(
     "closet VARCHAR(4096));"
 )
 
-DB.engine.execute(
-    "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s);",
-    ("test_user", "test_password", "test@test.test"),
-)
-
-DB.engine.execute(
-    "INSERT INTO users_closets (id,closet)VALUES(%s,%s);",
-    ("test_user", pickle.dumps(Wardrobe().generic_clothes_generator(), 0)),
-)
-
-USERS = DB.engine.execute("SELECT id,name,password FROM login_info;").fetchall()
-
 APP.logger.info("Successfully created DB and connected")
 
 
@@ -105,6 +93,18 @@ class User:
     def __repr__(self):
         return ("<User: %s>", self.username)
 
+
+DB.engine.execute(
+    "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s);",
+    ("test_user", "test_password", "test@test.test"),
+)
+
+DB.engine.execute(
+    "INSERT INTO users_closets (id,closet)VALUES(%s,%s);",
+    ("test_user", pickle.dumps(Wardrobe().generic_clothes_generator(), 0)),
+)
+
+USERS = DB.engine.execute("SELECT id,name,password FROM login_info;").fetchall()
 
 TOWEAR_USERS = [
     User(my_id=user[0], username=user[1], password=user[2]) for user in USERS
