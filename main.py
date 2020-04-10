@@ -78,12 +78,12 @@ DB.engine.execute(
 
 DB.engine.execute(
     "INSERT INTO login_info (name,password,email)VALUES(%s,%s,%s);",
-    ("test", "test", "test@test.test"),
+    ("test_user", "test_password", "test@test.test"),
 )
 
 DB.engine.execute(
     "INSERT INTO users_closets (id,closet)VALUES(%s,%s);",
-    ("test", pickle.dumps(Wardrobe().generic_clothes_generator(), 0)),
+    ("test_user", pickle.dumps(Wardrobe().generic_clothes_generator(), 0)),
 )
 
 USERS = DB.engine.execute("SELECT id,name,password FROM login_info;").fetchall()
