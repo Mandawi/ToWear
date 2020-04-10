@@ -241,7 +241,7 @@ def about():
     return render_template("about.html")
 
 
-@APP.route("/try")
+@APP.route("/try", methods=["GET", "POST"])
 def try_page():
     """Developer demo page."""
     if "log" not in session:
@@ -249,7 +249,7 @@ def try_page():
     return render_template("try.html")
 
 
-@APP.route("/closet")
+@APP.route("/closet", methods=["GET", "POST"])
 def closet():  # LOGIN REQUIRED!
     """User closet page."""
     if "log" not in session:
@@ -261,6 +261,7 @@ def closet():  # LOGIN REQUIRED!
     return render_template("my_closet.html", closet=user_closet)
 
 
+@APP.route("/try", methods=["GET", "POST"])
 def get_temp(zipcode):
     """function to get weather using zipcode through pyOWM
 
@@ -280,6 +281,7 @@ def get_temp(zipcode):
     return temp
 
 
+@APP.route("/closet", methods=["GET", "POST"])
 def closet_modify():
     """Page direction after modification of closet."""
     if "log" not in session:
@@ -312,7 +314,7 @@ def closet_modify():
     return render_template("my_closet.html", closet=user_closet)
 
 
-@APP.route("/try", methods=["POST"])  # LOGIN REQUIRED!
+@APP.route("/try", methods=["GET", "POST"])  # LOGIN REQUIRED!
 def form_post():
     """Page direction after submitting request for outfit suggestion."""
     if "log" not in session:
