@@ -18,42 +18,42 @@
 {% endblock %}
 
 {% block content %} 
-    {% if session.log %}
-    {% set navigation_bar = [('/closet', 'closet', 'My Closet'),('/try', 'try', 'Try'),('/logout', 'logout', 'Logout')] -%}
-    {% else %}
-    {% set navigation_bar = [('/login', 'login', 'Login'),('/register', 'register', 'Register')] -%}
-    {% endif %}
-    {% set active_page = active_page|default('home') -%}
-    <nav class="nav-extended">
-      <div class="teal nav-wrapper">
-        <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          {% for href, id, caption in navigation_bar %}
-          <li>
-            <a style="text-decoration:none;color: inherit" href="{{ href|e }}">{{ caption|e }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="dimgray nav-content">
-        <ul class="dimgray tabs tabs-transparent">
-          {% for href, id, caption in navigation_bar %}
-          <li class="dimgray tab">
-            <a style="text-decoration:none;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </nav>
-    <ul class="dimgray sidenav" id="mobile-demo">
-      {% for href, id, caption in navigation_bar %}
-      <li>
-        <a href="{{ href|e }}">{{ caption|e }}</a>
-      </li>
-      {% endfor %}
-    </ul>
-    <br>
-    <div class="container">
-        {% block page_content %}{% endblock %}
+  {% if session.log %}
+  {% set navigation_bar = [('/closet', 'closet', 'My Closet'),('/try', 'try', 'Try'),('/logout', 'logout', 'Logout')] -%}
+  {% else %}
+  {% set navigation_bar = [('/login', 'login', 'Login'),('/register', 'register', 'Register')] -%}
+  {% endif %}
+  {% set active_page = active_page|default('home') -%}
+  <nav class="nav-extended">
+    <div class="teal nav-wrapper">
+      <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {% for href, id, caption in navigation_bar %}
+        <li>
+          <a style="text-decoration:none;color: inherit" href="{{ href|e }}">{{ caption|e }}</a>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
+    <div class="black nav-content">
+      <ul class="tabs tabs-transparent">
+        {% for href, id, caption in navigation_bar %}
+        <li class="tab">
+          <a style="text-decoration:none;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </nav>
+  <ul class="sidenav" id="mobile-demo">
+    {% for href, id, caption in navigation_bar %}
+    <li>
+      <a href="{{ href|e }}">{{ caption|e }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  <br>
+  <div class="container">
+      {% block page_content %}{% endblock %}
+  </div>
 {% endblock %}

@@ -11,28 +11,32 @@ My Closet
     <h1> Welcome to your outdoors closet! </h1>
     <p> Here, you can add your clothes to get your outfit suggestions using them. We've already added some clothes. Feel free to remove and add as you may.</p>
     <form method="POST">    
-        <table>
-            <tr>
-                <th><h2>Name</h2></th>
-                <th><h2>Warmth</h2></th> 
-            </tr>
+        <table class="highlight">
+            <thead>
+                <tr>
+                    <th><h2>Name</h2></th>
+                    <th><h2>Warmth</h2></th> 
+                </tr>
+            </thead>
+            <tbody>
             {% for item in closet.contents %}
-            <tr>
-                <td>
-                    <label class="container">{{ item.name }}
-                        <input type="checkbox" name="check" value="{{ item.name }}">
-                        <span class="checkmark"></span>
-                    </label>
-                </td>
-                <td>{{ item.warmth }}</td>
-            </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="check" class="filled-in" value="{{ item.name }}"/>
+                            <span class="checkmark">{{ item.name }}</span>
+                        </label>
+                    </td>
+                    <td>{{ item.warmth }}</td>
+                </tr>
             {% endfor %} 
+            </tbody>
         </table>
         <br>
         <br>
         <div class="container_del">
             <p> Click the delete button to delete the selected items of clothing from your closet.</p>
-            <input type="submit" name="btn" value="delete">
+            <input type="submit" name="btn" value="delete" class="waves-effect waves-light btn-small white"/>
         </div>
     </form> 
     <br>
@@ -44,7 +48,7 @@ My Closet
             <input type="text" placeholder="Warmth (4 space-seperated integers from 0 to 10 indicating warmth at head, top, bottom, and feet)" name="warmth3" required>
             <br>
             <p> Click the change warmth button to change this item's warmth.</p>
-            <input type="submit" name="btn" value="change warmth">
+            <input type="submit" name="btn" value="change warmth" class="waves-effect waves-light btn-small white"/>
         </form>
     </div>
     <br>
@@ -56,7 +60,7 @@ My Closet
             <input type="text" placeholder="Warmth (4 space-seperated integers from 0 to 10 indicating warmth at head, top, bottom, and feet)" name="warmth" required>
             <br>
             <p> Click the add button to add this item of clothing to your closet.</p>
-            <input type="submit" name="btn" value="add">
+            <input type="submit" name="btn" value="add" class="waves-effect waves-light btn-small white"/>
         </form>
     </div>
     <br>
@@ -64,7 +68,7 @@ My Closet
     <div class="container_repopulate">
         <form method="POST">
             <p> Click to repopulate closet with generic clothes.</p>
-            <input type="submit" name="repopulate" value="repopulate">
+            <input type="submit" name="repopulate" value="repopulate" class="waves-effect waves-light btn-small white"/>
         </form>
     </div>
     <br>

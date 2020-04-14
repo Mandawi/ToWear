@@ -1,10 +1,7 @@
 """Web APPlication creation and web page direction (basically, glues the whole program together)."""
 
-
-import json
 import pickle
-
-# import socket
+import requests
 
 from flask import (
     Flask,
@@ -21,15 +18,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 
-# import sshtunnel
-
 from passlib.hash import sha256_crypt  # password encryption
 
 from try_towear import generate_data, suggest_outfit
 from points_to_english import translate_outfit
 from clothes_manager import Garment, Wardrobe
-
-# USE SQLALCHEMY TO TAKE CARE OF BOILERPLATE!!!
 
 APP = Flask(__name__)
 APP.config["SECRET_KEY"] = "donttellanyonethis"
@@ -37,27 +30,40 @@ APP.config["TEMPLATES_AUTO_RELOAD"] = True
 APP.config["DEBUG"] = True
 BOOTSTRAP = Bootstrap(APP)
 
-# sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
+if __name__ == "__main__":
+    import sshtunnel
 
-# TUNNEL = sshtunnel.open_tunnel(
-#     ("ssh.pythonanywhere.com"),
-#     ssh_username="oamandawi",
-#     ssh_password="ToWearwego?",
-#     remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
-#     debug_level="TRACE",
-# )
+    sshtunnel.SSH_TIMEOUT = sshtunnel.TUNNEL_TIMEOUT = 5.0
 
-# TUNNEL.start()
+    TUNNEL = sshtunnel.open_tunnel(
+        ("ssh.pythonanywhere.com"),
+        ssh_username="oamandawi",
+        ssh_password="ToWearwego?",
+        remote_bind_address=("oamandawi.mysql.pythonanywhere-services.com", 3306),
+        debug_level="TRACE",
+    )
 
-APP.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
-    username="oamandawi",
-    password="FrFZpH^gq5",
-    hostname="oamandawi.mysql.pythonanywhere-services.com",
-    # tunnel=TUNNEL.local_bind_port,
-    databasename="oamandawi$towear",
-)
+    TUNNEL.start()
+
+    APP.config[
+        "SQLALCHEMY_DATABASE_URI"
+    ] = "mysql+pymysql://{username}:{password}@{hostname}:{tunnel}/{databasename}".format(
+        username="oamandawi",
+        password="FrFZpH^gq5",
+        hostname="127.0.0.1",
+        tunnel=TUNNEL.local_bind_port,
+        databasename="oamandawi$towear",
+    )
+
+else:
+    APP.config[
+        "SQLALCHEMY_DATABASE_URI"
+    ] = "mysql+pymysql://{username}:{password}@{hostname}/{databasename}".format(
+        username="oamandawi",
+        password="FrFZpH^gq5",
+        hostname="oamandawi.mysql.pythonanywhere-services.com",
+        databasename="oamandawi$towear",
+    )
 
 APP.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 APP.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -267,12 +273,12 @@ def get_temp(zipcode):
         int - - temperature in fahrenheit returned by pyOWM
                 for the current zipcode at the current time
     """
-    response = request.get(
+    print(zipcode)
+    response = requests.get(
         f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},"
-        "zus&units=imperial&appid=a1f5a7e05ed9d8a645dc1651d089e671"
-    )
-    response_dict = json.loads(response.text)
-    temp = response_dict["main"]["temp"]
+        "us&units=imperial&appid=a1f5a7e05ed9d8a645dc1651d089e671"
+    ).json()
+    temp = response["main"]["temp"]
     print(f"{'*'*20}\nTHE TEMPERATURE is {temp}\n{'*'*20}")
     return temp
 
