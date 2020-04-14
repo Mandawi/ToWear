@@ -24,18 +24,34 @@
     {% set navigation_bar = [('/login', 'login', 'Login'),('/register', 'register', 'Register')] -%}
     {% endif %}
     {% set active_page = active_page|default('home') -%}
-    <nav>
+    <nav class="nav-extended">
       <div class="teal nav-wrapper">
         <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
-        <ul class="center hide-on-med-and-down" id="navigation">
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
           {% for href, id, caption in navigation_bar %}
-          <li {% if id == active_page %} class="active" {% endif%}>
+          <li>
             <a style="text-decoration:none;color: inherit" href="{{ href|e }}">{{ caption|e }}</a>
           </li>
           {% endfor %}
         </ul>
       </div>
+      <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+          {% for href, id, caption in navigation_bar %}
+          <li class="tab">
+            <a {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}>Test 1</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </nav>
+    <ul class="sidenav" id="mobile-demo">
+      {% for href, id, caption in navigation_bar %}
+      <li>
+        <a href="{{ href|e }}">{{ caption|e }}</a>
+      </li>
+      {% endfor %}
+    </ul>
     <br>
     <div class="container">
         {% block page_content %}{% endblock %}
