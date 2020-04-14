@@ -36,9 +36,9 @@
         </ul>
       </div>
       <div class="dimgray nav-content">
-        <ul class="tabs tabs-transparent">
+        <ul class="dimgray tabs tabs-transparent">
           {% for href, id, caption in navigation_bar %}
-          <li class="tab">
+          <li class="dimgray tab">
             <a style="text-decoration:none;color: inherit" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
           </li>
           {% endfor %}
