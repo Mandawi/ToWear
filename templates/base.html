@@ -39,13 +39,13 @@
         <ul class="tabs tabs-transparent">
           {% for href, id, caption in navigation_bar %}
           <li class="tab">
-            <a {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
+            <a style="text-decoration:none;color: inherit" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
           </li>
           {% endfor %}
         </ul>
       </div>
     </nav>
-    <ul class="sidenav" id="mobile-demo">
+    <ul class="dimgray sidenav" id="mobile-demo">
       {% for href, id, caption in navigation_bar %}
       <li>
         <a href="{{ href|e }}">{{ caption|e }}</a>
