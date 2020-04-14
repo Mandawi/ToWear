@@ -35,11 +35,11 @@
           {% endfor %}
         </ul>
       </div>
-      <div class="nav-content">
+      <div class="dimgray nav-content">
         <ul class="tabs tabs-transparent">
           {% for href, id, caption in navigation_bar %}
           <li class="tab">
-            <a {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}>Test 1</a>
+            <a {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
           </li>
           {% endfor %}
         </ul>
