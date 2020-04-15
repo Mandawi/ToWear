@@ -9,71 +9,81 @@ Try
 
 {% block page_content %} 
 <div class="container">
-    <h1> Try the app! </h1>
-    <p> Enter secret temperature desired as a number.</p>
-    <p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
+    <span id="app_info">  
+        <h1> Try the app!</h1>  
+        <p> Enter secret temperature desired as a number.</p>
+        <p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
+    </span>
+    <span  id="app_info_loading" style="display:none">  
+        <h1> Trying the app! </h1>  
+        <p> This could take up to a minute, depending on how many clothes are in your closet.</p>
+    </span>
     <form method="POST">
-        <hr>
-        Weather Conditions:
-        <p>
-            <label class="container">
-                <input type="radio" checked="checked" name="weather_conditions" value="0.15 0.35 0.35 0.15">
-                <span>Average: nothing extraordinary</span>
-            </label>
-        </p>
-        <p>
-            <label class="container">
-                <input type="radio" name="weather_conditions" value="0 0.3 0.35 0.35">
-                <span>Extra Sunny: less warm tops and nothing on head</span>
-            </label>
-        </p>
-        <p>
-            <label class="container">
-                <input type="radio" name="weather_conditions" value="0.2 0.3 0.3 0.2">
-                <span>Rainy Day: hats and boots </span>
-            </label>
-        </p>
-        <p>
-            <label class="container">
-                <input type="radio" name="weather_conditions" value="0.05 0.4 0.3 0.25">
-                <span>Snowy Day: boots and coat</span>
-            </label>        
-        </p>
-        <hr>
-        Temperature Tolerance:
-        <p> 
-            <label class="container">
-                <input type="radio" checked="checked" name="temperature_tolerance" value="100">
-                <span>Normal</span>
-            </label>
-        </p>
-        <p> 
-            <label class="container">
-                <input type="radio" name="temperature_tolerance" value="120">
-                <span>Always Cold</span>
-            </label>
-        </p>
-        <p>
-            <label class="container">
-                <input type="radio" name="temperature_tolerance" value="90">
-                <span>Always Warm</span>
-            </label>
-        </p>
-        <hr>
-        <div class="row">
-            <div class="input-field col s5">
-                <input type="text" pattern="[0-9]{5}" id="zipcode" name="zipcode" class="validate" required>
-                <label for="zipcode2">Your Zipcode</label>
-                <span class="helper-text" data-error="wrong" data-success="right">Please enter your zipcode</span>
-            </div>
-        </div>
-        <hr>
-        <input type="submit" value="suggestion" class="waves-effect waves-light btn-small white">
+        <span id="form">
+            <hr>
+            Weather Conditions:
+            <p>
+                <label class="container">
+                    <input type="radio" checked="checked" name="weather_conditions" value="0.15 0.35 0.35 0.15">
+                    <span>Average: nothing extraordinary</span>
+                </label>
+            </p>
+            <p>
+                <label class="container">
+                    <input type="radio" name="weather_conditions" value="0 0.3 0.35 0.35">
+                    <span>Extra Sunny: less warm tops and nothing on head</span>
+                </label>
+            </p>
+            <p>
+                <label class="container">
+                    <input type="radio" name="weather_conditions" value="0.2 0.3 0.3 0.2">
+                    <span>Rainy Day: hats and boots </span>
+                </label>
+            </p>
+            <p>
+                <label class="container">
+                    <input type="radio" name="weather_conditions" value="0.05 0.4 0.3 0.25">
+                    <span>Snowy Day: boots and coat</span>
+                </label>        
+            </p>
+            <hr>
+            Temperature Tolerance:
+            <p> 
+                <label class="container">
+                    <input type="radio" checked="checked" name="temperature_tolerance" value="100">
+                    <span>Normal</span>
+                </label>
+            </p>
+            <p> 
+                <label class="container">
+                    <input type="radio" name="temperature_tolerance" value="120">
+                    <span>Always Cold</span>
+                </label>
+            </p>
+            <p>
+                <label class="container">
+                    <input type="radio" name="temperature_tolerance" value="90">
+                    <span>Always Warm</span>
+                </label>
+            </p>
+            <hr>
+            <span class="row">
+                <span class="input-field col s5">
+                    <input type="text" pattern="[0-9]{5}" id="zipcode" name="zipcode" class="validate" required>
+                    <label for="zipcode2">Your Zipcode</label>
+                    <span class="helper-text" data-error="wrong" data-success="right">Please enter your zipcode</span>
+                </span>
+            </span>
+        </span>
         <br>
-        <br>
+        <button id="suggestion" type="submit" onclick="showElement()" value="suggestion" class="waves-effect waves-light btn-small black">Get a Suggestion</button>
         <br>
     </form>
-    <div class="row">
+    <span class="progress" id="preloader" style="visibility:hidden;">
+        <span class="indeterminate"></span>
+    </span>
+    {% if temperature %}
+    <div id="suggestion_card" class="row">
         <div class="col s12 m5">
             <div class="card-panel teal">
                 <span class="white-text">
@@ -88,5 +98,17 @@ Try
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
+<script type="text/javascript"> 
+    function showElement() { 
+        document.getElementById("preloader").style.visibility = 'visible'; 
+        document.getElementById("suggestion").style.display = 'none'; 
+        document.getElementById("form").style.display = 'none'; 
+        document.getElementById("app_info").style.display = 'none';
+        document.getElementById("app_info_loading").style.display = 'block';  
+        document.getElementById("app_info").style.display = 'none';
+        document.getElementById("suggestion_card").style.display = 'none';
+    }
+</script>
 {% endblock %}

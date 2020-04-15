@@ -77,7 +77,6 @@ class Wardrobe:
                 Garment("sweatshirt", [0, 4, 0, 0]),
                 Garment("sweater", [0, 5, 0, 0]),
                 Garment("winter jacket", [0, 6, 0, 0]),
-                Garment("winter coat", [1, 5, 2, 0]),
                 Garment("shorts", [0, 0, 1, 0]),
                 Garment("cargo shorts", [0, 0, 2, 0]),
                 Garment("sweatpants", [0, 0, 3, 0]),
