@@ -27,13 +27,6 @@
   <nav class="nav-extended">
     <div class="teal nav-wrapper">
       <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        {% for href, id, caption in navigation_bar %}
-        <li>
-          <a style="text-decoration:none;color: inherit" href="{{ href|e }}">{{ caption|e }}</a>
-        </li>
-        {% endfor %}
-      </ul>
     </div>
     <div class="black nav-content">
       <ul class="tabs tabs-transparent">
