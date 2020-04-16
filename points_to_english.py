@@ -232,7 +232,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
                 clothing.warmth[1]
                 for clothing in wardrobe.contents
                 if clothing.warmth[1] > 0
-            ]
+            ],
+            reverse=True,
         ),
         outfit_in_numbers[1],
     )

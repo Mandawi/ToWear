@@ -73,7 +73,7 @@ class Wardrobe:
                 Garment("short sleeve shirt", [0, 2, 0, 0]),
                 Garment("long sleeve shirt", [0, 3, 0, 0]),
                 Garment("sweatshirt", [0, 4, 0, 0]),
-                Garment("sweater", [1, 5, 0, 0]),
+                Garment("sweater", [0, 5, 0, 0]),
                 Garment("winter jacket", [0, 6, 0, 0]),
                 Garment("shorts", [0, 0, 1, 0]),
                 Garment("cargo shorts", [0, 0, 2, 0]),
