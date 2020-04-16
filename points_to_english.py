@@ -215,8 +215,9 @@ def translate_outfit_deprecated(wardrobe: Wardrobe, outfit_in_numbers: list) -> 
 
 
 def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
-    """Get an outfit in numbers and translate it to a list of outfits in words
-    using closest function and pseudolinear Pisinger balsum
+    """Get an outfit in numbers and translate it to a list of outfits in words.
+    Uses closest function and pseudolinear Pisinger balsum for top.
+    One closest warmth item each on head, bottom and feet.
 
     Arguments:
         wardrobe {Wardrobe} - - the closet of the user
