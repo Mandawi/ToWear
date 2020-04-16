@@ -281,8 +281,11 @@ def get_temp(zipcode):
         f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},"
         "us&units=imperial&appid=a1f5a7e05ed9d8a645dc1651d089e671"
     ).json()
-    temp = response["main"]["temp"]
-    print(f"{'*'*20}\nTHE TEMPERATURE is {temp}\n{'*'*20}")
+    if response["cod"] == "404":
+        temp = 50
+    else:
+        temp = response["main"]["temp"]
+    print(f"{'*'*20}\nWRONG ZIPCODE, 01602 ZIPCODE SENT{temp}\n{'*'*20}")
     return temp
 
 
