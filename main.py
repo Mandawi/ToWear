@@ -220,6 +220,7 @@ def login():
             APP.logger.info("Decrypting password")
             if sha256_crypt.verify(password, passdata_block):
                 session["user_id"] = curr_user.my_id
+                session["user_name"] = curr_user.username
                 session["log"] = True
                 APP.logger.info("Successfully logged in")
                 return redirect(url_for("closet"))
@@ -260,7 +261,9 @@ def closet():  # LOGIN REQUIRED!
         "SELECT closet FROM users_closets WHERE id = %s;", (session["user_id"]),
     ).fetchone()
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
-    return render_template("my_closet.html", closet=user_closet)
+    return render_template(
+        "my_closet.html", closet=user_closet, user=session["user_name"]
+    )
 
 
 def get_temp(zipcode):
@@ -313,7 +316,9 @@ def closet_modify():
         (pickle.dumps(user_closet, 0), session["user_id"]),
     )
     APP.logger.info("Successfully modified closet for user %s", (session["user_id"]))
-    return render_template("my_closet.html", closet=user_closet)
+    return render_template(
+        "my_closet.html", closet=user_closet, user=session["user_name"]
+    )
 
 
 @APP.route("/try", methods=["GET", "POST"])  # LOGIN REQUIRED!

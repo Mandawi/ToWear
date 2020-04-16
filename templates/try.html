@@ -10,12 +10,14 @@ Try
 {% block page_content %} 
 <div class="container">
     <span id="app_info">  
-        <h1> Try the app!</h1>  
-        <p> Enter secret temperature desired as a number.</p>
+        <h3>Try ToWear!</h3>
+        {% if temperature %}  
+        <h5>You can check your suggested outfit, below.</h5>
+        {% endif %}
         <p> Note that we will use only the items in your closet; so, go ahead and add or remove items from there in the My Closet page.</p>
     </span>
     <span  id="app_info_loading" style="display:none">  
-        <h1> Trying the app! </h1>  
+        <h3> Trying ToWear! Please wait...</h3>  
         <p> This could take up to a minute, depending on how many clothes are in your closet.</p>
     </span>
     <form method="POST">

@@ -8,14 +8,14 @@ My Closet
 
 {% block page_content %}
 <div class="container">
-    <h1> Welcome to your outdoors closet! </h1>
+    <h3> Welcome to your outdoors closet, {{ user }}! </h3>
     <p> Here, you can add your clothes to get your outfit suggestions using them. We've already added some clothes. Feel free to remove and add as you may.</p>
     <form method="POST">    
         <table class="highlight">
             <thead>
                 <tr>
-                    <th><h2>Name</h2></th>
-                    <th><h2>Warmth</h2></th> 
+                    <th>Name</th>
+                    <th>Warmth</th> 
                 </tr>
             </thead>
             <tbody>
