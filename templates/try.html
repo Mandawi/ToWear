@@ -70,8 +70,8 @@ Try
             <span class="row">
                 <span class="input-field col s5">
                     <input type="text" pattern="[0-9]{5}" id="zipcode" name="zipcode" class="validate" required>
-                    <label for="zipcode2">Your Zipcode</label>
-                    <span class="helper-text" data-error="wrong" data-success="right">Please enter your zipcode</span>
+                    <label for="zipcode">Your Zipcode</label>
+                    <span class="helper-text" data-error="That's an incorrect zipcode" data-success="">Please enter your zipcode</span>
                 </span>
             </span>
         </span>
@@ -102,13 +102,15 @@ Try
 </div>
 <script type="text/javascript"> 
     function showElement() { 
-        document.getElementById("preloader").style.visibility = 'visible'; 
-        document.getElementById("suggestion").style.display = 'none'; 
-        document.getElementById("form").style.display = 'none'; 
-        document.getElementById("app_info").style.display = 'none';
-        document.getElementById("app_info_loading").style.display = 'block';  
-        document.getElementById("app_info").style.display = 'none';
-        document.getElementById("suggestion_card").style.display = 'none';
+        if (document.getElementById("zipcode").checkValidity()){
+            document.getElementById("preloader").style.visibility = 'visible'; 
+            document.getElementById("suggestion").style.display = 'none'; 
+            document.getElementById("form").style.display = 'none'; 
+            document.getElementById("app_info").style.display = 'none';
+            document.getElementById("app_info_loading").style.display = 'block';  
+            document.getElementById("app_info").style.display = 'none';
+            document.getElementById("suggestion_card").style.display = 'none';
+        }
     }
 </script>
 {% endblock %}
