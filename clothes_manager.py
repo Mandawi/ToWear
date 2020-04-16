@@ -67,15 +67,13 @@ class Wardrobe:
         """
         self.contents.extend(
             [
-                Garment("cap", [1, 0, 0, 0]),
                 Garment("beanie", [2, 0, 0, 0]),
                 Garment("pom pom hat", [3, 0, 0, 0]),
                 Garment("trapper", [4, 0, 0, 0]),
-                Garment("tank top", [0, 1, 0, 0]),
                 Garment("short sleeve shirt", [0, 2, 0, 0]),
                 Garment("long sleeve shirt", [0, 3, 0, 0]),
                 Garment("sweatshirt", [0, 4, 0, 0]),
-                Garment("sweater", [0, 5, 0, 0]),
+                Garment("sweater", [1, 5, 0, 0]),
                 Garment("winter jacket", [0, 6, 0, 0]),
                 Garment("shorts", [0, 0, 1, 0]),
                 Garment("cargo shorts", [0, 0, 2, 0]),
@@ -84,7 +82,6 @@ class Wardrobe:
                 Garment("jeans", [0, 0, 5, 0]),
                 Garment("khakis", [0, 0, 6, 0]),
                 Garment("cargo skiing pants", [0, 0, 7, 0]),
-                Garment("sandals", [0, 0, 0, 1]),
                 Garment("slip-on", [0, 0, 0, 2]),
                 Garment("sneakers", [0, 0, 0, 3]),
                 Garment("casual shoes", [0, 0, 0, 4]),

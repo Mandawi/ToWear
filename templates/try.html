@@ -78,16 +78,16 @@ Try
             </span>
         </span>
         <br>
-        <button id="suggestion" type="submit" onclick="showElement()" value="suggestion" class="waves-effect waves-light btn-small black">Get a Suggestion</button>
+        <button id="suggestion" type="submit" onclick="showElement()" value="suggestion" class="waves-effect waves-light btn-small black scale-transition">Get a Suggestion</button>
         <br>
     </form>
-    <span class="progress" id="preloader" style="visibility:hidden;">
+    <span class="progress scale-transition scale-out" id="preloader">
         <span class="indeterminate"></span>
     </span>
     {% if temperature %}
     <div id="suggestion_card" class="row">
         <div class="col s12 m5">
-            <div class="card-panel teal">
+            <div class="card-panel teal hoverable">
                 <span class="white-text">
                 The temperature is: {{ temperature }}<br>
                 You should wear:<br>
@@ -105,8 +105,8 @@ Try
 <script type="text/javascript"> 
     function showElement() { 
         if (document.getElementById("zipcode").checkValidity()){
-            document.getElementById("preloader").style.visibility = 'visible'; 
-            document.getElementById("suggestion").style.display = 'none'; 
+            document.getElementById("preloader").className = "progress scale-transition scale-in"; 
+            document.getElementById("suggestion").className += " scale-out";  
             document.getElementById("form").style.display = 'none'; 
             document.getElementById("app_info").style.display = 'none';
             document.getElementById("app_info_loading").style.display = 'block';  
