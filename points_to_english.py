@@ -108,6 +108,8 @@ def closest(myclothes: Wardrobe, warmth_required: list, body_part: list):
     """
     if warmth_required[body_part] <= 0:
         return Garment("nothing", [0, 0, 0, 0])
+    if not list(filter(lambda x: x.warmth[body_part] != 0, myclothes)):
+        return Garment("nothing", [0, 0, 0, 0])
     suggested_item = myclothes[
         min(
             range(len(myclothes)),
@@ -117,6 +119,58 @@ def closest(myclothes: Wardrobe, warmth_required: list, body_part: list):
         )
     ]
     return suggested_item
+
+
+def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
+    """Get an outfit in numbers and translate it to a list of outfits in words.
+    Uses closest function and pseudolinear Pisinger balsum for top.
+    One closest warmth item each on head, bottom and feet.
+
+    Arguments:
+        wardrobe {Wardrobe} - - the closet of the user
+        outfit_in_numbers {list} - - the outfit suggested in numbers
+
+    Returns:
+        list -- the outfit suggested in words
+    """
+    suggested_tops = balsub(
+        sorted(
+            [
+                clothing.warmth[1]
+                for clothing in wardrobe.contents
+                if clothing.warmth[1] > 0
+            ],
+            reverse=True,
+        ),
+        outfit_in_numbers[1],
+    )
+    tops = [closest(wardrobe.contents, [0, top, 0, 0], 1) for top in suggested_tops]
+    merged_top_bottom = []
+    for top in tops:
+        if sum(list(map(operator.sub, outfit_in_numbers, top.warmth))) < sum(
+            outfit_in_numbers[:1] + outfit_in_numbers[2:]
+        ):
+            merged_top_bottom.append(top)
+            tops.remove(top)
+        outfit_in_numbers = list(map(operator.sub, outfit_in_numbers, top.warmth))
+        if not tops:
+            tops.append(Garment("nothing", [0, 0, 0, 0]))
+    if merged_top_bottom:
+        worded_oufit = [
+            f"Overall: {(', '.join([top_bottom.name for top_bottom in merged_top_bottom]))}.",
+            f"Head: {closest(wardrobe.contents, outfit_in_numbers, 0).name}.",
+            f"Top: {(', '.join([top.name for top in tops]))}.",
+            f"Bottom: {closest(wardrobe.contents, outfit_in_numbers, 2).name}.",
+            f"Feet: {closest(wardrobe.contents, outfit_in_numbers, 3).name}.",
+        ]
+    else:
+        worded_oufit = [
+            f"Head: {closest(wardrobe.contents, outfit_in_numbers, 0).name}.",
+            f"Top: {(', '.join([top.name for top in tops]))}.",
+            f"Bottom: {closest(wardrobe.contents, outfit_in_numbers, 2).name}.",
+            f"Feet: {closest(wardrobe.contents, outfit_in_numbers, 3).name}.",
+        ]
+    return worded_oufit
 
 
 @lru_cache()  # because 10*9*8*7 is 5040
@@ -133,6 +187,7 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
     Returns:
         list -- the list of garment names whose warmths satisfy the warmth_required
     """
+    #! No longer used, check translate_outfit
     myclothes = list(myclothes)
     warmth_required = list(warmth_required)
     if warmth_required == [0, 0, 0, 0]:
@@ -151,7 +206,8 @@ def subsetsum_lists(myclothes: Wardrobe, warmth_required: list) -> list:
 
 
 def translate_outfit_deprecated(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
-    """Get an outfit in numbers and translate it to a list of outfits in words
+    """
+    Get an outfit in numbers and translate it to a list of outfits in words
 
     Arguments:
         wardrobe {Wardrobe} - - the closet of the user
@@ -160,7 +216,7 @@ def translate_outfit_deprecated(wardrobe: Wardrobe, outfit_in_numbers: list) -> 
     Returns:
         list -- the outfit suggested in words
     """
-    # TODO: IF SUGGESTED OUTFIT HAS NEGATIVE NUMBERS (i.e. it does not make sense) JUST GIVE BACK MAXIMUM CLOTHING
+    #! No longer used, check translate_outfit
     # save a copy of the outfit_in_numbers so that we can later modify it
     original_outfit_in_numbers = outfit_in_numbers.copy()
     # try subsetsum_lists on the current wardrobe contents and suggested outfit
@@ -214,61 +270,12 @@ def translate_outfit_deprecated(wardrobe: Wardrobe, outfit_in_numbers: list) -> 
     return outfit_in_words
 
 
-def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
-    """Get an outfit in numbers and translate it to a list of outfits in words.
-    Uses closest function and pseudolinear Pisinger balsum for top.
-    One closest warmth item each on head, bottom and feet.
-
-    Arguments:
-        wardrobe {Wardrobe} - - the closet of the user
-        outfit_in_numbers {list} - - the outfit suggested in numbers
-
-    Returns:
-        list -- the outfit suggested in words
-    """
-    suggested_tops = balsub(
-        sorted(
-            [
-                clothing.warmth[1]
-                for clothing in wardrobe.contents
-                if clothing.warmth[1] > 0
-            ],
-            reverse=True,
-        ),
-        outfit_in_numbers[1],
-    )
-    tops = [closest(wardrobe.contents, [0, top, 0, 0], 1) for top in suggested_tops]
-    merged_top_bottom = []
-    for top in tops:
-        if sum(list(map(operator.sub, outfit_in_numbers, top.warmth))) < sum(
-            outfit_in_numbers[:1] + outfit_in_numbers[2:]
-        ):
-            merged_top_bottom.append(top)
-            tops.remove(top)
-        outfit_in_numbers = list(map(operator.sub, outfit_in_numbers, top.warmth))
-        if len(tops) == 0:
-            tops.append(Garment("nothing", [0, 0, 0, 0]))
-    if merged_top_bottom:
-        worded_oufit = [
-            f"Overall: {(', '.join([top_bottom.name for top_bottom in merged_top_bottom]))}.",
-            f"Head: {closest(wardrobe.contents, outfit_in_numbers, 0).name}.",
-            f"Top: {(', '.join([top.name for top in tops]))}.",
-            f"Bottom: {closest(wardrobe.contents, outfit_in_numbers, 2).name}.",
-            f"Feet: {closest(wardrobe.contents, outfit_in_numbers, 3).name}.",
-        ]
-    else:
-        worded_oufit = [
-            f"Head: {closest(wardrobe.contents, outfit_in_numbers, 0).name}.",
-            f"Top: {(', '.join([top.name for top in tops]))}.",
-            f"Bottom: {closest(wardrobe.contents, outfit_in_numbers, 2).name}.",
-            f"Feet: {closest(wardrobe.contents, outfit_in_numbers, 3).name}.",
-        ]
-    return worded_oufit
-
-
 # ! for testing only
 if __name__ == "__main__":
     MY_CLOSET = Wardrobe()
     MY_CLOSET.generic_clothes_generator()
-    NUMERICAL_OUTFIT = [0, 3, 2, 1]
+    MY_CLOSET.delete_by_name("beanie")
+    MY_CLOSET.delete_by_name("pom pom hat")
+    MY_CLOSET.delete_by_name("trapper")
+    NUMERICAL_OUTFIT = [2, 5, 5, 0]
     print(translate_outfit(MY_CLOSET, NUMERICAL_OUTFIT))

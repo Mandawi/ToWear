@@ -350,6 +350,7 @@ def form_post():
     user_closet = pickle.loads(str.encode(closet_pickled[0]))
     suggested_outfit_translated = translate_outfit(user_closet, suggested_outfit)
     APP.logger.info("%s sucessfully tried clothes", (session["user_id"]))
+    APP.logger.info("%s is the suggested outfit", (suggested_outfit_translated))
     return render_template(
         "try.html",
         temperature=temp,
