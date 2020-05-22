@@ -150,13 +150,6 @@ class RegisterForm(FlaskForm):
     password = PasswordField("", validators=[InputRequired(), Length(8, 80)])
 
 
-@APP.route("/home")
-@APP.route("/")
-def home():
-    """Home page."""
-    return render_template("index.html")
-
-
 @APP.route("/register", methods=["GET", "POST"])
 def register():
     """Registration page."""
@@ -188,6 +181,8 @@ def register():
     return render_template("register.html", form=form)
 
 
+@APP.route("/home")
+@APP.route("/")
 @APP.route("/login", methods=["GET", "POST"])
 def login():
     """Login page."""

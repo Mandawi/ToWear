@@ -32,7 +32,7 @@
     <img src={% block logo_color %}{% endblock %} alt="" class="u-image u-image-default u-image-1">
     <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
       <div class="menu-collapse" style="font-size: 0.666667rem; letter-spacing: 0; text-transform: uppercase; font-weight: 700;">
-        <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-shadow u-custom-top-bottom-menu-spacing u-nav-link u-text-active-grey u-text-hover-grey-15 u-text-white" href="#" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.4);">
+        <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-shadow u-custom-top-bottom-menu-spacing u-nav-link u-text-active-white u-text-hover-grey-15 u-text-grey" href="#" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.4);">
           <svg><use xlink:href="#menu-hamburger"></use></svg>
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><symbol id="menu-hamburger" viewBox="0 0 16 16" style="width: 16px; height: 16px;"><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
   </symbol>
@@ -43,7 +43,7 @@
         <ul class="u-custom-font u-nav u-text-font u-unstyled u-nav-1">
           {% for href, id, caption in navigation_bar %}
           <li class="u-nav-item">
-            <a class="u-button-style u-nav-link u-text-active-grey u-text-hover-grey-15 u-text-white" style="padding: 10px 20px;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
+            <a class="u-button-style u-nav-link u-text-active-white u-text-hover-grey-15 u-text-grey" style="padding: 10px 20px;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
           </li>
           {% endfor %}
         </ul>
