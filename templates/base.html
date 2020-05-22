@@ -1,19 +1,24 @@
 <!DOCTYPE html>
+<html style="font-size: 24px;">
 <!--to be used by each html that imports it-->
-{% extends "bootstrap/base.html"  %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+
 {% block head %}
-    <title>{% block title %}{% endblock %} - ToWear</title>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
-    <!-- Compiled and minified JavaScript -->
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='freepik-logo.ico') }}"/>
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="utf-8">
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="page_type" content="np-template-header-footer-from-plugin">
+      <title>{% block title %}{% endblock %} - ToWear</title>
+      <link rel="stylesheet" href="../static/css/nicepage.css" media="screen">
+      <link rel="stylesheet" href="../static/css/Login.css" media="screen">
+      <script class="u-script" type="text/javascript" src="../static/js/jquery-1.9.1.min.js" defer=""></script>
+      <script class="u-script" type="text/javascript" src="../static/js/nicepage.js" defer=""></script>
+      <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+      <link rel="shortcut icon" href="{{ url_for('static', filename='freepik-logo.ico') }}"/>
+  </head>
 {% endblock %}
 
 {% block content %} 
@@ -23,32 +28,46 @@
   {% set navigation_bar = [('/login', 'login', 'Login'),('/register', 'register', 'Register')] -%}
   {% endif %}
   {% set active_page = active_page|default('home') -%}
-  <nav class="nav-extended">
-    <div class="teal nav-wrapper">
-      <a style="text-decoration:none;color: inherit" href="/home" class="brand-logo center">ToWear</a>
-    </div>
-    <div class="black nav-content">
-      <ul class="tabs tabs-transparent">
-        {% for href, id, caption in navigation_bar %}
-        <li class="tab">
-          <a style="text-decoration:none;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </nav>
-  <ul class="sidenav" id="mobile-demo">
-    {% for href, id, caption in navigation_bar %}
-    <li>
-      <a href="{{ href|e }}">{{ caption|e }}</a>
-    </li>
-    {% endfor %}
-  </ul>
-  <br>
-  <div class="container">
-      {% block page_content %}{% endblock %}
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
-  <script src = "https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <body class="u-body"><header class="u-align-left u-clearfix u-header u-palette-5-base u-header" id="sec-add6"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+    <img src={% block logo_color %}{% endblock %} alt="" class="u-image u-image-default u-image-1">
+    <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
+      <div class="menu-collapse" style="font-size: 0.666667rem; letter-spacing: 0; text-transform: uppercase; font-weight: 700;">
+        <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-shadow u-custom-top-bottom-menu-spacing u-nav-link u-text-active-grey u-text-hover-grey-15 u-text-white" href="#" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.4);">
+          <svg><use xlink:href="#menu-hamburger"></use></svg>
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><symbol id="menu-hamburger" viewBox="0 0 16 16" style="width: 16px; height: 16px;"><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+  </symbol>
+  </defs></svg>
+        </a>
+      </div>
+      <div class="u-custom-menu u-nav-container">
+        <ul class="u-custom-font u-nav u-text-font u-unstyled u-nav-1">
+          {% for href, id, caption in navigation_bar %}
+          <li class="u-nav-item">
+            <a class="u-button-style u-nav-link u-text-active-grey u-text-hover-grey-15 u-text-white" style="padding: 10px 20px;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="u-custom-menu u-nav-container-collapse">
+        <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+          <div class="u-menu-close"></div>
+          <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
+            {% for href, id, caption in navigation_bar %}
+            <li class="u-nav-item">
+              <a class="u-button-style u-nav-link" style="padding: 10px 20px;" {% if id == active_page %} class="active" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+      </div>
+    </nav>
+    </div></header>
+  {% block page_content %}{% endblock %}
+  <footer class="u-align-center u-clearfix u-footer u-white u-footer" id="sec-dbc0"><div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-align-center u-small-text u-text u-text-variant u-text-1">©2020 Osamah Mandawi. All rights
+reserved.</p>
+  </div></footer>
+  </body>
 {% endblock %}
+</html>

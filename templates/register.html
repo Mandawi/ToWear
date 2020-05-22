@@ -1,30 +1,59 @@
 {% extends "base.html" %}
 
-{% block description %} 
-Register with ToWear and start the change!
-{% endblock %}
-
 {% block title %} 
 Register
 {% endblock %}
 
 {% set active_page = "register" %}
 
+{% block logo_color %}
+"../static/images/ToWearLogo_Purple.png"
+{% endblock %}
+
 {% block page_content %}
-<div class="container">
-  <form class="form-signin" method="POST" action="/register">
-    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only") }}
-    <div class="form-group  required">
-        {{  wtf.form_field(form.email,class="validate",for="email", id="email",type="email",value="",placeholder="Enter email") }}
-        <span class="helper-text" data-error="wrong" data-success="right"></span>
+<section class="u-clearfix u-grey-10 u-section-1" id="sec-4ce6">
+  <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+    <div class="u-layout">
+      <div class="u-layout-row">
+        <div class="u-container-style u-layout-cell u-left-cell u-size-30 u-layout-cell-1">
+          <div class="u-container-layout u-container-layout-1">
+            <div class="u-align-center u-container-style u-custom-color-1 u-expanded-width u-group u-group-1">
+              <div class="u-container-layout u-valign-middle u-container-layout-2">
+                <img src="../static/images/ToWearLogo.png" alt="" class="u-image u-image-default u-image-1" data-image-width="855" data-image-height="418">
+                <p class="u-text u-text-1">Welcome back. It’s time to change.<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-2">
+          <div class="u-container-layout u-container-layout-3">
+            <div class="u-align-center u-container-style u-palette-4-base u-expanded-width u-group u-group-2">
+              <div class="u-container-layout u-valign-middle u-container-layout-4">
+                <div class="u-form u-form-1">
+                  <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
+                    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
+                    <div class="form-group u-form-email u-form-group">
+                      {{ wtf.form_field(form.email, class='u-palette-3-base u-input u-input-rectangle u-text-white u-input-1', type='email', placeholder='Email', id='email')|safe}}
+                    </div>
+                    <div class="form-group u-form-group">
+                      {{ wtf.form_field(form.username, class='u-palette-3-base u-input u-input-rectangle u-text-white u-input-1', type='text', placeholder='Username', id='username')|safe}}
+                    </div>
+                    <div class="form-group u-form-group">
+                      {{ wtf.form_field(form.password, class='u-palette-3-base u-input u-input-rectangle u-text-white u-input-1', type='password', placeholder='Password', id='password')|safe}}
+                    </div>
+                    <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Register</button>
+                  </form>
+                </div>
+                <p class="u-res-move-started u-text u-text-3">Already have an account? <u>
+                  <a href={{ url_for('login') }}>Log in here</a></u>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group  required">
-        {{ wtf.form_field(form.username,class="form-control",id="username",type="text",value="",placeholder="Enter username") }}
-    </div>
-    <div class="form-group  required">
-        {{ wtf.form_field(form.password,class="form-control",id="password",type="password",value="",placeholder="Enter Password") }}
-    </div>
-    <button class="btn btn-info col-md-6" type="submit">Sign up</button>
-  </form>
-</div>
+  </div>
+</section>
 {% endblock %}
