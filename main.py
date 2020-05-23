@@ -126,8 +126,10 @@ class LoginForm(FlaskForm):
         FlaskForm -- Flask-specific subclass of WTForms ~wtforms.form.Form.
     """
 
-    username = StringField("", validators=[InputRequired(), Length(min=5, max=20)])
-    password = PasswordField("", validators=[InputRequired(), Length(8, 80)])
+    username = StringField(
+        "Username", validators=[InputRequired(), Length(min=5, max=20)]
+    )
+    password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
     remember = BooleanField("")
 
 
