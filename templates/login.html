@@ -30,16 +30,14 @@ Log in
           <div class="u-container-layout u-container-layout-3">
             <div class="u-align-center u-container-style u-custom-color-2 u-expanded-width u-group u-group-2">
               <div class="u-container-layout u-valign-middle u-container-layout-4" style="height:89.5vh">
-                <div class="u-form u-form-1">
-                  <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
-                    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
-                    <div class="form-group">
-                      {{ wtf.form_field(form.username, class='form-control', type='text', placeholder='Username', id='username')|safe}}
-                      {{ wtf.form_field(form.password, class='form-control', type='password', placeholder='Password', id='password')|safe}}
-                    </div>
-                    <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Log in</button>
-                  </form>
-                </div>
+                <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
+                  {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
+                  <div class="form-group">
+                    {{ wtf.form_field(form.username, class='form-control', type='text', placeholder='Username', id='username')|safe}}
+                    {{ wtf.form_field(form.password, class='form-control', type='password', placeholder='Password', id='password')|safe}}
+                  </div>
+                  <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Log in</button>
+                </form>
                 <p class="u-res-move-started u-text u-text-3">New to ToWear? <u>
                   <a href={{ url_for('register') }}>Sign up here</a></u>
                 </p>
