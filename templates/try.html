@@ -65,51 +65,61 @@ Try
             </p>
             <hr>
             Temperature Tolerance:
-            <p> 
-                <label class="container">
-                    <input type="radio" checked="checked" name="temperature_tolerance" value="100">
-                    <span>Normal</span>
-                </label>
-            </p>
-            <p> 
-                <label class="container">
-                    <input type="radio" name="temperature_tolerance" value="120">
-                    <span>Always Cold</span>
-                </label>
-            </p>
             <p>
-                <label class="container">
-                    <input type="radio" name="temperature_tolerance" value="90">
-                    <span>Always Warm</span>
-                </label>
+            <input style="width:100%; margin:0 auto;" id="temperature_tolerance" name="temperature_tolerance" type="text"
+            data-provide="slider"
+            data-slider-ticks="[80, 100, 120]"
+            data-slider-ticks-labels='["Always<br>Cold", "Normal", "Always<br>Warm"]'
+            data-slider-min="80"
+            data-slider-max="120"
+            data-slider-step="1"
+            data-slider-value="100"
+            data-slider-tooltip="hide" 
+            data-slider-lock-to-ticks="true"/>
             </p>
             <hr>
             <span class="row">
                 <span class="input-field col s5">
+                    <label for="zipcode">Your Zipcode:</label>
                     <input type="text" pattern="[0-9]{5}" id="zipcode" name="zipcode" class="validate" required>
-                    <label for="zipcode">Your Zipcode</label>
-                    <span class="helper-text" data-error="That's an incorrect zipcode" data-success="">Please enter your zipcode</span>
                 </span>
             </span>
         </span>
         <br>
-        <button id="suggestion" type="submit" onclick="showElement()" value="suggestion" class="waves-effect waves-light btn-small black scale-transition">Get a Suggestion</button>
+        <button id="suggestion" type="submit" onclick="showElement()" value="suggestion" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Get a Suggestion</button>
         <br>
     </form>
-    <span class="progress scale-transition scale-out" id="preloader">
-        <span class="indeterminate"></span>
-    </span>
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Loading!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Please wait. This could take a couple of mintues depending on your closet....            
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     function showElement() { 
         if (document.getElementById("zipcode").checkValidity()){
-            document.getElementById("preloader").className = "progress scale-transition scale-in"; 
             document.getElementById("suggestion").className += " scale-out";  
             document.getElementById("form").style.display = 'none'; 
             document.getElementById("app_info").style.display = 'none';
             document.getElementById("app_info_loading").style.display = 'block';  
             document.getElementById("app_info").style.display = 'none';
             document.getElementById("suggestion_card").style.display = 'none';
+            // Instantiate a slider
+            var mySlider = $(document.getElementById("temperature_tolerance")).slider();
+            // Call a method on the slider
+            var value = mySlider.slider('getValue');
+            return value;
         }
     }
 </script>

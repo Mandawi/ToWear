@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html style="font-size: 24px;">
 <!--to be used by each html that imports it-->
+{% extends "bootstrap/base.html"  %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 
@@ -14,10 +15,18 @@
       <title>{% block title %}{% endblock %} - ToWear</title>
       <link rel="stylesheet" href="../static/css/nicepage.css" media="screen">
       <link rel="stylesheet" href="../static/css/Login.css" media="screen">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.css" integrity="sha256-+bpMasWDxDlsVpNW3oZlL7L4RacwsP70u2fZt6Rxrmc=" crossorigin="anonymous"/>
       <script class="u-script" type="text/javascript" src="../static/js/jquery-1.9.1.min.js" defer=""></script>
       <script class="u-script" type="text/javascript" src="../static/js/nicepage.js" defer=""></script>
       <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
       <link rel="shortcut icon" href="{{ url_for('static', filename='freepik-logo.ico') }}"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.js" integrity="sha256-59/apVFrosMLFX2dHZLGvb3nPpu7e0Yx1rsDr1dTRrk=" crossorigin="anonymous"></script>
+      
   </head>
 {% endblock %}
 
@@ -29,7 +38,7 @@
   {% endif %}
   {% set active_page = active_page|default('home') -%}
   <body class="u-body"><header class="u-align-left u-clearfix u-header u-palette-5-base u-header" id="sec-add6"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-    <img src={% block logo_color %}{% endblock %} alt="" class="u-image u-image-default u-image-1">
+    <img src={% block logo_color %}"../static/images/ToWearLogo_Cyan.png"{% endblock %} alt="" class="u-image u-image-default u-image-1">
     <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
       <div class="menu-collapse" style="font-size: 0.666667rem; letter-spacing: 0; text-transform: uppercase; font-weight: 700;">
         <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-shadow u-custom-top-bottom-menu-spacing u-nav-link u-text-active-white u-text-hover-grey-15 u-text-grey" href="#" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.4);">
