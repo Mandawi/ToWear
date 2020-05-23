@@ -34,10 +34,10 @@ Log in
                   <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
                     {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
                     <div class="u-form-group">
-                      {{ wtf.form_field(form.username, class='u-custom-color-3 u-input u-input-rectangle u-text-white u-input-2', type='text', placeholder='Username', id='username')|safe}}
+                      {{ wtf.form_field(form.username, class='u-custom-color-3 u-input u-input-rectangle u-text-white u-input-1', type='text', placeholder='Username', id='username')|safe}}
                     </div>
                     <div class="u-form-group">
-                      {{ wtf.form_field(form.password, class='u-custom-color-3 u-input u-input-rectangle u-text-white u-input-2', type='password', placeholder='Password', id='password')|safe}}
+                      {{ wtf.form_field(form.password, class='u-custom-color-3 u-input u-input-rectangle u-text-white u-input-1', type='password', placeholder='Password', id='password')|safe}}
                     </div>
                     <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Log in</button>
                   </form>
