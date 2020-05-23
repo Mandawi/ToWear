@@ -4455,7 +4455,7 @@ a {
   margin-right: 50px;
 }
 .u-form-vertical.u-form-spacing-50 .u-form-group {
-  margin-bottom: 50px;
+  margin-bottom:0px;
 }
 .u-form-horizontal.u-form-spacing-49 .u-form-group {
   margin-right: 49px;
