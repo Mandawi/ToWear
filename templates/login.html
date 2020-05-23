@@ -30,7 +30,7 @@ Log in
           <div class="u-container-layout u-container-layout-3">
             <div class="u-align-center u-container-style u-custom-color-2 u-expanded-width u-group u-group-2">
               <div class="u-container-layout u-valign-middle u-container-layout-4" style="height:89.5vh">
-                <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
+                <form method="POST" action="/login" class="u-form-vertical" style="padding: 10px" name="form">
                   {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
                   <div class="form-group">
                     {{ wtf.form_field(form.username, class='form-control', type='text', placeholder='Username', id='username')|safe}}
