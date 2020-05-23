@@ -126,11 +126,9 @@ class LoginForm(FlaskForm):
         FlaskForm -- Flask-specific subclass of WTForms ~wtforms.form.Form.
     """
 
-    username = StringField(
-        "Username", validators=[InputRequired(), Length(min=5, max=20)]
-    )
-    password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
-    remember = BooleanField("Remember me")
+    username = StringField("", validators=[InputRequired(), Length(min=5, max=20)])
+    password = PasswordField("", validators=[InputRequired(), Length(8, 80)])
+    remember = BooleanField("")
 
 
 class RegisterForm(FlaskForm):
@@ -140,25 +138,16 @@ class RegisterForm(FlaskForm):
         FlaskForm - - Flask-specific subclass of WTForms ~wtforms.form.Form.
     """
 
-    username = StringField(
-        "Username", validators=[InputRequired(), Length(min=5, max=20)]
-    )
+    username = StringField("", validators=[InputRequired(), Length(min=5, max=20)])
     email = StringField(
-        "Email",
+        "",
         validators=[
             InputRequired(),
             Email(message="This is an invalid email!"),
             Length(max=50),
         ],
     )
-    password = PasswordField("Password", validators=[InputRequired(), Length(8, 80)])
-
-
-@APP.route("/home")
-@APP.route("/")
-def home():
-    """Home page."""
-    return render_template("index.html")
+    password = PasswordField("", validators=[InputRequired(), Length(8, 80)])
 
 
 @APP.route("/register", methods=["GET", "POST"])
@@ -192,6 +181,8 @@ def register():
     return render_template("register.html", form=form)
 
 
+@APP.route("/home")
+@APP.route("/")
 @APP.route("/login", methods=["GET", "POST"])
 def login():
     """Login page."""

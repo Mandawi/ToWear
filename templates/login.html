@@ -1,30 +1,56 @@
 {% extends "base.html" %}
 
 {% block title %} 
-Login
+Log in
 {% endblock %}
 
 {% set active_page = "login" %}
 
+{% block logo_color %}
+"../static/images/ToWearLogo_Cyan.png"
+{% endblock %}
 
 {% block page_content %}
-
-<div class="container">
-  <form class="form-signin" method="POST" action="/login">
-    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
-    <div class="form-group  required">
-        {{ wtf.form_field(form.username,class="form-control",id="username",type="text",value="",placeholder="Enter username")}}
+<section class="u-clearfix u-grey-10 u-section-1" id="sec-4ce6">
+  <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+    <div class="u-layout">
+      <div class="u-layout-row">
+        <div class="u-container-style u-layout-cell u-left-cell u-size-30 u-layout-cell-1">
+          <div class="u-container-layout u-container-layout-1">
+            <div class="u-align-center u-container-style u-custom-color-1 u-expanded-width u-group u-group-1">
+              <div class="u-container-layout u-valign-middle u-container-layout-2">
+                <img src="../static/images/ToWearLogo.png" alt="" class="u-image u-image-default u-image-1" data-image-width="855" data-image-height="418">
+                <p class="u-text u-text-1">Welcome back. It’s time to change.<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-2">
+          <div class="u-container-layout u-container-layout-3">
+            <div class="u-align-center u-container-style u-custom-color-2 u-expanded-width u-group u-group-2">
+              <div class="u-container-layout u-valign-middle u-container-layout-4">
+                <div class="u-form u-form-1">
+                  <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
+                    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
+                    <div class="u-form-group">
+                      {{ wtf.form_field(form.username, class='u-custom-color-3 u-input u-input-rectangle u-text-white u-input-1', type='text', placeholder='Username', id='username')|safe}}
+                    </div>
+                    <div class="u-form-group">
+                      {{ wtf.form_field(form.password, class='u-custom-color-3 u-input u-input-rectangle u-text-white u-input-1', type='password', placeholder='Password', id='password')|safe}}
+                    </div>
+                    <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Log in</button>
+                  </form>
+                </div>
+                <p class="u-res-move-started u-text u-text-3">New to ToWear? <u>
+                  <a href={{ url_for('register') }}>Sign up here</a></u>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group  required">
-        {{ wtf.form_field(form.password,class="form-control",id="password",type="password",value="",placeholder="Enter password") }}
-    </div>
-    <p>
-        <label>
-            <input id="remember_me" name="remember_me" type="checkbox" value="y" class="filled-in"/>
-            <span>Remember me</span>
-        </label>
-    </p>
-    <button class="btn btn-info col-md-6" type="submit">Sign in</button>
-  </form>
-</div>
+  </div>
+</section>
 {% endblock %}
