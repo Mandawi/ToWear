@@ -31,19 +31,19 @@ Register
             <div class="u-align-center u-container-style u-palette-4-base u-expanded-width u-group u-group-2">
               <div class="u-container-layout u-valign-middle u-container-layout-4" style="height:89.5vh">
                 <div class="u-form u-form-1">
-                  <form method="POST" action="/login" class="form-signin u-clearfix u-form-spacing-22 u-form-vertical u-inner-form" style="padding: 10px" name="form">
-                    {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
-                    <div class="form-group u-form-email u-form-group" style="margin-bottom: -35px;">
-                      {{ wtf.form_field(form.email, class='u-palette-3-base u-input u-input-round u-text-white u-input-1', type='email', placeholder='Email', id='email')|safe}}
-                    </div>
-                    <div class="form-group u-form-group" style="margin-bottom: -35px;">
-                      {{ wtf.form_field(form.username, class='u-palette-3-base u-input u-input-round u-text-white u-input-1', type='text', placeholder='Username', id='username')|safe}}
-                    </div>
-                    <div class="form-group u-form-group">
-                      {{ wtf.form_field(form.password, class='u-palette-3-base u-input u-input-round u-text-white u-input-1', type='password', placeholder='Password', id='password')|safe}}
-                    </div>
-                    <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Register</button>
-                  </form>
+                    <form class="form-signup u-clearfix u-form-spacing-22 u-inner-form" style="padding: 10px" method="POST" action="/register">
+                      {{ form.hidden_tag() }} {{ wtf.form_errors(form, hiddens="only")}}
+                      <div class="form-group u-form-email required u-form-group" style="margin-bottom: -35px;">
+                        {{ wtf.form_field(form.email, class='u-palette-3-base u-input u-input-round u-text-white u-input-1', type='email', placeholder='Email', id='email', value="")|safe}}
+                      </div>
+                      <div class="form-group required u-form-group" style="margin-bottom: -35px;">
+                        {{ wtf.form_field(form.username, class='u-palette-3-base u-input u-input-round u-text-white u-input-1', type='text', placeholder='Username', id='username', value="")|safe}}
+                      </div>
+                      <div class="form-group required u-form-group">
+                        {{ wtf.form_field(form.password, class='u-palette-3-base u-input u-input-round u-text-white u-input-1', type='password', placeholder='Password', id='password', value="")|safe}}
+                      </div>
+                      <button class="u-active-palette-5-light-2 u-border-0 u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-5-light-3 u-text-black u-white u-btn-1" type="submit">Register</button>
+                    </form>
                 </div>
                 <p class="u-res-move-started u-text u-text-3">Already have an account? <u>
                   <a href={{ url_for('login') }}>Log in here</a></u>

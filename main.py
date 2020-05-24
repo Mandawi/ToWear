@@ -107,16 +107,16 @@ TOWEAR_USERS = [
 ]
 
 
-@APP.after_request
-def add_header(made_request):
-    """
-    source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
-    """
-    made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    made_request.headers["Pragma"] = "no-cache"
-    made_request.headers["Expires"] = "0"
-    made_request.headers["Cache-Control"] = "public, max-age=0"
-    return made_request
+# @APP.after_request
+# def add_header(made_request):
+#     """
+#     source: https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+#     """
+#     made_request.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     made_request.headers["Pragma"] = "no-cache"
+#     made_request.headers["Expires"] = "0"
+#     made_request.headers["Cache-Control"] = "public, max-age=0"
+#     return made_request
 
 
 class LoginForm(FlaskForm):
