@@ -94,7 +94,7 @@ def balsub(w: list, c: int) -> list:
         return [w[j] for j in range(n) if x[j] == True]
 
 
-def closest(myclothes: Wardrobe, warmth_required: list, body_part: list):
+def closest(myclothes: Wardrobe, warmth_required: list, body_part: int):
     """returns the closest item in the closet to the warmth_required for head, bottom, and feet
     inspiration: https://www.geeksforgeeks.org/python-find-closest-number-to-k-in-given-list/
     
@@ -107,6 +107,8 @@ def closest(myclothes: Wardrobe, warmth_required: list, body_part: list):
         list -- the list of garment names whose warmths satisfy the warmth_required for this body part
     """
     if warmth_required[body_part] <= 0:
+        if body_part == 3:
+            return Garment("slippers", [0, 0, 0, 0])
         return Garment("nothing", [0, 0, 0, 0])
     if not list(filter(lambda x: x.warmth[body_part] != 0, myclothes)):
         return Garment("nothing", [0, 0, 0, 0])
