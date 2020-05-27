@@ -109,6 +109,8 @@ def closest(myclothes: Wardrobe, warmth_required: list, body_part: int):
     if warmth_required[body_part] <= 0:
         if body_part == 3:
             return Garment("slippers", [0, 0, 0, 0])
+        if body_part == 2:
+            return Garment("shorts", [0, 0, 0, 0])
         return Garment("nothing", [0, 0, 0, 0])
     if not list(filter(lambda x: x.warmth[body_part] != 0, myclothes)):
         return Garment("nothing", [0, 0, 0, 0])
@@ -156,7 +158,7 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
             tops.remove(top)
         outfit_in_numbers = list(map(operator.sub, outfit_in_numbers, top.warmth))
         if not tops:
-            tops.append(Garment("nothing", [0, 0, 0, 0]))
+            tops.append(Garment("tank top", [0, 0, 0, 0]))
     if merged_top_bottom:
         worded_oufit = [
             f"Overall: {(', '.join([top_bottom.name for top_bottom in merged_top_bottom]))}.",
