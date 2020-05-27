@@ -156,8 +156,8 @@ def translate_outfit(wardrobe: Wardrobe, outfit_in_numbers: list) -> list:
             merged_top_bottom.append(top)
             tops.remove(top)
         outfit_in_numbers = list(map(operator.sub, outfit_in_numbers, top.warmth))
-        if not tops:
-            tops.append(Garment("tank top", [0, 0, 0, 0]))
+    if not tops:
+        tops.append(Garment("tank top", [0, 0, 0, 0]))
     if merged_top_bottom:
         worded_oufit = [
             f"Overall: {(', '.join([top_bottom.name for top_bottom in merged_top_bottom]))}.",
