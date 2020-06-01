@@ -112,6 +112,10 @@ def closest(myclothes: Wardrobe, warmth_required: list, body_part: int):
             return Garment("shorts", [0, 0, 0, 0])
         return Garment("nothing", [0, 0, 0, 0])
     if not list(filter(lambda x: x.warmth[body_part] != 0, myclothes)):
+        if body_part == 3:
+            return Garment("slippers", [0, 0, 0, 0])
+        if body_part == 2:
+            return Garment("shorts", [0, 0, 0, 0])
         return Garment("nothing", [0, 0, 0, 0])
     suggested_item = myclothes[
         min(
